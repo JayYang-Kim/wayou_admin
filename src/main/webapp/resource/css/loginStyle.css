@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+   Login
+   ========================================================================== */
+#wrap header .login_header{position:fixed;left:0;top:0;z-index:50;width:100%;min-width:980px;height:60px;border-bottom:1px solid #c4c4c4;background-color:#ffffff;}
+#wrap header .login_header .title{position: absolute;left: 20px;top: 12px;}
+
+#wrap .login_container{background-color:#f5f6f7;}
+
+#wrap .login_container .register{padding:240px 0 60px;}
+#wrap .login_container .register .box_login{overflow:hidden;width:540px;padding:0 39px 49px;margin:0 auto 20px;border:1px solid #e6e6e6;background-color:#ffffff;}
+#wrap .login_container .register .box_login label{font-size:14px;}
+#wrap .login_container .register .box_login .title{padding-top:44px;font-size:24px;color:#1e1e1e;}
+#wrap .login_container .register .box_login input.boxTf{width:100%;height:45px;margin-top:10px;box-sizing:border-box;font-size:14px;}
+#wrap .login_container .register .box_login .btn_login{display: inline-block;width: 100%;color: #333333!important;text-align: center;background-color: #ffdc00;border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;cursor: pointer;vertical-align: middle;margin: 0;position: relative;font-weight:800;line-height: 50px;font-size: 16px;}
+#wrap .login_container .register .login_info{width: 620px;margin: 0 auto 20px;font-size: 13px;line-height: 14px;padding-top: 20px;text-align: center;color: #8e8e8e;}
+#wrap .login_container .register .login_info .bar{margin:0 10px;}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+/* Common */
+html, body{height:100%;}
+.login_wrap{display:table;table-layout:fixed;position:relative;width:100%;height:100%;min-width:980px;}
+.login_wrap .login_container{display:table-row;height:100%;}
+#wrap{min-width:1024px;}
+#wrap #container .contents .inner{width:1024px;margin:0 auto;}
+
+/* Header */
+#wrap header .header{position:fixed;left:0;top:0;z-index:50;width:100%;min-width:1024px;height:60px;border-bottom:1px solid #c4c4c4;background-color:#ffffff;text-align:center;}
+#wrap header .header .title{position: absolute;left: 20px;top: 18px;}
+#wrap header .header .gnb{display:inline-block;}
+#wrap header .header .gnb ul li{float:left;line-height:61px;}
+#wrap header .header .gnb ul li a{position:relative;height:60px;padding:0 14px 0 13px;font-size:16px;}
+#wrap header .header .gnb ul li a:hover, #wrap header .header .gnb ul li a:active{font-family:NBGBold;}
+#wrap header .header .userInfo{float:right;}
+#wrap header .header .userInfo ul li{float:left;line-height:61px;}
+#wrap header .header .userInfo ul li a{position:relative;height:60px;padding:0 14px 0 13px;font-size:14px;}
+#wrap header .header .userInfo_login{float:right;}
+#wrap header .header .userInfo_login ul li{float:left;line-height:61px;}
+#wrap header .header .userInfo_login ul li a, #wrap header .header .userInfo_login ul li span{position:relative;height:60px;padding:0 14px 0 13px;font-size:14px;}
+
+/* Footer */
+#wrap footer.login{padding:15px 0;background-color:#2b2d2e;color:#eeeeee;}
+#wrap footer.login .box_footer{text-align:center;}
+
