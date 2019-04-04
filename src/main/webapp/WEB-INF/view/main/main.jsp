@@ -6,7 +6,7 @@
 %>
 <script type="text/javascript">
 	var ra=${state};
-	if(re!=null){
+	if(re!=null){ 
 		alert(ra);
 	}
 </script>
