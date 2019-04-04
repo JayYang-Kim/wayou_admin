@@ -3,13 +3,16 @@ package com.sp.admin;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller("admin.adminController")
 public class AdminController {
@@ -58,10 +61,28 @@ public class AdminController {
 		return "redirect:/main"; //관리자 메인으로 주소 변경하세요 용운님
 	}
 	
-	//이렇게 사용하세요
+/*	//이렇게 사용하세요
 	@RequestMapping(value="/admin/hello")
 	public String hello(){
 		return ".admin.main.helloworld"; //관리자 메인으로 주소 변경하세요 용운님
 		//return ".admin.폴더명.파일명"
+	}*/
+	
+	@RequestMapping(value="/admin/created", method=RequestMethod.GET)
+	public String adminForm(
+			Model model,
+			HttpSession session,
+			RedirectAttributes ra,
+			HttpServletResponse resp){
+		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
+		if(info.getIdnCode() !=2) {
+			ra.addFlashAttribute("state","등록 권한이 없습니다.");
+			return "redirect:/main";
+		}
+		model.addAttribute("mode", "created");
+		return ".insa.join"; 
 	}
+	
+	
+
 }

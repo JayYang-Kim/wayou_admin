@@ -4,7 +4,12 @@
 <%
    String cp = request.getContextPath();
 %>
-
+<script type="text/javascript">
+	var ra=${state};
+	if(re!=null){
+		alert(ra);
+	}
+</script>
 			<!-- contents -->
 			<section id="contents">
 				<h1 id="page_tit">브랜드 로고</h1>
