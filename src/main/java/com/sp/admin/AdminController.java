@@ -1,5 +1,6 @@
 package com.sp.admin;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +30,8 @@ public class AdminController {
 	@ResponseBody
 	public Map<String,Object> loginSubmit(
 			Admin admin,
-			HttpSession session
-			) {
-			System.out.println("say hello~");
+			HttpSession session) {
 			Map<String,Object> map = new HashMap<>();
-			System.out.println("hi:"+admin.getAdminId());
 			Admin temp = adminService.readLoginInfo(admin.getAdminId());
 			boolean isAdmin = false;
 			if(temp != null && temp.getAdminPwd().equals(admin.getAdminPwd())){
@@ -68,6 +66,22 @@ public class AdminController {
 		//return ".admin.폴더명.파일명"
 	}*/
 	
+	@RequestMapping(value="/admin/sabun", method=RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> findSeq(){
+		Map<String, Object> model = new HashMap<>();
+		int result=adminService.findSeq();
+		Calendar cal = Calendar.getInstance();
+		int year=cal.get(Calendar.YEAR);
+		String answer=String.format("%04d", result);
+		answer=year+answer;
+		System.out.println(answer);
+		
+		model.put("adminId", answer);
+		return model;
+	}
+	
+	
 	@RequestMapping(value="/admin/created", method=RequestMethod.GET)
 	public String adminForm(
 			Model model,
@@ -80,9 +94,25 @@ public class AdminController {
 			return "redirect:/main";
 		}
 		model.addAttribute("mode", "created");
-		return ".insa.join"; 
+		return ".insa.created"; 
 	}
 	
-	
+	@RequestMapping(value="/admin/created", method=RequestMethod.POST)
+	public String adminSubmit(
+			Admin dto, 
+			Model model){
+
+		int result=adminService.insertAdmin(dto);
+		if(result==1) {
+			
+			model.addAttribute("message", "회원가입 완료 이메일짜라.");
+			return ".main.main";
+		} 
+		
+		model.addAttribute("mode", "created");
+		model.addAttribute("message", "아이디 중복으로 회원가입이 실패했습니다.");
+			
+		return ".insa.created";
+	}
 
 }

@@ -1,7 +1,7 @@
 package com.sp.admin;
 
 public class Admin {
-	private int adminIdx;
+	private Long adminIdx;
 	private String adminId;
 	private String adminPwd;
 	private String adminName;
@@ -10,17 +10,22 @@ public class Admin {
 	private String address2;
 	private String etc;
 	private String tel;
+	private String tel1;
+	private String tel2;
+	private String tel3;
 	private String email;
+	private String email1;
+	private String email2;
 	private String created;
 	private String adminModify_date;
 	private String extNum;
 	private int positionCode;
 	private int idnCode;
 	private int departCode;
-	public int getAdminIdx() {
+	public Long getAdminIdx() {
 		return adminIdx;
 	}
-	public void setAdminIdx(int adminIdx) {
+	public void setAdminIdx(Long adminIdx) {
 		this.adminIdx = adminIdx;
 	}
 	public String getAdminId() {
@@ -113,6 +118,37 @@ public class Admin {
 	public void setDepartCode(int departCode) {
 		this.departCode = departCode;
 	}
+	public String getTel1() {
+		return tel1;
+	}
+	public void setTel1(String tel1) {
+		this.tel1 = tel1;
+	}
+	public String getTel2() {
+		return tel2;
+	}
+	public void setTel2(String tel2) {
+		this.tel2 = tel2;
+	}
+	public String getTel3() {
+		return tel3;
+	}
+	public void setTel3(String tel3) {
+		this.tel3 = tel3;
+	}
+	public String getEmail1() {
+		return email1;
+	}
+	public void setEmail1(String email1) {
+		this.email1 = email1;
+	}
+	public String getEmail2() {
+		return email2;
+	}
+	public void setEmail2(String email2) {
+		this.email2 = email2;
+	}
+	
 	
 	
 }

@@ -5,5 +5,8 @@
 	<select id="readLoginInfo" parameterType="String" resultType="com.sp.admin.Admin">
 		select adminIdx,adminId,adminPwd,adminName,idnCode,departCode from admin where adminId=#{adminId}
 	</select>
-
+	
+	<select id="findSeq" resultType="Integer">
+		SELECT NVL(COUNT(*),0) FROM admin
+	</select>
 </mapper>
