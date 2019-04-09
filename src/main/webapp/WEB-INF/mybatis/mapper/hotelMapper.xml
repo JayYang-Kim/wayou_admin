@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hotel">
+	<insert id="insertHotel" parameterType="com.sp.hotel.Hotel">
+		INSERT INTO hotelinfo(hotelcode, hname, address1, address2, information, tel, email, name, savefilename, adminidx, locode)
+			VALUES(HOTELINFO_SEQ.NEXTVAL, #{hname}, #{address1}, #{address2}, #{information}, #{tel},
+						#{email}, #{saveFilename, jdbcType=VARCHAR}, #{adminidx}, #{loCode})
+	</insert>
+	
+	<insert id="insertRoomInfo" parameterType="com.sp.hotel.Room">
+		INSERT INTO roominfo(roomcode, hotelcode, roomtypecode, roomnum, hcount, price, information, notice, cancel_notice)
+			VALUES(ROOMINFO_SEQ.NEXTVAL, #{hotelcode}, #{roomtypecode}, #{roomnum}, #{hcount}, 
+						#{price}, #{information}, #{notice}, #{cancel_notice})
+	</insert>
+</mapper>

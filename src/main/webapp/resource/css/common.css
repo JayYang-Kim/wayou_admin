@@ -349,7 +349,7 @@ html,body{height:100%;}
 	.page_info h2{float:left;}
 	.page_info p{float:right;line-height:27px;}
 	.page_info:after{content:'';display:block;clear:both;}
-#footer{padding:10px 0 10px 220px;border-top:1px solid #333;background-color:#333333;color:#fff;}
+#footer{padding:10px 0 10px 220px;border-top:1px solid #333;background-color:#333333;color:#fff;clear: both;}
 
 /* ==========================================================================
    component
