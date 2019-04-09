@@ -29,6 +29,9 @@
 	<script src="<%=cp%>/resource/js/lib/jquery-migrate-1.4.1.min.js"></script>
     <script src="<%=cp%>/resource/js/lib/jquery-ui-1.12.1.min.js"></script>
     
+    <script src="<%=cp%>/resource/js/lib/util-jquery.js"></script>
+    <script src="<%=cp%>/resource/js/lib/util.js"></script>
+    
     <script src="<%=cp%>/resource/js/plugins.js"></script>
     <script src="<%=cp%>/resource/js/basic.js"></script>
    

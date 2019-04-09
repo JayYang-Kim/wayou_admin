@@ -23,44 +23,45 @@
 	<!-- style -->
 	<link rel="stylesheet" href="<%=cp%>/resource/css/common.css" media="all" />
 	<link rel="stylesheet" href="<%=cp%>/resource/css/contents.css" media="all" />
-	<%-- <link rel="stylesheet" href="<%=cp%>/resource/css/loginStyle.css" media="all" /> --%>
 
 	<!-- javascript -->
 	<script src="<%=cp%>/resource/js/lib/jquery-1.12.4.min.js"></script>
 	<script src="<%=cp%>/resource/js/lib/jquery-migrate-1.4.1.min.js"></script>
 	<script src="<%=cp%>/resource/js/lib/jquery-ui-1.12.1.min.js"></script>
-	<!--[if lt IE 9]>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-	<![endif]-->
-	<script src="<%=cp%>/resource/js/plugins.js"></script>
+    
+    <script src="<%=cp%>/resource/js/lib/util-jquery.js"></script>
+    <script src="<%=cp%>/resource/js/lib/util.js"></script>
+    
+    <script src="<%=cp%>/resource/js/plugins.js"></script>
 	<script src="<%=cp%>/resource/js/ui_script.js"></script>
-	<!-- //javascript -->
+    <!-- //javascript -->
+    
+	<!--[if lt IE 9]>
+		<script src="<%=cp%>/resource/js/lib/html5shiv.js"></script>
+	<![endif]-->
 </head>
 
 <body>
-
-<div id="wrap">
-<header id="header">
-	<tiles:insertAttribute name="header"/>
-</header>
-<aside class="left_menu">
-		<tiles:insertAttribute name="left"/>
-</aside>
-<div id="container">
-    <div class="body-container">
-        <div class="body-right">
-            <tiles:insertAttribute name="body"/>
-        </div>
-    </div>        
-</div>
-<footer id="footer">
-    <tiles:insertAttribute name="footer"/>
-</footer>
-</div>
-
-
-<%-- <script type="text/javascript" src="<%=cp%>/resource/admin/jquery/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="<%=cp%>/resource/admin/jquery/js/jquery.ui.datepicker-ko.js"></script>
- --%>
- </body>
+	<div id="wrap">
+		<header id="header">
+			<tiles:insertAttribute name="header"/>
+		</header>
+		
+		<aside class="left_menu">
+				<tiles:insertAttribute name="left"/>
+		</aside>
+		
+		<div id="container">
+		    <div class="body-container">
+		        <div class="body-right">
+		            <tiles:insertAttribute name="body"/>
+		        </div>
+		    </div>        
+		</div>
+		
+		<footer id="footer">
+		    <tiles:insertAttribute name="footer"/>
+		</footer>
+	</div>
+</body>
 </html>
