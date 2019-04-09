@@ -6,12 +6,6 @@
 	String cp=request.getContextPath();
 %>
 
-<script>
-
-
-
-
-</script>
 
 <div class="body" style="height: 1200px;">
 	<div style="height: 50px; margin-left: 20px;">
@@ -46,7 +40,7 @@
 	
 	<div>
 		<div id="insert-hotel">
-			
+			<button type='button' class='button btn_blk h50'>새로운 호텔 등록</button>
 		</div>
 	</div>
 

@@ -23,7 +23,7 @@
 	<!-- style -->
 	<link rel="stylesheet" href="<%=cp%>/resource/css/common.css" media="all" />
 	<link rel="stylesheet" href="<%=cp%>/resource/css/contents.css" media="all" />
-	<link rel="stylesheet" href="<%=cp%>/resource/css/loginStyle.css" media="all" />
+	<%-- <link rel="stylesheet" href="<%=cp%>/resource/css/loginStyle.css" media="all" /> --%>
 
 	<!-- javascript -->
 	<script src="<%=cp%>/resource/js/lib/jquery-1.12.4.min.js"></script>
