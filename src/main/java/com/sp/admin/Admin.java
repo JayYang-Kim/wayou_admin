@@ -22,6 +22,36 @@ public class Admin {
 	private int positionCode;
 	private int idnCode;
 	private int departCode;
+	private int listNum;
+	private String positionName;
+	private String departName;
+	private String identName;
+	
+	
+	public String getPositionName() {
+		return positionName;
+	}
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+	public String getDepartName() {
+		return departName;
+	}
+	public void setDepartName(String departName) {
+		this.departName = departName;
+	}
+	public String getIdentName() {
+		return identName;
+	}
+	public void setIdentName(String identName) {
+		this.identName = identName;
+	}
+	public int getListNum() {
+		return listNum;
+	}
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
+	}
 	public Long getAdminIdx() {
 		return adminIdx;
 	}

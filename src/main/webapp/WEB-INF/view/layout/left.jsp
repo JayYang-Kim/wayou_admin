@@ -21,9 +21,9 @@
 								<li><a href="#"><span class="blind">직원관리</span> 인사관리</a>
 									<div>
 										<ul>
-											<li><a href="">리스트</a></li>
+											<li><a href="<%=cp%>/admin/list">리스트</a></li>
 											<li><a href="<%=cp%>/admin/created">등록</a></li>
-											<li><a href="#">수정</a></li>
+											<li><a href="<%=cp%>/admin/update">수정</a></li>
 											<li><a href="#">삭제</a></li>
 										</ul>
 									</div>

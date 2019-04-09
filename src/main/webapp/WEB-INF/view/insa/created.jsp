@@ -42,31 +42,36 @@ function created() {
 	if(mode =="update"){
 		if(!content) {
 			alert("패스워드를 입력하세요. ");
-			f.userPwd.focus();
+			f.AdminPwd.focus();
 			return;
 		}
-	if(!/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(content)) { 
-		alert("패스워드는 5~10자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.");
-		f.adminPwd.focus();
-		return;
+		if(!/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(content)) { 
+			alert("패스워드는 5~10자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.");
+			f.adminPwd.focus();
+			return;
 		}
-	if(content!= f.adminPwdCheck.value) {
-        alert("패스워드가 일치하지 않습니다. ");
-        f.adminPwdCheck.focus();
-        return;
-	}
-	}
-	
 	f.adminPwd.value = content;
-
+	}	
+	
+	content = f.adminPwd.value;
+	content = content.trim();
+	if(mode =="update"){
+		if(content!= f.adminPwdCheck.value) {
+        	alert("패스워드가 일치하지 않습니다. ");
+        	f.adminPwdCheck.focus();
+        	return;
+		}
+	}
 	
 	content = f.adminName.value;
 	content = content.trim();
+	
     if(!content) {
         alert("이름을 입력하세요. ");
         f.adminName.focus();
         return;
     }
+    
     f.adminName.value = content;
 
 /*     content = f.adminBirth.value;
@@ -77,9 +82,25 @@ function created() {
         return;
     } */
     
+    content = f.email1.value;
+    content = content.trim();
+    if(!content) {
+        alert("이메일을 입력하세요. ");
+        f.email1.focus();
+        return;
+    }
+
+    content = f.email2.value;
+    content = content.trim();
+    if(!content) {
+        alert("이메일을 입력하세요. ");
+        f.email2.focus();
+        return;
+    }
+    
     content = f.tel1.value;
     content = content.trim();
-    if(!str) {
+    if(!content) {
         alert("전화번호를 입력하세요. ");
         f.tel1.focus();
         return;
@@ -87,7 +108,7 @@ function created() {
 
     content = f.tel2.value;
     content = content.trim();
-    if(!str) {
+    if(!content) {
         alert("전화번호를 입력하세요. ");
         f.tel2.focus();
         return;
@@ -100,7 +121,7 @@ function created() {
 
     content = f.tel3.value;
     content = content.trim();
-    if(!str) {
+    if(!content) {
         alert("전화번호를 입력하세요. ");
         f.tel3.focus();
         return;
@@ -111,22 +132,29 @@ function created() {
         return;
     }
     
-    content = f.email1.value;
+    content=f.idnCode.value;
     content = content.trim();
     if(!content) {
-        alert("이메일을 입력하세요. ");
-        f.email1.focus();
+        alert("권한을 선택해주세요. ");
+        f.idnCode.focus();
         return;
     }
 
-    content = f.email2.value;
+    content=f.positionCode.value;
     content = content.trim();
-    if(!str) {
-        alert("이메일을 입력하세요. ");
-        f.email2.focus();
+    if(!content) {
+        alert("직책을 선택해주세요. ");
+        f.positioncode.focus();
         return;
     }
-
+    
+    content=f.departCode.value;
+    content = content.trim();
+    if(!content) {
+        alert("부서를 선택해주세요. ");
+        f.departCode.focus();
+        return;
+    }
     
     if(mode=="created")
    		f.action = "<%=cp%>/admin/created";
@@ -140,7 +168,7 @@ function selectedEmail() {
     var f = document.createdForm;
 	    
     var content = f.selectEmail.value;
-    if(content!="direct") {
+    if(content!="write") {
         f.email2.value=content; 
         f.email2.readOnly = true;
         f.email1.focus(); 
@@ -166,7 +194,7 @@ function selectedEmail() {
 				<th scope="row"><b class="t_red">*</b> 아이디 (ID)</th>
 				<td>
 					<div class="inp_wid adminId">
-						<input type="text" name="adminId"  style="width:150px;" readonly="readonly" />
+						<input type="text" name="adminId"  style="width:150px;" readOnly ="readonly">
 						<c:if test="${mode=='created'}">
 						<button type="button" onclick="sabun()" class="button btn_blk" style="width:80px;">생성</button>
 						</c:if>
@@ -177,16 +205,16 @@ function selectedEmail() {
 				<th scope="row"><b class="t_red">*</b> 비밀번호 (Pass Word)</th>
 				<td>
 					<div class="inp_wid adminPwd">
-						<input type="password" name="adminPwd"  style="width:150px;" />
+						<input type="password" name="adminPwd"  style="width:150px; "${mode=="created" ? "readonly='readonly' ":""}  />
 					</div>
 				</td>
 			</tr>
 			<c:if test="${mode=='update'}">
 			<tr>
-				<th scope="row"><b class="t_red">*</b> 비밀번호 확인 (Pass Word Check)</th>
+				<th scope="row"><b class="t_red">*</b> 비밀번호 (Pass Word)</th>
 				<td>
 					<div class="inp_wid adminPwdCheck">
-						<input type="password" name="adminPwdCheck" style="width:150px;" />
+						<input type="password" name="adminPwdCheck"  style="width:150px;"  />
 					</div>
 				</td>
 			</tr>
@@ -195,8 +223,7 @@ function selectedEmail() {
 				<th scope="row"><b class="t_red">*</b> 성명 (Name)</th>
 				<td>
 					<div class="inp_wid adminName">
-						<input type="text" placeholder="성명"  name="adminName" value="${dto.adminName}" 
-						${mode=="update" ? "readonly='readonly' ":""}/>
+						<input type="text" placeholder="성명"  name="adminName" value="${dto.adminName}"/>
 					</div>
 				</td>
 			</tr>
@@ -218,11 +245,11 @@ function selectedEmail() {
 			                <option value="hanmail.net" ${dto.email2=="hanmail.net" ? "selected='selected'" : ""}>한 메일</option>
 			                <option value="hotmail.com" ${dto.email2=="hotmail.com" ? "selected='selected'" : ""}>핫 메일</option>
 			                <option value="gmail.com" ${dto.email2=="gmail.com" ? "selected='selected'" : ""}>지 메일</option>
-			                <option value="direct">직접입력</option>
+			                <option value="write">직접입력</option>
 						</select>
-							<input type="text" placeholder="E-mail ID" name="email1" value="${dto.email1}"/>
+							<input type="text" placeholder="E-mail ID" name="email1" value="${dto.email1}">
 							<span style="font-weight:bold;">&nbsp;@</span>
-							<input type="text" name="email2" value="${dto.email2}" readonly="readonly" />
+							<input type="text" name="email2" value="${dto.email2}">
 					</div>
 				</td>
 			</tr>
@@ -230,7 +257,7 @@ function selectedEmail() {
 				<th scope="row"><b class="t_red">*</b> 전화번호 (Tel)</th>
 				<td>
 					<div class="inp_wid selectTel">
-						<select name="selectTel" onchange="selectTel();">
+						<select name="tel1" id="tel1">
 			                <option value="">선 택</option>
 			                <option value="010" ${dto.tel1=="010" ? "selected='selected'" : ""}>010</option>
 			                <option value="011" ${dto.tel1=="011" ? "selected='selected'" : ""}>011</option>
@@ -249,12 +276,12 @@ function selectedEmail() {
 			<tr>
 				<th scope="row"><b class="t_red">*</b> 권한 (Authority)</th>
 				<td>
-					<div class="inp_wid identCode">
-						<select id="identCode" name="identCode">
+					<div class="inp_wid idnCode">
+						<select id="idnCode" name="idnCode">
 							<option value="">선 택</option>
-							<option value="0" ${dto.identCode=="0" ? "selected='selected'" : ""}>0. 없음</option>
-							<option value="1" ${dto.identCode=="1" ? "selected='selected'" : ""}>1. 관리자</option>
-							<option value="2" ${dto.identCode=="2" ? "selected='selected'" : ""}>2. 총관리자</option>
+							<option value="0" ${dto.idnCode=="0" ? "selected='selected'" : ""}>0. 없음</option>
+							<option value="1" ${dto.idnCode=="1" ? "selected='selected'" : ""}>1. 관리자</option>
+							<option value="2" ${dto.idnCode=="2" ? "selected='selected'" : ""}>2. 총관리자</option>
 						</select>
 					</div>
 				</td>
@@ -262,14 +289,14 @@ function selectedEmail() {
 			<tr>
 				<th scope="row"><b class="t_red">*</b> 직책 (Position)</th>
 				<td>
-					<div class="inp_wid positioncode">
-						<select id="positioncode" name="positioncode">
+					<div class="inp_wid positionCode">
+						<select id="positionCode" name="positionCode">
 							<option value="">선 택</option>
-							<option value="0" ${dto.positioncode=="0" ? "selected='selected'" : ""}>0. 퇴사</option>
-							<option value="1" ${dto.positioncode=="1" ? "selected='selected'" : ""}>1. 사원</option>
-							<option value="2" ${dto.positioncode=="2" ? "selected='selected'" : ""}>2. 대리</option>
-							<option value="3" ${dto.positioncode=="3" ? "selected='selected'" : ""}>3. 과장</option>
-							<option value="4" ${dto.positioncode=="4" ? "selected='selected'" : ""}>4. 사장</option>
+							<option value="0" ${dto.positionCode=="0" ? "selected='selected'" : ""}>0. 퇴사</option>
+							<option value="1" ${dto.positionCode=="1" ? "selected='selected'" : ""}>1. 사원</option>
+							<option value="2" ${dto.positionCode=="2" ? "selected='selected'" : ""}>2. 대리</option>
+							<option value="3" ${dto.positionCode=="3" ? "selected='selected'" : ""}>3. 과장</option>
+							<option value="4" ${dto.positionCode=="4" ? "selected='selected'" : ""}>4. 사장</option>
 						</select>
 					</div>
 				</td>

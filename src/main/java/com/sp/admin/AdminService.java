@@ -1,5 +1,8 @@
 package com.sp.admin;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,6 @@ public class AdminService {
 		try {
 			admin = dao.selectOne("admin.readLoginInfo", adminId);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return admin;
@@ -34,11 +36,9 @@ public class AdminService {
 					dto.getTel2() != null && dto.getTel2().length()!=0 &&
 							dto.getTel3() != null && dto.getTel3().length()!=0)
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
-			
-			long adminSeq = dao.selectOne("admin.adminSeq");
-			dto.setAdminIdx(adminSeq);		
-			dao.insertData("admin.insertMember", adminSeq);
-			dao.updateData("admin.insertMember12", dto); // 
+
+			dao.insertData("admin.insertAdmin",dto);
+			//dao.updateData("admin.insertAdmin12", dto);
 
 			result=1;
 		} catch (Exception e) {
@@ -51,6 +51,28 @@ public class AdminService {
 		int result=0;
 		try {
 			result=dao.selectOne("admin.findSeq");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public List<Admin> listAdmin(Map<String, Object> map) {
+		List<Admin> listAdmin =null;
+		
+		try {
+			listAdmin=dao.selectList("admin.listAdmin",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listAdmin;
+	}
+	
+	public int dataCount(Map<String, Object> map) {
+		int result=0;
+		
+		try {
+			result=dao.selectOne("admin.dataCount", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

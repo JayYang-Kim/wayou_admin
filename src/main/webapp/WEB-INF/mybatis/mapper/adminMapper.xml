@@ -9,4 +9,52 @@
 	<select id="findSeq" resultType="Integer">
 		SELECT NVL(COUNT(*),0) FROM admin
 	</select>
+	
+	<insert id="insertAdmin" parameterType="com.sp.admin.Admin">
+		INSERT INTO admin (adminIdx, adminId, adminPwd, adminName, tel, email, idnCode, positionCode, departCode)
+    		VALUES (adminIdx_seq.NEXTVAL, #{adminId}, #{adminPwd}, #{adminName}, #{tel}, #{email}, #{idnCode}, #{positionCode}, #{departCode})
+	</insert>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM admin
+	</select>
+	
+	<sql id="w-list">
+		<choose>
+		<when test="condition=='departCode'">
+			d.departName=#{word}
+		</when>
+		<when test="condition=='positionCode'">
+			p.positionName=#{word}
+		</when>
+		<when test="condition=='idnCode'">
+			i.identcode=#{word}
+		</when>
+		<when test="condition=='adminName'">
+			a.adminName=#{word}
+		</when>
+	</choose>
+	</sql>
+	
+	<select id="listAdmin" parameterType="map" resultType="com.sp.admin.Admin">
+		SELECT * FROM (
+		SELECT ROWNUM rnum, tb. * FROM (
+        SELECT adminId, adminName, departName, positionName, identName from admin a
+          JOIN identifierCode i ON a.idnCode = i.identCode 
+          JOIN position p ON a.positionCode = p.positionCode
+          JOIN department d ON a.departCode = d.departCode
+		<where>
+			<if test="word != null and word != ''">
+			<include refid="w-list"/>
+			</if>
+		</where>
+		ORDER BY AdminIdx DESC
+	<![CDATA[
+	        ) tb WHERE ROWNUM <= #{end}
+	    ) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+	
 </mapper>

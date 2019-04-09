@@ -6,7 +6,7 @@
 %>
 <script type="text/javascript">
 	var ra="${state}";
-	if(ra!=null){ 
+	if(ra!=""){ 
 		alert(ra);
 	}
 </script>
@@ -21,7 +21,7 @@
 
 				<div class="guide cont_inner">
 					<h2>텍스트</h2>
-					<h3>컬러${message }</h3>
+					<h3>컬러</h3>
 					<div class="line_box">
 						<p>default - #666</p>
 						<p class="t_wht" style="background:#000;">.t_wht</p>
