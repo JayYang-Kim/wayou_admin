@@ -1,10 +1,13 @@
 package com.sp.admin;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Admin {
-	private Long adminIdx;
+	private int adminIdx;
 	private String adminId;
 	private String adminPwd;
 	private String adminName;
+	private String adminBirth;
 	private String postCode;
 	private String address1;
 	private String address2;
@@ -26,8 +29,42 @@ public class Admin {
 	private String positionName;
 	private String departName;
 	private String identName;
+	private String saveFilename;
+	private String originalFilename;
+	private MultipartFile upload;
+	private long filesize;
 	
 	
+	public String getAdminBirth() {
+		return adminBirth;
+	}
+	public void setAdminBirth(String adminBirth) {
+		this.adminBirth = adminBirth;
+	}
+	public MultipartFile getUpload() {
+		return upload;
+	}
+	public void setUpload(MultipartFile upload) {
+		this.upload = upload;
+	}
+	public long getFilesize() {
+		return filesize;
+	}
+	public void setFilesize(long filesize) {
+		this.filesize = filesize;
+	}
+	public String getSaveFilename() {
+		return saveFilename;
+	}
+	public void setSaveFilename(String saveFilename) {
+		this.saveFilename = saveFilename;
+	}
+	public String getOriginalFilename() {
+		return originalFilename;
+	}
+	public void setOriginalFilename(String originalFilename) {
+		this.originalFilename = originalFilename;
+	}
 	public String getPositionName() {
 		return positionName;
 	}
@@ -52,10 +89,10 @@ public class Admin {
 	public void setListNum(int listNum) {
 		this.listNum = listNum;
 	}
-	public Long getAdminIdx() {
+	public int getAdminIdx() {
 		return adminIdx;
 	}
-	public void setAdminIdx(Long adminIdx) {
+	public void setAdminIdx(int adminIdx) {
 		this.adminIdx = adminIdx;
 	}
 	public String getAdminId() {

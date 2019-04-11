@@ -1,16 +1,17 @@
 package com.sp.admin;
 
 public class AdminSessionInfo {
-	private Long adminIdx;
+	private int adminIdx;
 	private String adminId;
 	private String adminName;
 	private int idnCode;
 	private int departCode;
-	public Long getAdminIdx() {
+	
+	public int getAdminIdx() {
 		return adminIdx;
 	}
-	public void setAdminIdx(Long long1) {
-		this.adminIdx = long1;
+	public void setAdminIdx(int adminIdx) {
+		this.adminIdx = adminIdx;
 	}
 	public String getAdminId() {
 		return adminId;

@@ -10,9 +10,13 @@
 		SELECT NVL(COUNT(*),0) FROM admin
 	</select>
 	
+	<select id="findBebun" parameterType="Integer" resultType="String">
+		SELECT TO_CHAR(adminBirth, 'YYYY-MM-DD') adminBirth FROM admin WHERE adminIdx=#{adminIdx}
+	</select>
+	
 	<insert id="insertAdmin" parameterType="com.sp.admin.Admin">
-		INSERT INTO admin (adminIdx, adminId, adminPwd, adminName, tel, email, idnCode, positionCode, departCode)
-    		VALUES (adminIdx_seq.NEXTVAL, #{adminId}, #{adminPwd}, #{adminName}, #{tel}, #{email}, #{idnCode}, #{positionCode}, #{departCode})
+		INSERT INTO admin (adminIdx, adminId, adminPwd, adminBirth, adminName, tel, email, idnCode, positionCode, departCode, saveFilename)
+    		VALUES (adminIdx_seq.NEXTVAL, #{adminId}, #{adminPwd}, #{adminBirth},  #{adminName}, #{tel}, #{email}, #{idnCode}, #{positionCode}, #{departCode}, #{saveFilename})
 	</insert>
 	
 	<select id="dataCount" parameterType="map" resultType="Integer">
@@ -40,7 +44,7 @@
 	<select id="listAdmin" parameterType="map" resultType="com.sp.admin.Admin">
 		SELECT * FROM (
 		SELECT ROWNUM rnum, tb. * FROM (
-        SELECT adminId, adminName, departName, positionName, identName from admin a
+        SELECT adminIdx, adminId, adminName, adminBirth, departName, positionName, identName from admin a
           JOIN identifierCode i ON a.idnCode = i.identCode 
           JOIN position p ON a.positionCode = p.positionCode
           JOIN department d ON a.departCode = d.departCode
@@ -56,5 +60,18 @@
 	]]>
 	</select>
 	
+	<select id="articleAdmin" parameterType="Integer" resultType="com.sp.admin.Admin">
+		SELECT adminIdx, adminId, adminPwd, adminName, TO_CHAR(adminBirth, 'YYYY-MM-DD') adminBirth, postCode, address1, address2, etc, tel, email, 
+        TO_CHAR(created, 'YYYY-MM-DD') created, adminModify_date, extNum, departName, positionName, identName, saveFilename
+    		FROM admin  a
+          JOIN identifierCode i ON a.idnCode = i.identCode 
+          JOIN position p ON a.positionCode = p.positionCode
+          JOIN department d ON a.departCode = d.departCode
+          WHERE adminIdx = #{adminIdx}
+	</select>
 	
+	<update id="updateAdmin" parameterType="com.sp.admin.Admin">
+		UPDATE admin SET adminName=#{adminName}, idnCode=#{idnCode}, positionCode=#{positionCode}, departCode=#{departCode}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
+    		WHERE adminIdx=#{adminIdx}
+	</update>
 </mapper>

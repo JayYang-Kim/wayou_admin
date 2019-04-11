@@ -6,11 +6,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sp.common.FileManager;
 import com.sp.common.dao.CommonDAO;
 
 @Service("admin.adminService")
 public class AdminService {
-	
+	@Autowired
+	private FileManager fileManager;
 	@Autowired
 	private CommonDAO dao;
 	
@@ -24,7 +26,7 @@ public class AdminService {
 		return admin;
 	}
 	
-	public int insertAdmin(Admin dto) {
+	public int insertAdmin(Admin dto, String pathname) {
 		int result=0;
 		
 		try {
@@ -36,9 +38,13 @@ public class AdminService {
 					dto.getTel2() != null && dto.getTel2().length()!=0 &&
 							dto.getTel3() != null && dto.getTel3().length()!=0)
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
-
+			
+			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
+			if(saveFilename!=null) {
+				dto.setSaveFilename(saveFilename);
+				dto.setOriginalFilename(dto.getUpload().getOriginalFilename());
+			}
 			dao.insertData("admin.insertAdmin",dto);
-			//dao.updateData("admin.insertAdmin12", dto);
 
 			result=1;
 		} catch (Exception e) {
@@ -51,6 +57,16 @@ public class AdminService {
 		int result=0;
 		try {
 			result=dao.selectOne("admin.findSeq");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public String findBebun(int adminIdx) {
+		String result=null;
+		try {
+			result=dao.selectOne("admin.findBebun",adminIdx);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -76,6 +92,39 @@ public class AdminService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+	public Admin articleAdmin(int adminIdx){
+		Admin dto = null;
+		
+		try {
+			dto=dao.selectOne("admin.articleAdmin", adminIdx);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+	
+	public int updateAdmin(Admin dto, String pathname) {
+		int result=0;
+		
+		try {
+			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
+			if(saveFilename != null) {
+				if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0) {
+					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+					
+					dto.setSaveFilename(saveFilename);
+					dto.setOriginalFilename(dto.getUpload().getOriginalFilename());
+				}
+				dao.updateData("admin.updateAdmin",dto);
+				result=1;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 }

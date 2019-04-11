@@ -6,6 +6,12 @@
 	String cp=request.getContextPath();
 %>
 <script type="text/javascript">
+function deleteFile(){
+	var url="<%=cp%>/admin/deleteFile?adminIdx=${dto.adminIdx}&pageNum=${pageNum}";
+	location.href=url;
+}
+
+
 function sabun(){
 	var url="<%=cp%>/admin/sabun";
 	$.ajax({
@@ -28,6 +34,28 @@ function sabun(){
 	});
 }
 
+function bebun(adminIdx){
+	var url="<%=cp%>/admin/bebun";
+	var data="adminIdx="+adminIdx;
+	$.ajax({
+		type:"GET",
+		url:url,
+		data:data,
+		success:function(data){
+			var adminPwd=data.adminPwd;
+			$("input[name=adminPwd]").val(adminPwd);
+			
+		},beforeSend:function(e){
+			e.setRequestHeader("AJAX",true);
+		},error:function(){
+			if(e.status==403){
+				location.href="<%=cp%>/admin/main";
+				return;
+			}
+			console.log(e.responseText);
+		}
+	});
+}
 function created() {
     var mode="${mode}";
 	var f = document.createdForm;
@@ -37,21 +65,7 @@ function created() {
 	content = content.trim();
 
 	content = f.adminPwd.value;
-	content = content.trim();
-	
-	if(mode =="update"){
-		if(!content) {
-			alert("패스워드를 입력하세요. ");
-			f.AdminPwd.focus();
-			return;
-		}
-		if(!/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(content)) { 
-			alert("패스워드는 5~10자이며 하나 이상의 숫자나 특수문자가 포함되어야 합니다.");
-			f.adminPwd.focus();
-			return;
-		}
-	f.adminPwd.value = content;
-	}	
+	content = content.trim();	
 	
 	content = f.adminPwd.value;
 	content = content.trim();
@@ -74,13 +88,13 @@ function created() {
     
     f.adminName.value = content;
 
-/*     content = f.adminBirth.value;
+	content = f.adminBirth.value;
     content = content.trim();
     if(!content || !isValidDateFormat(content)) {
         alert("생년월일를 입력하세요[YYYY-MM-DD]. ");
         f.adminBirth.focus();
         return;
-    } */
+    }
     
     content = f.email1.value;
     content = content.trim();
@@ -156,6 +170,14 @@ function created() {
         return;
     }
     
+    content=f.upload.value;
+    content = content.trim();
+    if(!content) {
+        alert("증명사진을 첨부해주세요. ");
+        f.upload.focus();
+        return;
+    }
+    
     if(mode=="created")
    		f.action = "<%=cp%>/admin/created";
 	else
@@ -183,7 +205,7 @@ function selectedEmail() {
 
 </script>
 <div>
-	<form name="createdForm" method="post">
+	<form name="createdForm" method="post" enctype="multipart/form-data">
 	<table class="table left_tbl form_tbl">
 		<caption style="padding-left:10px; padding-bottom:15px;">${mode=="created"?"| 인사 등록":"| 인사 수정"}</caption>
 		<colgroup>
@@ -194,7 +216,7 @@ function selectedEmail() {
 				<th scope="row"><b class="t_red">*</b> 아이디 (ID)</th>
 				<td>
 					<div class="inp_wid adminId">
-						<input type="text" name="adminId"  style="width:150px;" readOnly ="readonly">
+						<input type="text" name="adminId"  style="width:150px;" readOnly ="readonly" value="${dto.adminId}">
 						<c:if test="${mode=='created'}">
 						<button type="button" onclick="sabun()" class="button btn_blk" style="width:80px;">생성</button>
 						</c:if>
@@ -205,20 +227,13 @@ function selectedEmail() {
 				<th scope="row"><b class="t_red">*</b> 비밀번호 (Pass Word)</th>
 				<td>
 					<div class="inp_wid adminPwd">
-						<input type="password" name="adminPwd"  style="width:150px; "${mode=="created" ? "readonly='readonly' ":""}  />
+						<input type="password" name="adminPwd"  style="width:150px;" readOnly ="readonly" value="${dto.adminPwd}" />
+						<c:if test="${mode=='update'}">
+						<button type="button" onclick="bebun('${dto.adminIdx}')" class="button btn_blk" style="width:80px;">초기화</button>
+						</c:if>
 					</div>
 				</td>
 			</tr>
-			<c:if test="${mode=='update'}">
-			<tr>
-				<th scope="row"><b class="t_red">*</b> 비밀번호 (Pass Word)</th>
-				<td>
-					<div class="inp_wid adminPwdCheck">
-						<input type="password" name="adminPwdCheck"  style="width:150px;"  />
-					</div>
-				</td>
-			</tr>
-			</c:if>
 			<tr>
 				<th scope="row"><b class="t_red">*</b> 성명 (Name)</th>
 				<td>
@@ -227,14 +242,14 @@ function selectedEmail() {
 					</div>
 				</td>
 			</tr>
-<!-- 			<tr>
+			<tr>
 				<th scope="row"><b class="t_red">*</b> 생년월일 (Birth)</th>
 				<td>
 					<div class="inp_wid Birth">
-						<input type="text" placeholder="YYYY-MM-DD 형식" name="adminBirth" style="width:150px;" />
+						<input type="text" placeholder="YYYY-MM-DD 형식" name="adminBirth" style="width:150px;" value="${dto.adminBirth }"/>
 					</div>
 				</td>
-			</tr> -->
+			</tr>
 			<tr>
 				<th scope="row"><b class="t_red">*</b> 이메일 (E-mail)</th>
 				<td>
@@ -313,6 +328,19 @@ function selectedEmail() {
 							<option value="3" ${dto.departCode=="3" ? "selected='selected'" : ""}>3. 여행</option>
 							<option value="4" ${dto.departCode=="4" ? "selected='selected'" : ""}>4. 관리</option>
 						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><b class="t_red">*</b> 증명사진 (Photo)</th>
+				<td>
+					<div class="inp_wid upload">
+						 <input type="file" name="upload" size="53" style="width:250px;">${dto.saveFilename }
+					<c:if test="${mode=='update' }">
+					<c:if test="${not empty dto.saveFilename}">
+				         | <button type="button" onclick="deleteFile('${dto.adminIdx}')" class="button btn_blk" style="width:80px;">파일삭제</button>
+				    </c:if>
+				    </c:if>
 					</div>
 				</td>
 			</tr>

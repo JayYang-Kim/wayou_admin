@@ -10,12 +10,18 @@
 		var f=document.searchForm;
 		f.submit();
 	}
+	
+	var ra="${state}";
+	if(ra!=""){ 
+		alert(ra);
+	}
 </script>
 <h2>인사 리스트</h2>
 
 <div>
 	<div class="list_search_wrap">
 		<div class="list_search">
+		<form name="searchForm" action="<%=cp%>/admin/list" method="post">
 			<select name="condition" id="condition">
 				<option value="departCode" ${condition=="departCode"?"selected='selected' ":""}>부서</option>
 				<option value="positionCode" ${condition=="positionCode"?"selected='selected' ":""}>직책</option>
@@ -23,6 +29,7 @@
 			</select>
 			<input type="text" name="word" id="word" value="${word}"/>
 			<button class="button" onclick="searchAdminList()">검색</button>
+			</form>
 		</div>
 	</div>
 	<div class="tbl_wrap">
@@ -49,11 +56,11 @@
 			<c:forEach var="dto" items="${listAdmin}">
 				<tr>
 					<td>${dto.listNum}</td>
-					<td>${dto.adminId}</td>
-					<td>${dto.adminName}</td>
-					<td>${dto.departName}</td>
-					<td>${dto.positionName}</td>
-					<td>${dto.identName}</td>
+					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.adminId}</a></td>
+					<td><a href="javascript:adminArticle('${dto.adminIdx}')">${dto.adminName}</a></td>
+					<td><a href="javascript:adminArticle('${dto.adminIdx}')">${dto.departName}</a></td>
+					<td><a href="javascript:adminArticle('${dto.adminIdx}')">${dto.positionName}</a></td>
+					<td><a href="javascript:adminArticle('${dto.adminIdx}')">${dto.identName}</a></td>
 				</tr>
 			</c:forEach>	
 			</tbody>

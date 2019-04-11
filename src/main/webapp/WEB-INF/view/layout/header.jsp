@@ -5,7 +5,7 @@
 <%
    String cp = request.getContextPath();
 %>
-  <h1 id="logo"><a href="/">WAYOU</a></h1>
+  <h1 id="logo"><a href="<%=cp%>/main">WAYOU</a></h1>
             <!-- 로고있는 경우 하단 태그 사용 -->
             <!-- <h1 id="logo"><a href="/"><img src="./resource/images/common/logo.png" alt="카카오" /></a></h1> -->
 			<a href="#" class="btn_gnb">

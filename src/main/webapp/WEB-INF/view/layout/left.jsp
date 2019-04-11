@@ -23,8 +23,6 @@
 										<ul>
 											<li><a href="<%=cp%>/admin/list">리스트</a></li>
 											<li><a href="<%=cp%>/admin/created">등록</a></li>
-											<li><a href="<%=cp%>/admin/update">수정</a></li>
-											<li><a href="#">삭제</a></li>
 										</ul>
 									</div>
 								</li>
