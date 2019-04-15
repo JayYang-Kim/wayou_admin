@@ -22,9 +22,11 @@
 	<div class="list_search_wrap">
 		<div class="list_search">
 		<form name="searchForm" action="<%=cp%>/admin/list" method="post">
+		<span style="text-align:left">검색 결과 : ${dataCount}명</span>
 			<select name="condition" id="condition">
 				<option value="departCode" ${condition=="departCode"?"selected='selected' ":""}>부서</option>
 				<option value="positionCode" ${condition=="positionCode"?"selected='selected' ":""}>직책</option>
+				<option value="idnCode" ${condition=="idnCode"?"selected='selected' ":""}>권한</option>
 				<option value="adminName" ${condition=="adminName"?"selected='selected' ":""}>성명</option>
 			</select>
 			<input type="text" name="word" id="word" value="${word}"/>
@@ -57,10 +59,10 @@
 				<tr>
 					<td>${dto.listNum}</td>
 					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.adminId}</a></td>
-					<td><a href="javascript:adminArticle('${dto.adminIdx}')">${dto.adminName}</a></td>
-					<td><a href="javascript:adminArticle('${dto.adminIdx}')">${dto.departName}</a></td>
-					<td><a href="javascript:adminArticle('${dto.adminIdx}')">${dto.positionName}</a></td>
-					<td><a href="javascript:adminArticle('${dto.adminIdx}')">${dto.identName}</a></td>
+					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.adminName}</a></td>
+					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}"">${dto.departName}</a></td>
+					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.positionName}</a></td>
+					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.identName}</a></td>
 				</tr>
 			</c:forEach>	
 			</tbody>

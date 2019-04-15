@@ -6,10 +6,29 @@
 	String cp=request.getContextPath();
 %>
 <script type="text/javascript">
-function deleteFile(){
-	var url="<%=cp%>/admin/deleteFile?adminIdx=${dto.adminIdx}&pageNum=${pageNum}";
-	location.href=url;
+var ra="${state}";
+if(ra!=""){ 
+	alert(ra);
 }
+
+function deleteFile(adminIdx){
+	var url="<%=cp%>/admin/deleteFile";
+	location.href=url + "?adminIdx=${dto.adminIdx}&pageNum=${pageNum}";
+}
+
+var fn = 0;
+function fire(){
+	var fire=confirm("퇴직 처리하시겠습니까?");
+	if(fire==true){
+		$("#idnCode").val("0").prop("selected", true);
+		$("#positionCode").val("0").prop("selected", true);
+		$("#departCode").val("0").prop("selected", true);
+		fn=1;
+	}else if(fire==false){
+		location.href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}";
+	}
+}
+
 
 
 function sabun(){
@@ -61,25 +80,8 @@ function created() {
 	var f = document.createdForm;
 	var content;
 
-	content = f.adminId.value;
-	content = content.trim();
-
-	content = f.adminPwd.value;
-	content = content.trim();	
-	
-	content = f.adminPwd.value;
-	content = content.trim();
-	if(mode =="update"){
-		if(content!= f.adminPwdCheck.value) {
-        	alert("패스워드가 일치하지 않습니다. ");
-        	f.adminPwdCheck.focus();
-        	return;
-		}
-	}
-	
 	content = f.adminName.value;
-	content = content.trim();
-	
+    content = content.trim();
     if(!content) {
         alert("이름을 입력하세요. ");
         f.adminName.focus();
@@ -170,18 +172,19 @@ function created() {
         return;
     }
     
+    if(mode=="created"){
     content=f.upload.value;
     content = content.trim();
-    if(!content) {
+    	if(!content) {
         alert("증명사진을 첨부해주세요. ");
         f.upload.focus();
         return;
+    	}
     }
-    
     if(mode=="created")
    		f.action = "<%=cp%>/admin/created";
 	else
-   		f.action = "<%=cp%>/admin/update";
+   		f.action = "<%=cp%>/admin/updateAdmin";
 
     f.submit();
 }
@@ -206,6 +209,9 @@ function selectedEmail() {
 </script>
 <div>
 	<form name="createdForm" method="post" enctype="multipart/form-data">
+		<c:if test="${mode=='update'}">
+		<input type="hidden" name="adminIdx" value="${dto.adminIdx}">
+		</c:if>
 	<table class="table left_tbl form_tbl">
 		<caption style="padding-left:10px; padding-bottom:15px;">${mode=="created"?"| 인사 등록":"| 인사 수정"}</caption>
 		<colgroup>
@@ -335,7 +341,7 @@ function selectedEmail() {
 				<th scope="row"><b class="t_red">*</b> 증명사진 (Photo)</th>
 				<td>
 					<div class="inp_wid upload">
-						 <input type="file" name="upload" size="53" style="width:250px;">${dto.saveFilename }
+						 <input type="file" name="upload" size="53" style="width:250px;">${dto.saveFilename}
 					<c:if test="${mode=='update' }">
 					<c:if test="${not empty dto.saveFilename}">
 				         | <button type="button" onclick="deleteFile('${dto.adminIdx}')" class="button btn_blk" style="width:80px;">파일삭제</button>
@@ -345,6 +351,10 @@ function selectedEmail() {
 				</td>
 			</tr>
 	</table>
-		<div style="margin-top:15px; text-align:center"><button type="button" onclick="created()" class="button btn_blk" style="width:80px;">${mode=="created"?"등록":"수정"}</button></div>
+		<div style="margin-top:15px; text-align:center"><button type="button" onclick="created()" class="button btn_blk" style="width:80px;">${mode=="created"?"등록":"수정"}</button>
+		<c:if test="${mode=='update' }">
+		<button type="button" onclick="fire()" class="button btn_blk" style="width:100px;">퇴직 처리</button>
+		</c:if>
+		</div>
 	</form>
 </div>

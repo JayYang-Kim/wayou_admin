@@ -19,10 +19,6 @@
     		VALUES (adminIdx_seq.NEXTVAL, #{adminId}, #{adminPwd}, #{adminBirth},  #{adminName}, #{tel}, #{email}, #{idnCode}, #{positionCode}, #{departCode}, #{saveFilename})
 	</insert>
 	
-	<select id="dataCount" parameterType="map" resultType="Integer">
-		SELECT NVL(COUNT(*),0)
-		FROM admin
-	</select>
 	
 	<sql id="w-list">
 		<choose>
@@ -33,13 +29,25 @@
 			p.positionName=#{word}
 		</when>
 		<when test="condition=='idnCode'">
-			i.identcode=#{word}
+			i.identName=#{word}
 		</when>
 		<when test="condition=='adminName'">
 			a.adminName=#{word}
 		</when>
 	</choose>
 	</sql>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0) from admin a
+  			JOIN identifierCode i ON a.idnCode = i.identcode 
+  			JOIN position p ON a.positionCode = p.positionCode
+  			JOIN department d ON a.departCode = d.departCode 
+		<where>
+			<if test="word != null and word != ''">
+			<include refid="w-list"/>
+			</if>
+		</where>
+	</select>
 	
 	<select id="listAdmin" parameterType="map" resultType="com.sp.admin.Admin">
 		SELECT * FROM (
@@ -62,7 +70,7 @@
 	
 	<select id="articleAdmin" parameterType="Integer" resultType="com.sp.admin.Admin">
 		SELECT adminIdx, adminId, adminPwd, adminName, TO_CHAR(adminBirth, 'YYYY-MM-DD') adminBirth, postCode, address1, address2, etc, tel, email, 
-        TO_CHAR(created, 'YYYY-MM-DD') created, adminModify_date, extNum, departName, positionName, identName, saveFilename
+        TO_CHAR(created, 'YYYY-MM-DD') created, adminModify_date, extNum, a.idnCode, a.positionCode, a.departCode, departName, positionName, identName, saveFilename
     		FROM admin  a
           JOIN identifierCode i ON a.idnCode = i.identCode 
           JOIN position p ON a.positionCode = p.positionCode
@@ -71,7 +79,7 @@
 	</select>
 	
 	<update id="updateAdmin" parameterType="com.sp.admin.Admin">
-		UPDATE admin SET adminName=#{adminName}, idnCode=#{idnCode}, positionCode=#{positionCode}, departCode=#{departCode}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
+		UPDATE admin SET adminName=#{adminName}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, idnCode=#{idnCode}, positionCode=#{positionCode}, departCode=#{departCode}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
     		WHERE adminIdx=#{adminIdx}
 	</update>
 </mapper>

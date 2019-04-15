@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -124,9 +123,14 @@ public class AdminController {
 		String pathname = root + "uploads" + File.separator + "admin";
 
 		int result= adminService.insertAdmin(dto, pathname);
+
 		if(result==0) {
 			return "redirect:/admin/created";
-		}else return "redirect:/admin/list";
+		}else {
+			boolean b=adminService.mailSend(dto);
+			System.out.println(""+b);
+			return "redirect:/admin/list";
+		}
 	}
 
 	@RequestMapping(value="/admin/list")
@@ -219,6 +223,11 @@ public class AdminController {
 			) throws Exception{
 		System.out.println(adminIdx);
 		Admin dto = adminService.articleAdmin(adminIdx);
+		
+		if(dto == null) {
+			return "redirect:/admin/list";
+		}
+		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		
 		String em[]=dto.getEmail().split("@");
@@ -230,9 +239,7 @@ public class AdminController {
 		dto.setTel2(tt[1]);
 		dto.setTel3(tt[2]);
 		
-		if(dto == null) {
-			return "redirect:/admin/list";
-		}
+		
 		
 		if(info.getIdnCode() !=2) {
 			ra.addFlashAttribute("state","수정 권한이 없습니다.");
@@ -251,24 +258,28 @@ public class AdminController {
 			@RequestParam(defaultValue="1") int pageNum,
 			@RequestParam(defaultValue="departCode") String condition,
 			@RequestParam(defaultValue="") String word,
+			RedirectAttributes ra,
 			HttpSession session
 			) throws Exception{
-		
-		String root= session.getServletContext().getRealPath("/");
-		String pathname = root + "uploads" + File.separator+"admin";
-		
-		adminService.updateAdmin(dto, pathname);
-		
-		return "redirect:/admin/list?pageNum="+pageNum;
+		int result=0;
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + "uploads" + File.separator + "admin";
+		result=adminService.updateAdmin(dto, pathname);
+		if(result==0) {
+			ra.addFlashAttribute("state","(수정 실패) 다시 시도해주세요");
+			return "redirect:/admin/articleAdmin?adminIdx="+dto.getAdminIdx();
+		}else
+			ra.addFlashAttribute("state","수정 완료");
+
+		return "redirect:/admin/articleAdmin?adminIdx="+dto.getAdminIdx();
 	}
 	
-	@RequestMapping(value="/amdin/deleteFile")
+	@RequestMapping(value="/admin/deleteFile")
 	public String deleteFile(
 			@RequestParam int adminIdx,
-			@RequestParam int pageNum,
+			@RequestParam(defaultValue="1") int pageNum,
 			HttpSession session
 			) throws Exception{
-		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		String root=session.getServletContext().getRealPath("/");
 		String pathname=root+"uploads"+File.separator+"amdin";
 		
@@ -276,13 +287,13 @@ public class AdminController {
 		if(dto==null) {
 			return "redirect:/admin/list?pageNum="+pageNum;
 		}
-		
+
 		if(dto.getSaveFilename()!=null) {
 			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
 			dto.setSaveFilename("");
 			adminService.updateAdmin(dto, pathname);
 		}
 		
-		return "redirect:/admin/update?adminIdx="+adminIdx+"&pageNum="+pageNum;
+		return "redirect:/admin/updateAdmin?adminIdx="+adminIdx+"&pageNum="+pageNum;
 	}
 }
