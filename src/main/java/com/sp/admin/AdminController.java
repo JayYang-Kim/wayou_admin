@@ -55,7 +55,7 @@ public class AdminController {
 	public String logout(HttpSession session){
 		session.removeAttribute("admin");
 		session.invalidate();
-		return "redirect:/main"; //관리자 메인으로 주소 변경하세요 용운님
+		return "redirect:/admin/login"; //관리자 메인으로 주소 변경하세요 용운님
 	}
 	
 	//이렇게 사용하세요
