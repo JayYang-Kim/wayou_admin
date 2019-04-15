@@ -29,6 +29,7 @@ public class HotelController {
 		return ".hotel.reserve.list";
 	}
 	
+	
 	@RequestMapping(value="/hotel/customer/reserveList")
 	public String customerList() {
 		return ".hotel.customer.reserveList";
@@ -37,13 +38,14 @@ public class HotelController {
 	@RequestMapping(value="/hotel/hotelInfo/insertHotel", method=RequestMethod.GET)
 	public String insertHotelForm(Model model) {
 		
-		model.addAttribute("mode", "created");
+		//model.addAttribute("mode", "created");
 		
-		return ".hotel.hotelInfo.insertHotel";
+		return "hotel/hotelInfo/insertHotel";
 	}
 	
 	@RequestMapping(value="/hotel/hotelInfo/insertHotel", method=RequestMethod.POST)
 	public String insertHotelSubmit(Hotel dto, HttpSession session, Model model) {
+		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		String root = session.getServletContext().getRealPath("/");
 		
@@ -53,7 +55,12 @@ public class HotelController {
 		
 		hotelService.insertHotel(dto, pathname);
 		
-		return "redirect:/hotel/hotelList";
+		return "redirect:/hotel/reserve/list";
+	}
+	
+	@RequestMapping(value="/hotel/event/listEvent")
+	public String listEvent() {
+		return ".hotel.event.listEvent";
 	}
 	
 }

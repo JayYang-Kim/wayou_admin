@@ -24,9 +24,10 @@ public class HotelServiceImpl implements HotelService {
 			
 			result=dao.insertData("hotel.insertHotel", dto);
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		return result;
 	}
+
 	
 }

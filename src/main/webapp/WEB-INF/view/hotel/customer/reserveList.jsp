@@ -10,7 +10,7 @@
 	<div style="height: 50px;">
 		<h1>예약고객List</h1>
 	</div>
-	<div class="list_search_wrap" style="margin-right: 20%;">
+	<div class="list_search_wrap">
 		<div class="list_search">
 			<select title="검색조건선택">
 				<option value="전체">전체</option>
@@ -26,7 +26,7 @@
 			</span>
 		</div>
 	</div>
-		<table class="table td_bor_no" style="width: 80%" >
+		<table class="table td_bor_no">
 			<thead>
 				<tr>
 					<th width="50">예약번호</th>

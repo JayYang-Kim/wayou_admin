@@ -5,12 +5,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class Hotel {
 	private int hotelCode;
 	private String hname;
-	private String address1, address2, lat, lng;
+	private String address1, address2;
 	private String information, tel, email, name;
 	private String saveFilename;
 	private MultipartFile upload;
 	private int adminIdx;
-	private int loCode;
+	private int locCode;
 	
 	public int getHotelCode() {
 		return hotelCode;
@@ -36,18 +36,7 @@ public class Hotel {
 	public void setAddress2(String address2) {
 		this.address2 = address2;
 	}
-	public String getLat() {
-		return lat;
-	}
-	public void setLat(String lat) {
-		this.lat = lat;
-	}
-	public String getLng() {
-		return lng;
-	}
-	public void setLng(String lng) {
-		this.lng = lng;
-	}
+	
 	public String getInformation() {
 		return information;
 	}
@@ -84,11 +73,11 @@ public class Hotel {
 	public void setAdminIdx(int adminIdx) {
 		this.adminIdx = adminIdx;
 	}
-	public int getLocode() {
-		return loCode;
+	public int getLocCode() {
+		return locCode;
 	}
-	public void setLocode(int loCode) {
-		this.loCode = loCode;
+	public void setLocCode(int locCode) {
+		this.locCode = locCode;
 	}
 	public MultipartFile getUpload() {
 		return upload;

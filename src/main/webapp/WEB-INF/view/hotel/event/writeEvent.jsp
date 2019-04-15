@@ -5,13 +5,11 @@
 <%
 	String cp=request.getContextPath();
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
 
-</body>
-</html>
+
+<table class="table left_tbl">
+	<tr>
+		<th>제목</th>
+		<td><input type="text"></td>
+	</tr>
+</table>
