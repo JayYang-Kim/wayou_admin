@@ -16,7 +16,7 @@
 		alert(ra);
 	}
 </script>
-<h2>인사 리스트</h2>
+<h1>| 인사 리스트</h1>
 
 <div>
 	<div class="list_search_wrap">
@@ -60,7 +60,7 @@
 					<td>${dto.listNum}</td>
 					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.adminId}</a></td>
 					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.adminName}</a></td>
-					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}"">${dto.departName}</a></td>
+					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.departName}</a></td>
 					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.positionName}</a></td>
 					<td><a href="<%=cp%>/admin/articleAdmin?adminIdx=${dto.adminIdx}">${dto.identName}</a></td>
 				</tr>

@@ -11,7 +11,7 @@ if(ra!=""){
 	alert(ra);
 }
 
-function deleteFile(adminIdx){
+function deleteFile(){
 	var url="<%=cp%>/admin/deleteFile";
 	location.href=url + "?adminIdx=${dto.adminIdx}&pageNum=${pageNum}";
 }
@@ -207,13 +207,11 @@ function selectedEmail() {
 
 
 </script>
+<div style="padding-left:10px; padding-bottom:15px;">
+<h1>${mode=="created"?"| 인사 등록":"| 인사 수정"}</h1></div>
 <div>
 	<form name="createdForm" method="post" enctype="multipart/form-data">
-		<c:if test="${mode=='update'}">
-		<input type="hidden" name="adminIdx" value="${dto.adminIdx}">
-		</c:if>
 	<table class="table left_tbl form_tbl">
-		<caption style="padding-left:10px; padding-bottom:15px;">${mode=="created"?"| 인사 등록":"| 인사 수정"}</caption>
 		<colgroup>
 			<col style="width:15%" />
 			<col />
@@ -341,10 +339,10 @@ function selectedEmail() {
 				<th scope="row"><b class="t_red">*</b> 증명사진 (Photo)</th>
 				<td>
 					<div class="inp_wid upload">
-						 <input type="file" name="upload" size="53" style="width:250px;">${dto.saveFilename}
+						 <input type="file" name="upload" size="53" style="width:250px;" value="${dto.saveFilename}">${dto.saveFilename}
 					<c:if test="${mode=='update' }">
 					<c:if test="${not empty dto.saveFilename}">
-				         | <button type="button" onclick="deleteFile('${dto.adminIdx}')" class="button btn_blk" style="width:80px;">파일삭제</button>
+				         | <button type="button" onclick="deleteFile('${dto.saveFilename}')" class="button btn_blk" style="width:80px;">파일삭제</button>
 				    </c:if>
 				    </c:if>
 					</div>
@@ -356,5 +354,8 @@ function selectedEmail() {
 		<button type="button" onclick="fire()" class="button btn_blk" style="width:100px;">퇴직 처리</button>
 		</c:if>
 		</div>
+		<c:if test="${mode=='update'}">
+		<input type="hidden" name="adminIdx" value="${dto.adminIdx}">
+		</c:if>
 	</form>
 </div>

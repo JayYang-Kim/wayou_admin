@@ -17,7 +17,8 @@ function updateAdmin(adminIdx){
 }
 
 </script>
-<h2>인사 관리 - ${dto.adminName}</h2>
+<div style="padding-left:10px; padding-bottom:15px;">
+<h1>| 인사 관리 - ${dto.adminName}&nbsp;${dto.positionName}</h1></div>
 <table class="table left_tbl">
 	<caption>테이블 제목</caption>
 	<colgroup>
@@ -75,6 +76,8 @@ function updateAdmin(adminIdx){
 	</tbody>
 </table>
 		<div style="padding-top:10px; text-align:center;" >
+		<c:if test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == dto.adminId}">
 			<button class="button btn_blk" onclick="updateAdmin('${adminIdx}')">수정</button>
+		</c:if>
 			<button class="button btn_blk" onclick="javascript:location.href='<%=cp%>/admin/list';">돌아가기</button>
 		</div>

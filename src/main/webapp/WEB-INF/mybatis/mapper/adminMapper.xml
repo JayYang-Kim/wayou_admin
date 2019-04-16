@@ -52,7 +52,7 @@
 	<select id="listAdmin" parameterType="map" resultType="com.sp.admin.Admin">
 		SELECT * FROM (
 		SELECT ROWNUM rnum, tb. * FROM (
-        SELECT adminIdx, adminId, adminName, adminBirth, departName, positionName, identName from admin a
+        SELECT adminIdx, adminId, adminName, adminBirth, departName, positionName, a.positionCode, identName from admin a
           JOIN identifierCode i ON a.idnCode = i.identCode 
           JOIN position p ON a.positionCode = p.positionCode
           JOIN department d ON a.departCode = d.departCode
@@ -80,6 +80,11 @@
 	
 	<update id="updateAdmin" parameterType="com.sp.admin.Admin">
 		UPDATE admin SET adminName=#{adminName}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, idnCode=#{idnCode}, positionCode=#{positionCode}, departCode=#{departCode}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
+    		WHERE adminIdx=#{adminIdx}
+	</update>
+	
+	<update id="MyupdateAdmin" parameterType="com.sp.admin.Admin">
+		UPDATE admin SET adminPwd=${adminPwd}, adminName=#{adminName}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, extNum=#{extNum}, postCode=${postCode}, address1=#{address1}, address2=#{address2}, etc=#{etc}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
     		WHERE adminIdx=#{adminIdx}
 	</update>
 </mapper>
