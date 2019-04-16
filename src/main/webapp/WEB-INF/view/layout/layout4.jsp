@@ -9,7 +9,10 @@
 %>
 
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="ko"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8" lang="ko"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9" lang="ko"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="ko"> <!--<![endif]-->
 <head>
 <meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -52,16 +55,13 @@
 		</aside>
 		
 		<div id="container">
-		    <div class="body-container">
-		        <div class="body-right">
-		            <tiles:insertAttribute name="body"/>
-		        </div>
-		    </div>        
+			<section id="contents">
+	            <tiles:insertAttribute name="body"/>
+		    </section>        
 		</div>
-		
-		<footer id="footer">
-		    <tiles:insertAttribute name="footer"/>
-		</footer>
 	</div>
+	<footer id="footer">
+	    <tiles:insertAttribute name="footer"/>
+	</footer>
 </body>
 </html>
