@@ -11,7 +11,14 @@ public class Hotel {
 	private MultipartFile upload;
 	private int adminIdx;
 	private int locCode;
+	private String locName;
 	
+	public String getLocName() {
+		return locName;
+	}
+	public void setLocName(String locName) {
+		this.locName = locName;
+	}
 	public int getHotelCode() {
 		return hotelCode;
 	}

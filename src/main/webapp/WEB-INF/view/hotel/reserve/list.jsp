@@ -9,6 +9,47 @@
 
 <script type="text/javascript">
 
+var pageNo = 1;
+var searchKey = "hname";
+var searchValue = "";
+
+function ajaxHTML(url, type, query, id) {
+	$.ajax({
+		type: type,
+		url:url,
+		data:query,
+		success:function(data){
+			
+			$("#"+id).html(data);
+			
+		},
+		beforeSend:function(e) {
+			e.setRequestHeader("AJAX", true);
+		},
+		error:function(e) {
+			console.log(e.responseText);
+		}
+	});
+}	
+
+$(function() {
+	listPage(1);
+});
+
+function listPage(page) {
+	pageNo = page;
+	
+	var id="hotel-body";
+	var url="<%=cp%>/hotel/reserve/list";
+	var query="pageNo="+pageNo;
+	if(searchValue!="") {
+		query+="&searchKey="+searchKey+"&searchValue="+encodeURIComponent(searchValue);
+	}
+	
+	ajaxHTML(url,"get", query, id);
+}
+
+
 $(function() {
 
 	$(".btnInsertHotel").click(function() {	
@@ -19,7 +60,7 @@ $(function() {
 			$("#insertForm").empty();
 			return false;
 		}
-		
+	
 		var url="<%=cp%>/hotel/hotelInfo/insertHotel";
 		$.ajax({
 			type:"get",
@@ -42,15 +83,40 @@ $(function() {
 		});
 	});
 	
-	$(".btnInsertHotel").click(function() {
-		
-	})
+	
 });
+
 
 function sendOk() {
     var f = document.insertHotelForm;
-    
-	// alert(f.hname.value);
+		
+	if(! f.hname.value) {
+		alert("호텔명을 입력하세요.");
+		f.hname.focus();
+		return;
+	}
+	
+	if(! f.address1.value) {
+		f.address1.focus();
+		return;
+	}
+	
+	if(! f.address2.value) {
+		f.address2.focus();
+		return;
+	}
+	
+	if(! f.email.value) {
+		f.email.focus();
+		return;
+	}
+	
+	if(! f.tel.value) {
+		f.tel.focus();
+		return;
+	}
+ 
+
  
 	f.action="<%=cp%>/hotel/hotelInfo/insertHotel";
 
@@ -113,24 +179,39 @@ function hotel_Postcode() {
 	<div style="height: 50px; margin-left: 20px;">
 		<h1>호텔 List</h1>
 	</div>
-	<div style="width: 95%;">
+	<div class="list_search_wrap">
+		<div class="list_search">
+			<select name="searchKey" id="searchKey" title="검색조건선택">
+				<option value="hname">호텔명</option>
+				<option value="location">지역</option>
+				<option value="name">사업자명</option>
+			</select>
+			<input type="text" name="searchValue" id="searchValue" title="검색내용입력" />
+			<span class="btn">
+				<a class="button" onclick="searchList();" style="border: none;">검색</a>
+			</span>
+		</div>
+	</div>
+	<div class="hotel-body" style="width: 100%;">
 		<table class="table td_bor_no" style="width: 100%;">
 			<thead>
 				<tr>
 					<th width="100">호텔명</th>
+					<th width="50">지역</th>
 					<th width="70">사업자명</th>
 					<th width="100" colspan="2">관리</th>
 				</tr>
 			</thead>
 			<tbody>
-				
+				<c:forEach var="dto" items="${list}">
 					<tr>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
+						<td>${dto.hname}</td>
+						<td>${dto.locName}</td>
+						<td>${dto.name}</td>
 						<td><button type='button' class='button btn_blk btnInsertRoom'>호텔 정보 수정</button></td>
 						<td><button type='button' class='button btn_blk btnInsertRoom'>객실 추가ㆍ수정</button></td>
 					</tr>
-				
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>

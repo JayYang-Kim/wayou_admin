@@ -5,9 +5,7 @@
 <%
 	String cp=request.getContextPath();
 %>
-<script type="text/javascript">
 
-</script>
 
 
 <div>
@@ -60,15 +58,7 @@
 	 	<tr>
 	 	<th>호텔 이미지 등록</th>
 	 	<td>
-		 	<div class="mt10">
-				<p class="inp_file">
-					<input type="text" placeholder="첨부파일을 선택해주세요." title="첨부파일 선택" readonly="readonly">
-					<span class="btn_file">
-						<a href="#" class="button btn-white">파일찾기</a>
-						<input type="file" name="file" id="hotel_img" placeholder="내용입력" title="파일첨부">
-					</span>
-				</p>
-			</div>
+			<input type="file" placeholder="첨부파일을 선택해주세요." title="첨부파일 선택" readonly="readonly">
 		</td>
 	 	</tr>
 	</table>
