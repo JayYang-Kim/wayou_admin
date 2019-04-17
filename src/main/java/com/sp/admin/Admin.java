@@ -33,6 +33,9 @@ public class Admin {
 	private String originalFilename;
 	private MultipartFile upload;
 	private long filesize;
+	private String ex_Tel1;
+	private String ex_Tel2;
+	private String ex_Tel3;
 	
 	
 	public String getAdminBirth() {
@@ -215,6 +218,25 @@ public class Admin {
 	public void setEmail2(String email2) {
 		this.email2 = email2;
 	}
+	public String getEx_Tel1() {
+		return ex_Tel1;
+	}
+	public void setEx_Tel1(String ex_Tel1) {
+		this.ex_Tel1 = ex_Tel1;
+	}
+	public String getEx_Tel2() {
+		return ex_Tel2;
+	}
+	public void setEx_Tel2(String ex_Tel2) {
+		this.ex_Tel2 = ex_Tel2;
+	}
+	public String getEx_Tel3() {
+		return ex_Tel3;
+	}
+	public void setEx_Tel3(String ex_Tel3) {
+		this.ex_Tel3 = ex_Tel3;
+	}
+	
 	
 	
 	

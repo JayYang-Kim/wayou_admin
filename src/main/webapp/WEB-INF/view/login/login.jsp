@@ -39,103 +39,88 @@
     <!--[if lt IE 9]>
         <script src="resource/js/lib/html5shiv.js"></script>
     <![endif]-->
-       <script type="text/javascript">
-    	function sendOk(){
-    		var f = document.login_form;
-    	
-    		if(!$("input[name='adminId']").val() || !$("input[name='adminPwd']").val()){
-    			alert("이름과 패스워드를 입력하세요");
-    			return;
-    		}
-    		var url ="<%=cp%>/admin/login";
-    		var query = $("form[name='login_form']").serialize();
-    		$.ajax({
-    			type:"post",
-    			url:url,
-    			data:query,
-    			dataType:"json",
-    			success:function(data){
-    				if(data.isAdmin){
-    					var uri = data.uri;
-    					if(uri==null){
-    						uri ="/main";
-    					}
-    					location.href="<%=cp%>"+uri;
-    				}else{
-    					alert("정보가 다릅니다.");
-    				}
-    			},
-    			beforesend:function(e){
-    				e.setRequestHeader("AJAX",true);
-    			},
-    			error:function(e){
-    				console.log(e);
-    			}
-    		});
-    	}
+    <script type="text/javascript">
+    $(function(){
+    	$("#login_notice").hide();
+    });
+    function sendOk(){
+   		var f = document.login_form;
+   	
+   		if(!$("input[name='adminId']").val()){
+   			$("#login_notice").find(".memo_notice").html("아이디를 입력해주세요.");
+   			$("#login_notice").fadeIn(2000);
+   			$("input[name='adminId']").focus();
+   			return;
+   		}
+   		
+   		if(!$("input[name='adminPwd']").val()) {
+   			$("#login_notice").find(".memo_notice").html("비밀번호를 입력해주세요.");
+   			$("#login_notice").fadeIn(2000);
+   			$("input[name='adminPwd']").focus();
+   			return;
+   		}
+   		
+   		var url ="<%=cp%>/admin/login";
+   		var query = $("form[name='login_form']").serialize();
+   		$.ajax({
+   			type:"post",
+   			url:url,
+   			data:query,
+   			dataType:"json",
+   			success:function(data){
+   				if(data.isAdmin){
+   					var uri = data.uri;
+   					if(uri==null){
+   						uri ="/main";
+   					}
+   					location.href="<%=cp%>"+uri;
+   				}else{
+   					$("#login_notice").find(".memo_notice").html("아이디 또는 비밀번호가 일치하지 않습니다.");
+   		   			$("#login_notice").fadeIn(2000);
+   		   			$("input[name='adminId']").focus();
+   				}
+   			},
+   			beforesend:function(e){
+   				e.setRequestHeader("AJAX",true);
+   			},
+   			error:function(e){
+   				console.log(e);
+   			}
+   		});
+   	}
     </script>
 </head>
 
 <body>
-    <!-- Wrap -->
-    <div id="wrap" class="login_wrap">
-        <!-- Header -->
-        <header>
-            <div class="login_header">
-                <h1 class="title">
-                    <a href="main.html">WAYOU | 관리자</a>
-                </h1>
-            </div>
-        </header>
-        <!-- //Header -->
-        
-        <!-- container -->
-        <div id="container" class="login_container">
-            <!-- contents -->
-            <div class="register">
-                <form name="login_form" action="#">
-                    <fieldset>
-                        <div class="box_login">
-                            <h3 class="title">로그인</h3>
-                            <div class="mt30">
-                                <label for="txt_id">아이디</label>
-                                <div>
-                                    <input type="text" name="adminId" id="txt_id" class="boxTf" autocomplete="off" autofocus/>
-                                </div>
-                            </div>
-                            <div class="mt30">
-                                <label for="txt_pwd">비밀번호</label>
-                                <div>
-                                    <input type="password" name="adminPwd" id="txt_pwd" class="boxTf" autocomplete="off" autofocus/>
-                                </div>
-                            </div>
-                            <div class="mt30">
-                                <label class="checkbox">
-                                    <input name="checkbox" type="checkbox" value="saveId"/>
-                                    <span class="lbl">아이디 저장</span>
-                                </label>
-                            </div>
-                            <div class="mt30">
-                                <button type="button" class="btn_login" onclick="sendOk();">로그인</button>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <!-- //contents -->
-        </div>
-        <!-- //container -->
-        
-        <!-- Footer -->
-        <footer class="clear login">
-            <div class="box_footer">
-                <div class="copyright">
-                    <p>Copyright (c) (주)WAYOU. All rights reserved.</p>
-                </div>
-            </div>
-        </footer>
-        <!-- //Footer -->
-    </div>
-    <!-- //Wrap -->
+	<article class="main_wrap">
+		<div class="inner">
+			<h3>로그인</h3>
+			<form name="login_form">
+				<ul>
+					<li>
+						<label for="userId">아이디 / ID</label>
+						<input id="userId" name="adminId" type="text" placeholder="ID" autocomplete="off" autofocus/>
+					</li>
+					<li>
+						<label for="userPw">비밀번호 / Password</label>
+						<input id="userPw" name="adminPwd" type="password" placeholder="PASSWORD" autocomplete="off" autofocus/>
+					</li>
+					<li class="login_check mt20">
+						<label class="checkbox-wrap">
+							<input type="checkbox" id="id_save">
+							<i class="check-icon"></i>
+						</label>
+						<label for="id_save">아이디저장</label>
+					</li>
+					<li>
+						<button type="button" class="btn_login btn-block" onclick="sendOk()"><strong>로그인</strong></button>
+					</li>
+				</ul>
+			</form>
+			<footer id="login_notice">
+				<img src="<%=cp%>/resource/images/common/icon_notice2.png" class="icon_notice"><span class="memo_notice">아이디 및 패스워드를 확인해주세요.</span>
+			</footer>
+		</div>
+	</article>
 </body>
 </html>

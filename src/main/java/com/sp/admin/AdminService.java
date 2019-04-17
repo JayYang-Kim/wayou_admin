@@ -133,12 +133,12 @@ public class AdminService {
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
 			
 			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
-
 			if(saveFilename != null) {
 				if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0) {
 					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
 				}
-				dto.setSaveFilename(saveFilename);
+				if(dto.getPositionCode()!=0) 
+					dto.setSaveFilename(saveFilename);
 			}
 			dao.updateData("admin.updateAdmin",dto);
 			result=1;
@@ -148,6 +148,42 @@ public class AdminService {
 		
 		return result;
 	}
+	
+	public int MyupdateAdmin(Admin dto, String pathname) {
+		int result=0;
+		
+		try {
+			if(dto.getEmail1() != null && dto.getEmail1().length()!=0 &&
+					dto.getEmail2() != null && dto.getEmail2().length()!=0)
+				dto.setEmail(dto.getEmail1() + "@" + dto.getEmail2());
+			
+			if(dto.getTel1() != null && dto.getTel1().length()!=0 &&
+					dto.getTel2() != null && dto.getTel2().length()!=0 &&
+							dto.getTel3() != null && dto.getTel3().length()!=0)
+				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
+			
+			if(dto.getEx_Tel1() != null && dto.getEx_Tel1().length()!=0 &&
+					dto.getEx_Tel2() != null && dto.getEx_Tel2().length()!=0 &&
+							dto.getEx_Tel3() != null && dto.getEx_Tel3().length()!=0)
+				dto.setExtNum(dto.getEx_Tel1() + "-" + dto.getEx_Tel2() + "-" + dto.getEx_Tel3());
+			
+			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
+			if(saveFilename != null) {
+				if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0) {
+					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+				}
+				if(dto.getPositionCode()!=0) 
+					dto.setSaveFilename(saveFilename);
+			}
+			dao.updateData("admin.MyupdateAdmin",dto);
+			result=1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
 	
 	private String mailType= "text/html; charset=utf-8";
 	private String encType= "utf-8";

@@ -24,7 +24,7 @@
 /* base */
 h1,h2,h3,h4,h5,h6,fieldset,ul,ol,dl,dt,dd,p,button,figure{margin:0;padding:0;}
 html{}
-body{font:normal 12px/1.5 "나눔고딕",'Nanum Gothic',NanumGothic,sans-serif;color:#666;}
+body{font:normal 12px/1.5 NBGNormal, "돋움", Dotum, Arial, Tahoma , Geneva, Verdana;color:#666;}
 legend,caption{width:0;height:0;visibility:hidden;font-size:0;line-height:0;}
 em,a ,input,textarea,keygen,select,button,isindex{font-style:normal;text-decoration:none;color:inherit;}
 fieldset,button{background:none;border:0px;}
@@ -97,6 +97,7 @@ hr{border-width:1px 0 0 0;}
 
 .w_100{width:100%;}
 
+.hide{dosplay:none;}
 .hidden{overflow:hidden;}
 .scroll{overflow-y:scroll;}
 .no_bg{background:none !important;}
@@ -290,7 +291,8 @@ html,body{height:100%;}
 /*#header{position:fixed;left:0;top:0;width:100%;border-bottom:2px solid #f9d700;background:#f4f4f4;z-index:13;}*/
 	#header > div{margin-left:200px;border-left:1px solid #fff;padding:10px;overflow:hidden;}
 	#logo{float:left;width:199px;}
-	#logo a{display:block;height:48px;line-height:48px;text-align:center;}
+	#logo a{display:block;height:48px;line-height:52px;text-align:center;}
+	/* #logo a{display:block;height:48px;line-height:48px;text-align:center;} */
 	#logo a img{max-width:100%;max-height:100%}
 	.btn_gnb{display:none;position:fixed;left:10px;top:4px;width:30px;height:40px;font-size:0;text-align:center;z-index:20;}
 	.btn_gnb i:before,
@@ -316,7 +318,8 @@ html,body{height:100%;}
 	#gnb{margin-top:50px;}
 	#gnb > ul{}
 	#gnb > ul > li{border-top:1px solid #4b4c4d;border-bottom:1px solid #2e2f31;}
-	#gnb > ul > li > a{position:relative;display:block;padding:10px 25px;color:#fff;font-size:13px;font-weight:bold;}
+	#gnb > ul > li > a{position:relative;display:block;padding:10px 25px;color:#fff;font-size:13px;}
+	/* #gnb > ul > li > a{position:relative;display:block;padding:10px 25px;color:#fff;font-size:13px;font-weight:bold;} */
 	#gnb > ul > li > a:hover,
 	#gnb > ul > li > a:focus,
 	#gnb > ul > li > a:active,

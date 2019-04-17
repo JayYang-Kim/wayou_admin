@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="travel.party">
+	<!-- sql -->
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'all'">
+			   (INSTR(subject, #{searchValue}) &gt; 0
+		          OR DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0)
+			</when>
+			<when test="searchKey == 'subject'">
+			   INSTR(subject, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'content'">
+			    DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'userId'">
+			   INSTR(userId, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'userCount'">
+			   max = #{searchValue}
+			</when>
+			<when test="searchKey == 'enabled'">
+			   enabled = #{searchValue}
+			</when>
+			<when test="searchKey == 'confirmCode'">
+			   confirmCode = #{searchValue}
+			</when>
+			<otherwise>
+			    (TO_CHAR(${searchKey}, 'YYYYMMDD') = #{searchValue}
+		          OR TO_CHAR(${searchKey}, 'YYYY-MM-DD') = #{searchValue})
+			</otherwise>
+		</choose>
+	</sql>
+	<!-- /sql -->
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM party
+		<where>
+			<if test="searchValue != null and searchValue != ''">
+	     	    <include refid="where-list"/>
+	     	</if>
+		</where>
+	</select>
+	
+	<select id="listParty" parameterType="map" resultType="com.sp.travel.party.Party">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT partyCode, subject, content,
+		        TO_CHAR(startDate, 'YYYY-MM-DD') AS startDate,
+		        TO_CHAR(endDate, 'YYYY-MM-DD') AS endDate,
+		        u.userIdx,
+		        u.userId,
+		        u.userName,
+		        TO_CHAR(created, 'YYYY-MM-DD') AS created,
+		        max, enabled, confirmCode
+		        FROM party p
+				JOIN tb_user u ON p.userIdx = u.userIdx
+		        <where>
+		        	<if test="searchValue != null and searchValue != ''">
+			     	    <include refid="where-list"/>
+			     	</if>
+		        </where>
+		        ORDER BY partyCode DESC, confirmCode ASC
+		<![CDATA[
+		    ) tb WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+		]]>
+	</select>
+	
+	<select id="readParty" parameterType="Integer" resultType="com.sp.travel.party.Party">
+		SELECT p.partyCode, subject, content, 
+		    TO_CHAR(startDate, 'YYYY-MM-DD') startDate, 
+		    TO_CHAR(endDate, 'YYYY-MM-DD') endDate, 
+		    p.userIdx,
+		    u.roleCode,
+		    u.userId,
+		    u.userName,
+		    TO_CHAR(created, 'YYYY-MM-DD') created, max, enabled, confirmCode,
+		    NVL(partyPeopleCount, 0) partyPeopleCount
+		FROM party p
+		JOIN tb_user u ON p.userIdx = u.userIdx
+		LEFT OUTER JOIN (
+		    SELECT partyCode, COUNT(*) partyPeopleCount FROM partyPeople
+		    GROUP BY partyCode
+		) pp ON p.partyCode = pp.partyCode
+		WHERE p.partyCode = #{partyCode}
+	</select>
+	
+	<!-- 이전글 -->
+	<select id="preReadParty" parameterType="map" resultType="com.sp.travel.party.Party">
+		SELECT tb.* FROM (
+		    SELECT partyCode, subject
+		    FROM party
+		    <where>
+				<if test="keyword != null and keyword != '' ">
+            		<include refid="where-list"/>
+              	</if>
+              	AND (partyCode &gt; #{partyCode})
+            </where>
+		    ORDER BY partyCode DESC, confirmCode ASC
+		) tb WHERE ROWNUM=1
+	</select>
+
+	<!-- 다음글 -->
+	<select id="nextReadParty" parameterType="map" resultType="com.sp.travel.party.Party">
+		SELECT tb.* FROM (
+		    SELECT partyCode, subject
+		    FROM party
+		    <where>
+				<if test="keyword != null and keyword != '' ">
+            		<include refid="where-list"/>
+              	</if>
+              	AND (partyCode &lt; #{partyCode})
+            </where>
+		    ORDER BY partyCode DESC, confirmCode ASC
+		) tb WHERE ROWNUM=1
+	</select>
+	
+	<update id="updateConfirm" parameterType="Integer">
+		UPDATE party SET
+			confirmCode = 1
+		WHERE partyCode = #{partyCode}
+	</update>
+</mapper>

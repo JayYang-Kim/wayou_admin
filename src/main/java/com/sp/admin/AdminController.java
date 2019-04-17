@@ -239,6 +239,13 @@ public class AdminController {
 		dto.setTel2(tt[1]);
 		dto.setTel3(tt[2]);
 		
+		if(dto.getExtNum()!=null) {
+		String et[]=dto.getExtNum().split("-");
+		dto.setEx_Tel1(et[0]);
+		dto.setEx_Tel2(et[1]);
+		dto.setEx_Tel3(et[2]);
+		}
+
 		
 		
 		if(info.getIdnCode() !=2) {
@@ -295,5 +302,66 @@ public class AdminController {
 		}
 		
 		return "redirect:/admin/updateAdmin?adminIdx="+adminIdx+"&pageNum="+pageNum;
+	}
+	
+	@RequestMapping(value="/admin/Myupdate", method=RequestMethod.GET)
+	public String adminMyUpdateForm(
+			HttpSession session,
+			RedirectAttributes ra,
+			Model model
+			) throws Exception{
+		AdminSessionInfo info= (AdminSessionInfo)session.getAttribute("admin");
+		int adminIdx=info.getAdminIdx();
+		Admin dto = adminService.articleAdmin(adminIdx);
+		
+		if(dto == null) {
+			return "redirect:/main";
+		}
+		
+		
+		String em[]=dto.getEmail().split("@");
+		dto.setEmail1(em[0]);
+		dto.setEmail2(em[1]);
+		
+		if(dto.getTel()!=null) {
+		String tt[]=dto.getTel().split("-");
+		dto.setTel1(tt[0]);
+		dto.setTel2(tt[1]);
+		dto.setTel3(tt[2]);
+		}
+		if(dto.getExtNum()!=null) {
+		String et[]=dto.getExtNum().split("-");
+		dto.setEx_Tel1(et[0]);
+		dto.setEx_Tel2(et[1]);
+		dto.setEx_Tel3(et[2]);
+		}
+		
+		
+		if(info.getAdminIdx() !=dto.getAdminIdx()) {
+			ra.addFlashAttribute("state","수정 권한이 없습니다.");
+			return "redirect:/main";
+		}
+		model.addAttribute("dto",dto);
+		
+		return ".insa.update";
+	}
+	
+	@RequestMapping(value="/admin/Myupdate", method=RequestMethod.POST)
+	public String adminMyUpdateSubmit(
+			Admin dto,
+			RedirectAttributes ra,
+			HttpSession session
+			) throws Exception{
+		int result=0;
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + "uploads" + File.separator + "admin";
+		result=adminService.MyupdateAdmin(dto, pathname);
+		if(result==0) {
+			ra.addFlashAttribute("state","(수정 실패) 다시 시도해주세요");
+			return "redirect:/admin/articleAdmin?adminIdx="+dto.getAdminIdx();
+		}else
+			ra.addFlashAttribute("state","수정 완료");
+
+		return "redirect:/admin/articleAdmin?adminIdx="+dto.getAdminIdx();
 	}
 }

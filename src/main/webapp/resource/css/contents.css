@@ -27,6 +27,7 @@
 
 /*list_search*/
 .list_search_wrap{overflow:hidden;margin-top:20px;margin-bottom:10px;}
+.list_search_wrap .search_clean{float:left;}
 .list_search_wrap .list_search{float:right;}
 .list_search_wrap .list_search.f_left{float:left;}
 .list_search_wrap .txt{float:left;padding:4px 0;}
@@ -95,7 +96,16 @@
    Media Queries for Responsive Design.
    ========================================================================== */
 
-@media only screen and (max-width:479px ){			
+@media only screen and (max-width:1024px ){
+	
+}
+
+@media only screen and (max-width:740px ){
+	
+}
+
+
+@media only screen and (max-width:480px ){
 	.list_search_wrap .txt{width:45%;}
 	.list_search_wrap .search_left{float:none;margin-bottom:10px;}
 	.list_search_wrap .list_search{float:none !important;}
@@ -105,4 +115,3 @@
 	.full_search{display:block;padding:12px 0;}
 	.full_search>div{display:block;padding:3px 10px;width:auto !important;}
 }
-
