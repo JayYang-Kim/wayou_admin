@@ -13,7 +13,7 @@ if(ra!=""){
 
 function deleteFile(){
 	var url="<%=cp%>/admin/deleteFile";
-	location.href=url + "?adminIdx=${dto.adminIdx}&pageNum=${pageNum}";
+	location.href=url + "?adminIdx=${dto.adminIdx}&page=${page}";
 }
 
 function update() {

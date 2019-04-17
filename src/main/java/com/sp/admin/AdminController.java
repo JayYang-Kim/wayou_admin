@@ -2,6 +2,7 @@ package com.sp.admin;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -135,7 +136,7 @@ public class AdminController {
 
 	@RequestMapping(value="/admin/list")
 	public String adminlist(
-			@RequestParam(value = "pageNum", defaultValue="1") int current_page,
+			@RequestParam(value = "page", defaultValue="1") int current_page,
 			@RequestParam(defaultValue="departCode") String condition,
 			@RequestParam(defaultValue="") String word,
 			HttpServletRequest req,
@@ -175,12 +176,26 @@ public class AdminController {
 			n++;
 		}
 		
-		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");
+		String cp = req.getContextPath();
+		String query = "";
+		String listUrl = cp + "/admin/list";
+		String articleUrl = cp + "/admin/articleAdmin?page=" + current_page;
+		
+		if(word.length()!=0) {
+			query = "condition=" + condition + "&word=" + URLEncoder.encode(word, "UTF-8");
+			
+			listUrl += "?" + query;
+			articleUrl += "&" + query;
+		}
+		
+		
+		String paging = myUtil.paging(current_page, total_page, listUrl);
 		model.addAttribute("listAdmin", listAdmin);
 		model.addAttribute("dataCount", dataCount);
 		model.addAttribute("page", current_page);
 		model.addAttribute("total_page", total_page);
 		model.addAttribute("paging", paging);
+		model.addAttribute("articleUrl", articleUrl);
 		model.addAttribute("condition", condition);
 		model.addAttribute("word", word);
 		
@@ -190,22 +205,37 @@ public class AdminController {
 	@RequestMapping(value="/admin/articleAdmin")
 	public String adminArticle (
 			@RequestParam int adminIdx,
-			@RequestParam(defaultValue="1") int pageNum,
+			@RequestParam(value = "page", defaultValue="1") int current_page,
 			@RequestParam(defaultValue="departCode") String condition,
 			@RequestParam(defaultValue="") String word,
 			HttpSession session,
 			HttpServletRequest req,
 			Model model) throws Exception{		
+		
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			word = URLDecoder.decode(word, "UTF-8");
+		}
+		
+		String query = "page=" + current_page;
+		if(word.length() != 0) {
+			query += "&condition=" + condition + "&word=" + URLEncoder.encode(word, "UTF-8");
+		}
+		
 		Admin dto = adminService.articleAdmin(adminIdx);
 		if(dto==null) {
-			return "redirect:/admin/list?page="+pageNum;
+			return "redirect:/admin/list?"+query;
 		}
-		word=URLDecoder.decode(word, "UTF-8");
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("condition", condition);
+		map.put("word", word);
+		map.put("adminIdx", adminIdx);
 		
 		model.addAttribute("dto",dto);
 		model.addAttribute("comdition",condition);
 		model.addAttribute("word",word);
-		model.addAttribute("pageNum",pageNum);
+		model.addAttribute("query", query);
 
 		
 		return ".insa.article";
@@ -214,7 +244,7 @@ public class AdminController {
 	@RequestMapping(value="/admin/updateAdmin", method=RequestMethod.GET)
 	public String adminUpdateForm(
 			@RequestParam int adminIdx,
-			@RequestParam(defaultValue="1") int pageNum,
+			@RequestParam(defaultValue="1") int page,
 			@RequestParam(defaultValue="departCode") String condition,
 			@RequestParam(defaultValue="") String word,
 			HttpSession session,
@@ -254,7 +284,7 @@ public class AdminController {
 		}
 		model.addAttribute("dto",dto);
 		model.addAttribute("mode","update");
-		model.addAttribute("pageNum",pageNum);
+		model.addAttribute("page",page);
 		
 		return ".insa.created";
 	}
@@ -262,7 +292,7 @@ public class AdminController {
 	@RequestMapping(value="/admin/updateAdmin", method=RequestMethod.POST)
 	public String adminUpdateSubmit(
 			Admin dto,
-			@RequestParam(defaultValue="1") int pageNum,
+			@RequestParam(defaultValue="1") int page,
 			@RequestParam(defaultValue="departCode") String condition,
 			@RequestParam(defaultValue="") String word,
 			RedirectAttributes ra,
@@ -288,7 +318,7 @@ public class AdminController {
 	@RequestMapping(value="/admin/deleteFile")
 	public String deleteFile(
 			@RequestParam int adminIdx,
-			@RequestParam(defaultValue="1") int pageNum,
+			@RequestParam(defaultValue="1") int page,
 			HttpSession session
 			) throws Exception{
 		String root=session.getServletContext().getRealPath("/");
@@ -296,7 +326,7 @@ public class AdminController {
 		
 		Admin dto = adminService.articleAdmin(adminIdx);
 		if(dto==null) {
-			return "redirect:/admin/list?pageNum="+pageNum;
+			return "redirect:/admin/list?page="+page;
 		}
 
 		if(dto.getSaveFilename()!=null) {
@@ -305,7 +335,7 @@ public class AdminController {
 			adminService.updateAdmin(dto, pathname);
 		}
 		
-		return "redirect:/admin/updateAdmin?adminIdx="+adminIdx+"&pageNum="+pageNum;
+		return "redirect:/admin/updateAdmin?adminIdx="+adminIdx+"&page="+page;
 	}
 	
 	@RequestMapping(value="/admin/myupdate", method=RequestMethod.GET)

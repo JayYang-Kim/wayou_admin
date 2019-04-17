@@ -13,7 +13,7 @@ if(ra!=""){
 
 function deleteFile(){
 	var url="<%=cp%>/admin/deleteFile";
-	location.href=url + "?adminIdx=${dto.adminIdx}&pageNum=${pageNum}";
+	location.href=url + "?adminIdx=${dto.adminIdx}&page=${page}";
 }
 
 var fn = 0;
@@ -346,8 +346,6 @@ function selectedEmail() {
 				    </c:if>
 				    </c:if>
 					</div>
-				</td>
-				<td>
 					<input type="hidden" name="saveFilename" value="${dto.saveFilename}">
 				</td>
 				
