@@ -61,7 +61,7 @@ body{background-color:#f5f6f7;}
 }
 
 @media only screen and (max-width: 530px) {
-	.main_wrap{width:100%;min-width:320px;margin:0;}
+	.main_wrap{width:100%;min-width:320px;margin:0;padding:0;}
 	.main_wrap h1{text-align:center;}
 	.main_wrap h1 img{width:80%;float:none;margin:0;}
 	.main_wrap h1 > strong{font-size:30px;padding-top:15px;}

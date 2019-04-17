@@ -50,43 +50,17 @@
    			$("#login_notice").find(".memo_notice").html("아이디를 입력해주세요.");
    			$("#login_notice").fadeIn(2000);
    			$("input[name='adminId']").focus();
-   			return;
+   			return false;
    		}
    		
    		if(!$("input[name='adminPwd']").val()) {
    			$("#login_notice").find(".memo_notice").html("비밀번호를 입력해주세요.");
    			$("#login_notice").fadeIn(2000);
    			$("input[name='adminPwd']").focus();
-   			return;
+   			return false;
    		}
    		
-   		var url ="<%=cp%>/admin/login";
-   		var query = $("form[name='login_form']").serialize();
-   		$.ajax({
-   			type:"post",
-   			url:url,
-   			data:query,
-   			dataType:"json",
-   			success:function(data){
-   				if(data.isAdmin){
-   					var uri = data.uri;
-   					if(uri==null){
-   						uri ="/main";
-   					}
-   					location.href="<%=cp%>"+uri;
-   				}else{
-   					$("#login_notice").find(".memo_notice").html("아이디 또는 비밀번호가 일치하지 않습니다.");
-   		   			$("#login_notice").fadeIn(2000);
-   		   			$("input[name='adminId']").focus();
-   				}
-   			},
-   			beforesend:function(e){
-   				e.setRequestHeader("AJAX",true);
-   			},
-   			error:function(e){
-   				console.log(e);
-   			}
-   		});
+   		return true;
    	}
     </script>
 </head>
@@ -95,7 +69,7 @@
 	<article class="main_wrap">
 		<div class="inner">
 			<h3>로그인</h3>
-			<form name="login_form">
+			<form name="login_form" method="post" onsubmit="return sendOk()">
 				<ul>
 					<li>
 						<label for="userId">아이디 / ID</label>
@@ -113,7 +87,7 @@
 						<label for="id_save">아이디저장</label>
 					</li>
 					<li>
-						<button type="button" class="btn_login btn-block" onclick="sendOk()"><strong>로그인</strong></button>
+						<button type="submit" class="btn_login btn-block"><strong>로그인</strong></button>
 					</li>
 				</ul>
 			</form>
