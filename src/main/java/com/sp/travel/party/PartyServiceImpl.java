@@ -93,4 +93,17 @@ public class PartyServiceImpl implements PartyService {
 		return dto;
 	}
 
+	@Override
+	public List<JoinParty> listJoinParty(int partyCode) throws Exception {
+		List<JoinParty> list = null;
+		
+		try {
+			list = dao.selectList("travel.party.joinListParty", partyCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
 }
