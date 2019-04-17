@@ -29,7 +29,7 @@ public class AdminService {
 	private CommonDAO dao;
 	@Autowired
 	private MyUtil myUtil;
-	
+
 	public Admin readLoginInfo(String adminId) {
 		Admin admin = null;
 		try {
@@ -39,20 +39,20 @@ public class AdminService {
 		}
 		return admin;
 	}
-	
+
 	public int insertAdmin(Admin dto, String pathname) {
 		int result=0;
-		
+
 		try {
 			if(dto.getEmail1() != null && dto.getEmail1().length()!=0 &&
 					dto.getEmail2() != null && dto.getEmail2().length()!=0)
 				dto.setEmail(dto.getEmail1() + "@" + dto.getEmail2());
-			
+
 			if(dto.getTel1() != null && dto.getTel1().length()!=0 &&
 					dto.getTel2() != null && dto.getTel2().length()!=0 &&
-							dto.getTel3() != null && dto.getTel3().length()!=0)
+					dto.getTel3() != null && dto.getTel3().length()!=0)
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
-			
+
 			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
 			if(saveFilename!=null) {
 				dto.setSaveFilename(saveFilename);
@@ -65,7 +65,7 @@ public class AdminService {
 		}
 		return result;
 	}
-	
+
 	public int findSeq() {
 		int result=0;
 		try {
@@ -75,7 +75,7 @@ public class AdminService {
 		}
 		return result;
 	}
-	
+
 	public String findBebun(int adminIdx) {
 		String result=null;
 		try {
@@ -85,10 +85,10 @@ public class AdminService {
 		}
 		return result;
 	}
-	
+
 	public List<Admin> listAdmin(Map<String, Object> map) {
 		List<Admin> listAdmin =null;
-		
+
 		try {
 			listAdmin=dao.selectList("admin.listAdmin",map);
 		} catch (Exception e) {
@@ -96,10 +96,10 @@ public class AdminService {
 		}
 		return listAdmin;
 	}
-	
+
 	public int dataCount(Map<String, Object> map) {
 		int result=0;
-		
+
 		try {
 			result=dao.selectOne("admin.dataCount", map);
 		} catch (Exception e) {
@@ -107,10 +107,10 @@ public class AdminService {
 		}
 		return result;
 	}
-	
+
 	public Admin articleAdmin(int adminIdx){
 		Admin dto = null;
-		
+
 		try {
 			dto=dao.selectOne("admin.articleAdmin", adminIdx);
 		} catch (Exception e) {
@@ -118,89 +118,96 @@ public class AdminService {
 		}
 		return dto;
 	}
-	
+
 	public int updateAdmin(Admin dto, String pathname) {
 		int result=0;
-		
+
 		try {
 			if(dto.getEmail1() != null && dto.getEmail1().length()!=0 &&
 					dto.getEmail2() != null && dto.getEmail2().length()!=0)
 				dto.setEmail(dto.getEmail1() + "@" + dto.getEmail2());
-			
+
 			if(dto.getTel1() != null && dto.getTel1().length()!=0 &&
 					dto.getTel2() != null && dto.getTel2().length()!=0 &&
-							dto.getTel3() != null && dto.getTel3().length()!=0)
+					dto.getTel3() != null && dto.getTel3().length()!=0)
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
 			
-			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
-			if(saveFilename != null) {
-				if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0) {
-					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+			if(dto.getUpload() !=null && !dto.getUpload().isEmpty()) {
+				String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
+				if(saveFilename != null) {
+					if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0) {
+						fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+					}
+						dto.setSaveFilename(saveFilename);
 				}
-				if(dto.getPositionCode()!=0) 
-					dto.setSaveFilename(saveFilename);
+			} else {
+				dto.setSaveFilename(dto.getSaveFilename());
 			}
+			
 			dao.updateData("admin.updateAdmin",dto);
 			result=1;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
-	
-	public int MyupdateAdmin(Admin dto, String pathname) {
+
+	public int myupdateAdmin(Admin dto, String pathname) {
 		int result=0;
-		
+
 		try {
 			if(dto.getEmail1() != null && dto.getEmail1().length()!=0 &&
 					dto.getEmail2() != null && dto.getEmail2().length()!=0)
 				dto.setEmail(dto.getEmail1() + "@" + dto.getEmail2());
-			
+
 			if(dto.getTel1() != null && dto.getTel1().length()!=0 &&
 					dto.getTel2() != null && dto.getTel2().length()!=0 &&
-							dto.getTel3() != null && dto.getTel3().length()!=0)
+					dto.getTel3() != null && dto.getTel3().length()!=0)
 				dto.setTel(dto.getTel1() + "-" + dto.getTel2() + "-" + dto.getTel3());
+
+			if(dto.getExTel1() != null && dto.getExTel1().length()!=0 &&
+					dto.getExTel2() != null && dto.getExTel2().length()!=0 &&
+					dto.getExTel3() != null && dto.getExTel3().length()!=0)
+				dto.setExtNum(dto.getExTel1() + "-" + dto.getExTel2() + "-" + dto.getExTel3());
 			
-			if(dto.getEx_Tel1() != null && dto.getEx_Tel1().length()!=0 &&
-					dto.getEx_Tel2() != null && dto.getEx_Tel2().length()!=0 &&
-							dto.getEx_Tel3() != null && dto.getEx_Tel3().length()!=0)
-				dto.setExtNum(dto.getEx_Tel1() + "-" + dto.getEx_Tel2() + "-" + dto.getEx_Tel3());
-			
-			String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
-			if(saveFilename != null) {
-				if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0) {
-					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+			if(dto.getUpload() !=null && !dto.getUpload().isEmpty()) {
+				String saveFilename=fileManager.doFileUpload(dto.getUpload(), pathname);
+				if(saveFilename != null) {
+					if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0) {
+						fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+					}
+						dto.setSaveFilename(saveFilename);
 				}
-				if(dto.getPositionCode()!=0) 
-					dto.setSaveFilename(saveFilename);
+			} else {
+				dto.setSaveFilename(dto.getSaveFilename());
 			}
-			dao.updateData("admin.MyupdateAdmin",dto);
+			dao.updateData("admin.myupdateAdmin",dto);
 			result=1;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
-	
-	
+
+
 	private String mailType= "text/html; charset=utf-8";
 	private String encType= "utf-8";
 	private class SMTPAuthenticator extends javax.mail.Authenticator {
-		  @Override
-	      public PasswordAuthentication getPasswordAuthentication() {  
-	          String username =  "wayou1904"; 
-	          String password = "1qaz2wsx!!"; 
-	          return new PasswordAuthentication(username, password);  
-	       }  
+		@Override
+		public PasswordAuthentication getPasswordAuthentication() {  
+			String username =  "wayou1904"; 
+			String password = "1qaz2wsx!!"; 
+			return new PasswordAuthentication(username, password);  
+		}  
 	}
-	
+
 	private void makeMessage(Message msg, String any) throws MessagingException {
-			msg.setText(any);
-			msg.setHeader("Content-Type", mailType);
+		msg.setText(any);
+		msg.setHeader("Content-Type", mailType);
 	}
-	
+
 	public boolean mailSend(Admin dto) {
 		boolean b=false;
 		String sendEmail="wayou1904@gmail.com";
@@ -209,7 +216,7 @@ public class AdminService {
 		String subject= dto.getAdminId()+" 님 WAYOU의 일원이 되신걸 환영합니다~";
 
 		Properties p = new Properties();   
-  
+
 		p.put("mail.smtp.user", "wayou1904");   
 		p.put("mail.smtp.host", "smtp.gmail.com");
 		p.put("mail.smtp.port", "465");   
@@ -218,35 +225,35 @@ public class AdminService {
 		p.put("mail.smtp.socketFactory.port", "465");   
 		p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");   
 		p.put("mail.smtp.socketFactory.fallback", "false");  
-		
+
 		try {
 			Authenticator auth = new SMTPAuthenticator();  
 			Session session = Session.getDefaultInstance(p, auth);
-			
+
 			Message msg = new MimeMessage(session);
 
 			msg.setFrom(new InternetAddress(sendEmail, sendName, encType));
-			
+
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(dto.getEmail()));
-			
+
 			msg.setSubject(subject);
-			
+
 			if(mailType.indexOf("text/html") != -1) {
 				content=(myUtil.htmlSymbols(content));
 			}
 			makeMessage(msg, content);
 			msg.setHeader("X-Mailer", sendName);
-			
+
 			msg.setSentDate(new Date());
-			
+
 			Transport.send(msg);
-			
+
 			b=true;
-						
+
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		
+
 		return b;
 	}
 }

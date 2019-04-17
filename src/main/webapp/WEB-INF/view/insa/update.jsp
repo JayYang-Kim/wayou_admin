@@ -24,7 +24,7 @@ function update() {
     content = content.trim();
 		if(!content) {
 				alert("패스워드를 입력하세요. ");
-				f.AdminPwd.focus();
+				f.adminPwd.focus();
 				return;
 			}
 		if(!/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(content)) { 
@@ -143,43 +143,46 @@ function update() {
     	}
 
     	
-     content = f.ex_Tel1.value;
+     content = f.exTel1.value;
      content = content.trim();
  	    if(!content) {
- 	        alert("전화번호를 입력하세요. ");
- 	        f.ex_Tel1.focus();
+ 	        alert("내선 전화번호를 입력하세요. ");
+ 	        f.exTel1.focus();
  	        return;
  	    }
  	    if(!/^(\d+)$/.test(content)) {
  	        alert("숫자만 가능합니다. ");
- 	        f.ex_Tel1.focus();
+ 	        f.exTel1.focus();
  	        return;
  	    }
-      content = f.ex_Tel2.value;
+ 	    
+      content = f.exTel2.value;
       content = content.trim();
    	    if(!content) {
-   	        alert("전화번호를 입력하세요. ");
-   	        f.ex_Tel2.focus();
+   	        alert("내선 전화번호를 입력하세요. ");
+   	        f.exTel2.focus();
    	        return;
    	    }
    	    if(!/^(\d+)$/.test(content)) {
    	        alert("숫자만 가능합니다. ");
-   	        f.ex_Tel2.focus();
+   	        f.exTel2.focus();
    	        return;
    	    }
-      content = f.ex_Tel3.value;
+   	    
+      content = f.exTel3.value;
       content = content.trim();
    	    if(!content) {
-   	        alert("전화번호를 입력하세요. ");
-   	        f.ex_Tel3.focus();
+   	        alert("내선 전화번호를 입력하세요. ");
+   	        f.exTel3.focus();
    	        return;
    	    }
    	    if(!/^(\d+)$/.test(content)) {
    	        alert("숫자만 가능합니다. ");
-   	        f.ex_Tel3.focus();
+   	        f.exTel3.focus();
    	        return;
    	    }
-   	f.action = "<%=cp%>/admin/MyupdateAdmin";
+   	    
+   	f.action = "<%=cp%>/admin/myupdate";
 
     f.submit();
 }
@@ -230,7 +233,7 @@ function myForm_Postcode() {
 <div style="padding-left:10px; padding-bottom:15px;">
 <h1>내정보 수정</h1></div>
 <div>
-	<form name="MyForm" method="post" enctype="multipart/form-data">
+	<form name="updateForm" method="post" enctype="multipart/form-data">
 	<table class="table left_tbl form_tbl">
 		<colgroup>
 			<col style="width:15%" />
@@ -316,11 +319,11 @@ function myForm_Postcode() {
 				<th scope="row"><b class="t_red">*</b> 내선번호 (Ex-Tel)</th>
 				<td>
 					<div class="inp_wid ex-Tel">
-							<input type="text" name="ex_Tel1" value="${dto.ex_Tel1}"/>
+							<input type="text" id="exTel1" name="exTel1" value="${dto.exTel1}"/>
 							<span style="font-size:18px; font-weight:bold;">&nbsp;-</span>
-							<input type="text" name="ex_Tel1" value="${dto.ex_Tel2}"/>
+							<input type="text" id="exTel2" name="exTel2" value="${dto.exTel2}"/>
 							<span style="font-size:18px; font-weight:bold;">&nbsp;-</span>
-							<input type="text" name="ex_Tel1" value="${dto.ex_Tel3}" />
+							<input type="text" id="exTel3" name="exTel3" value="${dto.exTel3}" />
 					</div>
 				</td>
 			</tr>
@@ -357,6 +360,9 @@ function myForm_Postcode() {
 				         | <button type="button" onclick="deleteFile('${dto.saveFilename}')" class="button btn_blk" style="width:80px;">파일삭제</button>
 				    </c:if>
 					</div>
+				</td>
+				<td>
+					<input type="hidden" name="saveFilename" value="${dto.saveFilename}">
 				</td>
 			</tr>
 	</table>

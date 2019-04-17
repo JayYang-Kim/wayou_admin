@@ -83,8 +83,8 @@
     		WHERE adminIdx=#{adminIdx}
 	</update>
 	
-	<update id="MyupdateAdmin" parameterType="com.sp.admin.Admin">
-		UPDATE admin SET adminPwd=${adminPwd}, adminName=#{adminName}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, extNum=#{extNum}, postCode=${postCode}, address1=#{address1}, address2=#{address2}, etc=#{etc}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
+	<update id="myupdateAdmin" parameterType="com.sp.admin.Admin">
+		UPDATE admin SET adminName=#{adminName}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, postCode=#{postCode}, address1=#{address1}, address2=#{address2}, etc=#{etc}, extNum=#{extNum}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
     		WHERE adminIdx=#{adminIdx}
 	</update>
 </mapper>

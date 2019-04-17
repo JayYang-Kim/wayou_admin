@@ -241,9 +241,9 @@ public class AdminController {
 		
 		if(dto.getExtNum()!=null) {
 		String et[]=dto.getExtNum().split("-");
-		dto.setEx_Tel1(et[0]);
-		dto.setEx_Tel2(et[1]);
-		dto.setEx_Tel3(et[2]);
+		dto.setExTel1(et[0]);
+		dto.setExTel2(et[1]);
+		dto.setExTel3(et[2]);
 		}
 
 		
@@ -266,8 +266,12 @@ public class AdminController {
 			@RequestParam(defaultValue="departCode") String condition,
 			@RequestParam(defaultValue="") String word,
 			RedirectAttributes ra,
-			HttpSession session
+			HttpSession session,
+			@RequestParam String saveFilename
 			) throws Exception{
+		
+		dto.setSaveFilename(saveFilename);
+		
 		int result=0;
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + "uploads" + File.separator + "admin";
@@ -304,12 +308,13 @@ public class AdminController {
 		return "redirect:/admin/updateAdmin?adminIdx="+adminIdx+"&pageNum="+pageNum;
 	}
 	
-	@RequestMapping(value="/admin/Myupdate", method=RequestMethod.GET)
+	@RequestMapping(value="/admin/myupdate", method=RequestMethod.GET)
 	public String adminMyUpdateForm(
 			HttpSession session,
 			RedirectAttributes ra,
 			Model model
 			) throws Exception{
+		
 		AdminSessionInfo info= (AdminSessionInfo)session.getAttribute("admin");
 		int adminIdx=info.getAdminIdx();
 		Admin dto = adminService.articleAdmin(adminIdx);
@@ -331,9 +336,9 @@ public class AdminController {
 		}
 		if(dto.getExtNum()!=null) {
 		String et[]=dto.getExtNum().split("-");
-		dto.setEx_Tel1(et[0]);
-		dto.setEx_Tel2(et[1]);
-		dto.setEx_Tel3(et[2]);
+		dto.setExTel1(et[0]);
+		dto.setExTel2(et[1]);
+		dto.setExTel3(et[2]);
 		}
 		
 		
@@ -346,16 +351,19 @@ public class AdminController {
 		return ".insa.update";
 	}
 	
-	@RequestMapping(value="/admin/Myupdate", method=RequestMethod.POST)
+	@RequestMapping(value="/admin/myupdate", method=RequestMethod.POST)
 	public String adminMyUpdateSubmit(
 			Admin dto,
+			@RequestParam String saveFilename,
 			RedirectAttributes ra,
 			HttpSession session
 			) throws Exception{
+		dto.setSaveFilename(saveFilename);
+
 		int result=0;
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + "uploads" + File.separator + "admin";
-		result=adminService.MyupdateAdmin(dto, pathname);
+		result=adminService.myupdateAdmin(dto, pathname);
 		if(result==0) {
 			ra.addFlashAttribute("state","(수정 실패) 다시 시도해주세요");
 			return "redirect:/admin/articleAdmin?adminIdx="+dto.getAdminIdx();

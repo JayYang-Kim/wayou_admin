@@ -347,6 +347,10 @@ function selectedEmail() {
 				    </c:if>
 					</div>
 				</td>
+				<td>
+					<input type="hidden" name="saveFilename" value="${dto.saveFilename}">
+				</td>
+				
 			</tr>
 	</table>
 		<div style="margin-top:15px; text-align:center"><button type="button" onclick="created()" class="button btn_blk" style="width:80px;">${mode=="created"?"등록":"수정"}</button>

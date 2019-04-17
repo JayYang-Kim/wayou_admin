@@ -22,7 +22,7 @@
 					<c:if test="${sessionScope.admin != null}">
 						<span><strong>${sessionScope.admin.adminName}</strong>님 안녕하세요.</span>
 						<a href="<%=cp%>/admin/logout" class="button h22">로그아웃</a>
-						<a href="<%=cp%>/admin/Myupdate" class="button h22">내정보 수정</a>
+						<a href="<%=cp%>/admin/myupdate" class="button h22">내정보 수정</a>
 					</c:if>
 					<c:if test="${sessionScope.admin == null}">
 						<a href="<%=cp%>/admin/login" class="button h22">로그인</a>
