@@ -32,7 +32,7 @@ function update() {
 				f.adminPwd.focus();
 				return;
 			}
-	f.adminPwd.value = content;
+
 		if(content!= f.adminPwdCheck.value) {
 	        	alert("패스워드가 일치하지 않습니다. ");
 	        	f.adminPwdCheck.focus();

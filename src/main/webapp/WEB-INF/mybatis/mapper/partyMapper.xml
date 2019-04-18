@@ -55,7 +55,7 @@
 		        u.userId,
 		        u.userName,
 		        TO_CHAR(created, 'YYYY-MM-DD') AS created,
-		        max, enabled, confirmCode
+		        max, p.enabled, confirmCode
 		        FROM party p
 				JOIN tb_user u ON p.userIdx = u.userIdx
 		        <where>
@@ -78,7 +78,7 @@
 		    u.roleCode,
 		    u.userId,
 		    u.userName,
-		    TO_CHAR(created, 'YYYY-MM-DD') created, max, enabled, confirmCode,
+		    TO_CHAR(created, 'YYYY-MM-DD') created, max, p.enabled, confirmCode,
 		    NVL(partyPeopleCount, 0) partyPeopleCount
 		FROM party p
 		JOIN tb_user u ON p.userIdx = u.userIdx

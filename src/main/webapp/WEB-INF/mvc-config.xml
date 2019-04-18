@@ -9,6 +9,7 @@
 	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="
 	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
@@ -16,7 +17,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
-        http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+        http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <mvc:annotation-driven />
 
@@ -39,19 +41,6 @@
        </property>
     </bean>
      
-    <!-- Interceptor 설정 -->
-  <mvc:interceptors>
-    	<mvc:interceptor>
-    		<mvc:mapping path="/admin"/>
-    		<mvc:exclude-mapping path="/"/>
-    		<mvc:exclude-mapping path="/resource/**"/>
-			<mvc:exclude-mapping path="/admin/login"/>
-			<mvc:exclude-mapping path="/admin/logout"/>
-			
-    		<bean class="com.sp.common.LoginCheckInterceptor"/>
-    	</mvc:interceptor>
-    </mvc:interceptors>
-     
 	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<property name="order" value="1" />
 		<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
@@ -70,6 +59,12 @@
          <property name="defaultEncoding" value="utf-8"/>
          <property name="maxUploadSize" value="10485760" />
     </bean>
+    
+    <!-- @Secured, @PreAuthorize, @PostAuthorize 어노테이션등 시큐리티 어노테이션 -->
+    <security:global-method-security proxy-target-class="true"
+          secured-annotations="enabled"
+          jsr250-annotations="enabled"
+          pre-post-annotations="enabled"/>
 
     <!-- 예외처리 -->
 <!--     
@@ -85,6 +80,7 @@
             <props>
                 <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">.error.fileuploadFailure</prop>
                 <prop key="org.springframework.dao.DataAccessException">.error.dataAccessFailure</prop>
+                <prop key="org.springframework.security.access.AccessDeniedException">.member.noAuthorized</prop>
 				<prop key="java.lang.Exception">.error.error</prop>
             </props>
         </property>

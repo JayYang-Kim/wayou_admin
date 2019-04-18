@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,14 +34,36 @@ public class AdminController {
 	private MyUtil myUtil;
 	
 	@Autowired
+	private BCryptPasswordEncoder bcryptEncoder;
+	
+	@Autowired
 	private AdminService adminService;
 	
 	@RequestMapping(value="/admin/login", method=RequestMethod.GET)
-	public String login() {
+	public String login(String login_error, Model model) {
+		
+		boolean bLoginChk = login_error != null;
+		if(bLoginChk) {
+			String msg = "아이디 또는 비밀번호가 일치하지 않습니다.";
+			model.addAttribute("msg", msg);
+		}
+		
 		return "login/login";
 	}
 	
-	@RequestMapping(value="/admin/login", method=RequestMethod.POST)
+	// 접근 권한이 없는 경우
+	@RequestMapping(value="/admin/noAuthorized")
+	public String noAuthorized() {
+		return ".error.noAuthorized";
+	}
+	
+	// 세션이 만료된 경우
+	@RequestMapping(value="/admin/expired")
+	public String expired() {
+		return ".error.expired";
+	}
+	
+	/*@RequestMapping(value="/admin/login", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> loginSubmit(
 			Admin admin,
@@ -64,14 +87,14 @@ public class AdminController {
 			map.put("isAdmin", isAdmin);
 			map.put("uri", uri);
 		return map;
-	}
+	}*/
 	
-	@RequestMapping(value="/admin/logout")
+	/*@RequestMapping(value="/admin/logout")
 	public String logout(HttpSession session){
 		session.removeAttribute("admin");
 		session.invalidate();
 		return "redirect:/main";
-	}
+	}*/
 	
 	@RequestMapping(value="/admin/sabun", method=RequestMethod.GET)
 	@ResponseBody
