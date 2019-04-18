@@ -124,4 +124,24 @@
 			confirmCode = 1
 		WHERE partyCode = #{partyCode}
 	</update>
+	
+	<select id="" parameterType="map" resultType="com.sp.travel.party.JoinParty">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT p.userIdx, u.userId, u.userName, pCode, partyCode, memo, TO_CHAR(created, 'YYYY-MM-DD') created
+		        FROM partyPeople p
+		        JOIN tb_user u 
+		        ON p.userIdx = u.userIdx
+		        <where>
+					<if test="keyword != null and keyword != '' ">
+	            		<include refid="where-list"/>
+	              	</if>
+	              	AND p.partyCode = #{partyCode}
+	            </where>
+		    ) tb
+	<![CDATA[
+		    WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+	</select>
 </mapper>
