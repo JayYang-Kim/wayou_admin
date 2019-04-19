@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.common.MyUtil;
 
@@ -130,12 +131,41 @@ public class PartyController {
 		Party preReadParty = partyService.preReadParty(map);
 		Party nextReadParty = partyService.nextReadParty(map);
 		
+		List<JoinParty> list = partyService.listJoinParty(map);
+		
 		model.addAttribute("dto", dto);
+		model.addAttribute("joinPartyList", list);
 		model.addAttribute("page", current_page);
 		model.addAttribute("preReadParty", preReadParty);
 		model.addAttribute("nextReadParty", nextReadParty);
 		model.addAttribute("query", query);
 		
 		return ".travel.party.view";
+	}
+	
+	@RequestMapping(value="/travel/admin/party/updConfirm")
+	@ResponseBody
+	public Map<String, Object> updateConfirm(@RequestParam int partyCode,
+			@RequestParam int chk_confirmCode) throws Exception {
+		
+		String msg = null;
+		int result = 0;
+		try {
+			Map<String, Object> map = new HashMap<>();
+			map.put("partyCode", partyCode);
+			map.put("chk_confirmCode", chk_confirmCode);
+			
+			result = partyService.updateConfirm(map);
+			
+			msg = "true";
+		} catch (Exception e) {
+			msg = "false";
+		}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("msg", msg);
+		model.put("confirmCode", result);
+		
+		return model;
 	}
 }

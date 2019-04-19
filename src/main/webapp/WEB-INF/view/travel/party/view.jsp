@@ -7,7 +7,83 @@
 %>
 
 <script type="text/javascript">
-
+	$(function(){
+		$(".btn_saveCancel").hide();
+		
+		$("body").on("click", ".upd_confirm", function(){
+			$(".btn_upd").hide();
+			$(".btn_saveCancel").show();
+			
+			var select = "<select name='chk_confirmCode'>";
+			select += "<option value='0'>등록대기</option>";
+			select += "<option value='1'>등록수락</option>";
+			select += "<option value='2'>등록거절</option>";
+			select += "</select>";
+			
+			$('.box_confirm').children(".area_confrim").html(select);
+		});
+		
+		$("body").on("click", ".cancel_confirm", function(){
+			$(".btn_upd").show();
+			$(".btn_saveCancel").hide();
+			
+			$('.box_confirm').children(".area_confrim").html(msg);
+			
+			var cc = ${dto.confirmCode};
+			var msg = null;
+			
+			if(cc == 0) {
+				msg = "등록대기";
+			} else if(cc == 1) {
+				msg = "등록수락";
+			} else {
+				msg = "등록거절";
+			}
+			
+			$('.box_confirm').children(".area_confrim").html(msg);
+		});
+		
+		$("body").on("click", ".save_confirm", function(){
+			var url = "<%=cp%>/travel/admin/party/updConfirm";
+			var query = "partyCode=${dto.partyCode}&chk_confirmCode=" + $("select[name='chk_confirmCode']").val();
+			
+			$.ajax({
+				type : "post",
+				url : url,
+				data : query,
+				dataType : "JSON",
+				success:function(data) {
+					if(data.msg == "true") {
+						var c = data.confirmCode;
+						var msg = null;
+						if(c == 0) {
+							msg = "등록대기";
+						} else if(c == 1) {
+							msg = "등록수락";
+						} else {
+							msg = "등록거절";
+						}
+						
+						$('.box_confirm').children(".area_confrim").html(msg);
+						$(".btn_saveCancel").hide();
+						$(".btn_upd").show();
+					} else {
+						alert("변경 실패했습니다.");
+					}
+				}
+			    ,beforeSend:function(e) {
+			    	e.setRequestHeader("AJAX", true);
+			    }
+			    ,error:function(e) {
+			    	if(e.status==403) {
+			    		location.href="<%=cp%>/admin/login";
+			    		return;
+			    	}
+			    	console.log(e.responseText);
+			    }
+			});
+		});
+	});
 </script>
 
 <h1 id="page_tit">여행관리</h1>
@@ -46,7 +122,16 @@
 			<th scope="row">활성여부</th>
 			<td>${dto.enabled == 0 ? "활성" : "비활성"}</td>
 			<th scope="row">확인여부</th>
-			<td></td>
+			<td class="box_confirm">
+				<div class="inblock area_confrim">${(dto.confirmCode == 0) ? '등록대기' : (dto.confirmCode == 1) ? '등록수락' : '등록거절'}</div>
+				<div class="inblock btn_upd">
+					<button type="button" class="upd_confirm button btn_wht h35 ml10">수정</button>
+				</div>
+				<div class="inblock btn_saveCancel">
+					<button type='button' class='save_confirm button btn_wht h35 ml10'>저장</button>
+					<button type='button' class='cancel_confirm button btn_wht h35 ml5'>취소</button>
+				</div>
+			</td>
 		</tr>
 		<tr>
 			<th scope="row">내용</th>
@@ -58,11 +143,37 @@
 		</tr>
 	</tbody>
 </table>
-<div class="btn_wrap view_btn">
-	<a href="#" class="button btn_blk h35">저장</a>
-</div>
 <div class="mt20 mb20">
 	<h3>참가현황 : ${dto.partyPeopleCount} / ${dto.max}</h3>
+	<c:if test="${not empty joinPartyList}">
+		<table class="table tbl_hover td_bor_no mt20">
+			<caption>FAQ 정보</caption>
+			<colgroup>
+				<col style="width:10%">
+				<col style="width:20%">
+				<col style="width:20%">
+				<col style="width:20%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th scope="col">유저정보</th>
+					<th scope="col">상태</th>
+					<th scope="col">참가내용</th>
+					<th scope="col">작성일</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="dto2" items="${joinPartyList}">
+					<tr>
+						<td>${dto2.userId}<br/>(${dto2.userName})</td>
+						<td>${(dto2.pCode == 0) ? '대기자' : (dto2.pCode == 1) ? '참가수락' : (dto2.pCode == 2) ? '참거거절' : '파티탈퇴'}</td>
+						<td>${dto2.memo }</td>
+						<td>${dto2.created}</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</c:if>
 </div>
 <div class="tbl_btn">
 	<p class="f_left">

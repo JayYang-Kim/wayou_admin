@@ -9,7 +9,8 @@ public interface PartyService {
 	public Party readParty(int partyCode) throws Exception;
 	public Party preReadParty(Map<String, Object> map) throws Exception;
 	public Party nextReadParty(Map<String, Object> map) throws Exception;
-	public int updateConfirm(int partyCode) throws Exception;
+	public int updateConfirm(Map<String, Object> map) throws Exception;
 	
-	public List<JoinParty> listJoinParty(int partyCode) throws Exception;
+	public int dataCount_joinParty(Map<String, Object> map) throws Exception;
+	public List<JoinParty> listJoinParty(Map<String, Object> map) throws Exception;
 }

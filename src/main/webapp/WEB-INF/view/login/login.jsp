@@ -42,6 +42,15 @@
     <script type="text/javascript">
     $(function(){
     	$("#login_notice").hide();
+    	
+    	var msg = "${msg}";
+    	if(msg != "") {
+    		$("#login_notice").find(".memo_notice").html(msg);
+   			$("#login_notice").fadeIn(2000);
+   			$("input[name='adminId']").focus();
+   			return false;
+    	}
+    	
     });
     function sendOk(){
    		var f = document.login_form;
@@ -79,14 +88,14 @@
 						<label for="userPw">비밀번호 / Password</label>
 						<input id="userPw" name="adminPwd" type="password" placeholder="PASSWORD" autocomplete="off" autofocus/>
 					</li>
-					<li class="login_check mt20">
+					<%-- <li class="login_check mt20">
 						<label class="checkbox-wrap">
 							<input type="checkbox" id="id_save">
 							<i class="check-icon"></i>
 						</label>
 						<label for="id_save">아이디저장</label>
-					</li>
-					<li>
+					</li> --%>
+					<li style="margin-top:40px">
 						<button type="submit" class="btn_login btn-block"><strong>로그인</strong></button>
 					</li>
 				</ul>
