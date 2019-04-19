@@ -7,6 +7,7 @@ public class JoinParty {
 	private String userId;
 	private String userName;
 	private int pCode;
+	private String memo;
 	private String created;
 	
 	public int getListNum() {
@@ -44,6 +45,12 @@ public class JoinParty {
 	}
 	public void setpCode(int pCode) {
 		this.pCode = pCode;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
 	}
 	public String getCreated() {
 		return created;

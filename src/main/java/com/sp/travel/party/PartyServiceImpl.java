@@ -41,11 +41,13 @@ public class PartyServiceImpl implements PartyService {
 	}
 
 	@Override
-	public int updateConfirm(int partyCode) throws Exception {
+	public int updateConfirm(Map<String, Object> map) throws Exception {
 		int result = 0;
 		
 		try {
-			result = dao.updateData("travel.party.updateConfirm", partyCode);
+			dao.updateData("travel.party.updateConfirm", map);
+			
+			result = dao.selectOne("travel.party.selectConfirm", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -94,11 +96,24 @@ public class PartyServiceImpl implements PartyService {
 	}
 
 	@Override
-	public List<JoinParty> listJoinParty(int partyCode) throws Exception {
+	public int dataCount_joinParty(Map<String, Object> map) throws Exception {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("travel.party.dataCount_joinParty", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public List<JoinParty> listJoinParty(Map<String, Object> map) throws Exception {
 		List<JoinParty> list = null;
 		
 		try {
-			list = dao.selectList("travel.party.joinListParty", partyCode);
+			list = dao.selectList("travel.party.joinListParty", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
