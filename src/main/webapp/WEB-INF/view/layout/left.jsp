@@ -41,14 +41,14 @@
                     <li><a href="#">여행관리</a>
                         <div>
 							<ul>
-								<li><a href="#"><span class="blind">여행관리</span> 고객리스트</a></li>
-                                <li><a href="#"><span class="blind">여행관리</span> 블랙리스트 관리</a></li>
-                                <li><a href="#"><span class="blind">여행관리</span> 지역관리</a></li>
-                                <li><a href="#"><span class="blind">여행관리</span> 랜드마크 관리</a></li>
-                                <li><a href="#"><span class="blind">여행관리</span> 통계 데이터</a></li>
+								<li><a href="<%=cp%>/travel/admin/user/list"><span class="blind">여행관리</span> 고객리스트</a></li>
+                                <li><a href="<%=cp%>/travel/admin/user/black/list"><span class="blind">여행관리</span> 블랙리스트 관리</a></li>
+                                <li><a href="<%=cp%>/travel/admin/location/list"><span class="blind">여행관리</span> 지역관리</a></li>
+                                <li><a href="<%=cp%>/travel/admin/landmark/list"><span class="blind">여행관리</span> 랜드마크 관리</a></li>
+                                <li><a href="<%=cp%>/travel/admin/chart"><span class="blind">여행관리</span> 통계 데이터</a></li>
                                 <li><a href="<%=cp%>/travel/admin/party/list"><span class="blind">여행관리</span> 여행동료 관리</a></li>
-                                <li><a href="#"><span class="blind">여행관리</span> 공지사항</a></li>
-                                <li><a href="#"><span class="blind">여행관리</span> 이벤트</a></li>
+                                <li><a href="<%=cp%>/travel/admin/notice/list"><span class="blind">여행관리</span> 공지사항</a></li>
+                                <li><a href="<%=cp%>/travel/admin/event/list"><span class="blind">여행관리</span> 이벤트</a></li>
 							</ul>
 						</div>
                     </li>

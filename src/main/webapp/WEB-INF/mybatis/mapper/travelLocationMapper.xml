@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="travel.location">
+	<select id="listLoc" resultType="com.sp.travel.location.Location">
+		SELECT locCode, locName, loceName FROM locationCode
+	</select>
+
+	<insert id="insertLocation" parameterType="com.sp.travel.location.Location">
+		INSERT INTO location(locCode, lat, lng, memo, enable, adminIdx, saveFilename)
+			VALUES(#{locCode}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{enable}, #{adminIdx}, #{saveFilename, jdbcType = VARCHAR})
+	</insert>
+	
+	<!-- sql -->
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'location'">
+			   INSTR(locName, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'memo'">
+			    DBMS_LOB.INSTR(memo, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'created'">
+			   (TO_CHAR(created, 'YYYYMMDD') = #{searchValue}
+		          OR TO_CHAR(created, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<when test="searchKey == 'enable'">
+			   INSTR(enable, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'writer'">
+			   INSTR(enable, #{searchValue}) &gt; 0
+			</when>
+			<otherwise>
+			    INSTR(${searchKey}, #{searchValue}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	<!-- /sql -->
+</mapper>
