@@ -43,7 +43,7 @@ function sabun(){
 			
 		},beforeSend:function(e){
 			e.setRequestHeader("AJAX",true);
-		},error:function(){
+		},error:function(e){
 			if(e.status==403){
 				location.href="<%=cp%>/admin/main";
 				return;
@@ -66,7 +66,7 @@ function bebun(adminIdx){
 			
 		},beforeSend:function(e){
 			e.setRequestHeader("AJAX",true);
-		},error:function(){
+		},error:function(e){
 			if(e.status==403){
 				location.href="<%=cp%>/admin/main";
 				return;
