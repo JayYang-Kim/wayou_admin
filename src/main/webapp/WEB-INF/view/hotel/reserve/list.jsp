@@ -6,48 +6,7 @@
 	String cp=request.getContextPath();
 %>
 
-
 <script type="text/javascript">
-
-var pageNo = 1;
-var searchKey = "hname";
-var searchValue = "";
-
-function ajaxHTML(url, type, query, id) {
-	$.ajax({
-		type: type,
-		url:url,
-		data:query,
-		success:function(data){
-			
-			$("#"+id).html(data);
-			
-		},
-		beforeSend:function(e) {
-			e.setRequestHeader("AJAX", true);
-		},
-		error:function(e) {
-			console.log(e.responseText);
-		}
-	});
-}	
-
-$(function() {
-	listPage(1);
-});
-
-function listPage(page) {
-	pageNo = page;
-	
-	var id="hotel-body";
-	var url="<%=cp%>/hotel/reserve/list";
-	var query="pageNo="+pageNo;
-	if(searchValue!="") {
-		query+="&searchKey="+searchKey+"&searchValue="+encodeURIComponent(searchValue);
-	}
-	
-	ajaxHTML(url,"get", query, id);
-}
 
 
 $(function() {
@@ -87,7 +46,7 @@ $(function() {
 });
 
 
-function sendOk() {
+function sendHotel(mode) {
     var f = document.insertHotelForm;
 		
 	if(! f.hname.value) {
@@ -116,13 +75,61 @@ function sendOk() {
 		return;
 	}
  
-
+	if(mode=="created") {
+		searchKey="hname";
+		searchValue="";
+		pageNo=1;
+		f.action="<%=cp%>/hotel/hotelInfo/insertHotel";
+	}
+	
+	if(mode=="update") {
+		f.action="<%=cp%>/hotel/hotelInfo/updateHotel";
+	}
  
-	f.action="<%=cp%>/hotel/hotelInfo/insertHotel";
-
+	
     f.submit();
 
 }
+
+$(function() {
+
+	$(".btnUpdateHotel").click(function() {	
+
+		var isClass = $("#insertForm").hasClass("insertHotel");
+		if(isClass) {
+			$("#insertForm").removeClass("insertHotel");
+			$("#insertForm").empty();
+			return false;
+		}
+	
+		var url="<%=cp%>/hotel/hotelInfo/updateHotel";
+		var query="hotelCode="+$(this).attr("data-hotelCode");
+		
+		$.ajax({
+			type:"get",
+			url:url,
+			data:query,
+			success:function(data){
+				$("#insertForm").html(data);
+				$("#insertForm").addClass("insertHotel");
+			},
+			beforeSend:function(e) {
+				e.setRequestHeader("AJAX", true);
+			},
+			error:function(e) {
+				if(e.status==403){
+					location.href="<%=cp%>/wadmin/admin/login";
+					return;
+				}
+				console.log(e.responseText);
+			}
+		});
+	});
+	
+	
+});
+
+	
 
 
 function hotel_Postcode() {
@@ -208,11 +215,18 @@ function hotel_Postcode() {
 						<td>${dto.hname}</td>
 						<td>${dto.locName}</td>
 						<td>${dto.name}</td>
-						<td><button type='button' class='button btn_blk btnInsertRoom'>호텔 정보 수정</button></td>
-						<td><button type='button' class='button btn_blk btnInsertRoom'>객실 추가ㆍ수정</button></td>
+						<td><button type='button' class='button btnUpdateHotel' data-hotelCode="${dto.hotelCode}">호텔 정보 수정</button></td>
+						<td><button type='button' class='button btnInsertRoom'>객실 추가ㆍ수정</button></td>
 					</tr>
 				</c:forEach>
 			</tbody>
+		</table>
+		<table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
+		   <tr height="35">
+			<td align="center">
+				${paging}
+			</td>
+		   </tr>
 		</table>
 	</div>
 	

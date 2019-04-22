@@ -56,5 +56,28 @@ public class HotelServiceImpl implements HotelService {
 		return result;
 	}
 
+	@Override
+	public Hotel readHotel(int num) {
+		Hotel dto = null;
+		try {
+			dto=dao.selectOne("hotel.readHotel", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public int updateHotel(Hotel dto, String pathname) {
+		int result=0;
+		try {
+			result=dao.updateData("hotel.updateHotel", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	
 }

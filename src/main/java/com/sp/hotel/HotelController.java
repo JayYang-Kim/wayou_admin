@@ -90,7 +90,7 @@ public class HotelController {
 	@RequestMapping(value="/hotel/hotelInfo/insertHotel", method=RequestMethod.GET)
 	public String insertHotelForm(Model model) {
 		
-		//model.addAttribute("mode", "created");
+		model.addAttribute("mode", "created");
 		
 		return "hotel/hotelInfo/insertHotel";
 	}
@@ -115,5 +115,32 @@ public class HotelController {
 		return ".hotel.event.listEvent";
 	}
 	
+	@RequestMapping(value="/hotel/hotelInfo/updateHotel", method=RequestMethod.GET)
+	public String updateHotelForm(
+			@RequestParam int hotelCode,
+
+			Model model) {
 	
+		Hotel dto = hotelService.readHotel(hotelCode);
+
+		model.addAttribute("mode", "update");
+		model.addAttribute("dto", dto);
+		return "hotel/hotelInfo/insertHotel";
+	}
+	
+
+	@RequestMapping(value="/hotel/hotelInfo/updateHotel", method=RequestMethod.POST)
+	public String updateHotelSubmit(
+			Hotel dto,
+			HttpSession session) throws Exception {
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root+"uploads"+File.separator+"abbs";
+		
+
+		hotelService.updateHotel(dto, pathname);
+
+		return "redirect:/hotel/reserve/list";
+	}
+
 }
