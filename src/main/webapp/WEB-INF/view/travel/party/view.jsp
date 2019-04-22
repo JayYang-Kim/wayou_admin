@@ -147,7 +147,7 @@
 	<h3>참가현황 : ${dto.partyPeopleCount} / ${dto.max}</h3>
 	<c:if test="${not empty joinPartyList}">
 		<table class="table tbl_hover td_bor_no mt20">
-			<caption>FAQ 정보</caption>
+			<caption>참가현황</caption>
 			<colgroup>
 				<col style="width:10%">
 				<col style="width:20%">

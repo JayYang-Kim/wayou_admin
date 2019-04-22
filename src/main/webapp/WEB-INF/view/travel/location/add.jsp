@@ -66,7 +66,7 @@
 	<p>지역 관리 &gt; <strong>등록</strong></p>
 </div>
 
-<form name="location_form" method="post">
+<form name="location_form" method="post" enctype="multipart/form-data">
 	<table class="table left_tbl form_tbl">
 		<caption>지역 등록</caption>
 		<colgroup>

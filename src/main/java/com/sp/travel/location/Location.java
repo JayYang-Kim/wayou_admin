@@ -11,8 +11,10 @@ public class Location {
 	private String lng;
 	private String memo;
 	private String created;
-	private int enable;
+	private String enable;
 	private String saveFilename;
+	
+	private int logCode;
 	
 	private int adminIdx;
 	private String adminId;
@@ -86,11 +88,11 @@ public class Location {
 		this.created = created;
 	}
 
-	public int getEnable() {
+	public String getEnable() {
 		return enable;
 	}
 
-	public void setEnable(int enable) {
+	public void setEnable(String enable) {
 		this.enable = enable;
 	}
 
@@ -102,6 +104,14 @@ public class Location {
 		this.saveFilename = saveFilename;
 	}
 
+	public int getLogCode() {
+		return logCode;
+	}
+
+	public void setLogCode(int logCode) {
+		this.logCode = logCode;
+	}
+	
 	public int getAdminIdx() {
 		return adminIdx;
 	}

@@ -11,24 +11,22 @@
 			VALUES(#{locCode}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{enable}, #{adminIdx}, #{saveFilename, jdbcType = VARCHAR})
 	</insert>
 	
+	<insert id="insertLocationLog" parameterType="com.sp.travel.location.Location">
+		INSERT INTO locationLog(logCode, locCode, lat, lng, memo, writer)
+    		VALUES(LOCATIONLOG_SEQ.NEXTVAL, #{locCode}, #{lat}, #{lat}, #{memo, jdbcType = CLOB}, #{adminIdx})
+	</insert>
+	
 	<!-- sql -->
 	<sql id="where-list">
 		<choose>
 			<when test="searchKey == 'location'">
-			   INSTR(locName, #{searchValue}) &gt; 0
+			   INSTR(lc.locName, #{searchValue}) &gt; 0
 			</when>
 			<when test="searchKey == 'memo'">
 			    DBMS_LOB.INSTR(memo, #{searchValue}) &gt; 0
 			</when>
-			<when test="searchKey == 'created'">
-			   (TO_CHAR(created, 'YYYYMMDD') = #{searchValue}
-		          OR TO_CHAR(created, 'YYYY-MM-DD') = #{searchValue})
-			</when>
-			<when test="searchKey == 'enable'">
-			   INSTR(enable, #{searchValue}) &gt; 0
-			</when>
 			<when test="searchKey == 'writer'">
-			   INSTR(enable, #{searchValue}) &gt; 0
+			    INSTR(adminId, #{searchValue}) &gt; 0
 			</when>
 			<otherwise>
 			    INSTR(${searchKey}, #{searchValue}) &gt; 0
@@ -36,4 +34,77 @@
 		</choose>
 	</sql>
 	<!-- /sql -->
-</mapper>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM location l
+		JOIN locationCode lc
+			ON l.locCode = lc.locCode
+		JOIN admin a
+			ON l.adminIdx = a.adminIdx 
+		<where>
+        	<if test="searchValue != null and searchValue != ''">
+	     	    <include refid="where-list"/>
+	     	</if>
+	     	AND l.enable = #{enable}
+        </where>
+	</select>
+	
+	<select id="listLocation" parameterType="map" resultType="com.sp.travel.location.Location">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT l.locCode, lc.locName, lat, lng, memo,
+				    CASE 
+				        WHEN l.enable = 1 THEN '활성화' 
+				        WHEN l.enable = 0 THEN '비활성' 
+				    END AS enable,
+				    l.adminIdx, a.adminId, a.adminName, l.saveFilename, 
+					TO_CHAR(l.created, 'YYYY-MM-DD') AS created
+				FROM location l
+				JOIN locationCode lc
+					ON l.locCode = lc.locCode
+				JOIN admin a
+					ON l.adminIdx = a.adminIdx 
+		        <where>
+		        	<if test="searchValue != null and searchValue != ''">
+			     	    <include refid="where-list"/>
+			     	</if>
+			     	AND l.enable = #{enable}
+		        </where>
+		        ORDER BY l.locCode DESC
+		    )  tb
+	<![CDATA[	    
+		    WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readLocation" parameterType="Integer" resultType="com.sp.travel.location.Location">
+		SELECT l.locCode, lc.locName, lat, lng, memo, 
+			CASE 
+		        WHEN l.enable = 1 THEN '활성화' 
+		        WHEN l.enable = 0 THEN '비활성' 
+		    END AS enable, 
+			l.adminIdx, a.adminId, a.adminName, l.saveFilename, 
+			TO_CHAR(l.created, 'YYYY-MM-DD') AS created
+		FROM location l
+		JOIN locationCode lc
+			ON l.locCode = lc.locCode
+		JOIN admin a
+			ON l.adminIdx = a.adminIdx
+		WHERE l.locCode = #{locCode}
+	</select>
+	
+	<select id="listLocationLog" parameterType="Integer" resultType="com.sp.travel.location.Location">
+		SELECT ll.logCode, ll.locCode, lc.locName, ll.lat, ll.lng, ll.memo, 
+			ll.writer AS adminIdx, 
+			a.adminId, a.adminName, 
+			TO_CHAR(ll.created, 'YYYY-MM-DD') AS created
+		FROM locationLog ll
+		JOIN locationCode lc
+			ON ll.locCode = lc.locCode
+		JOIN admin a
+			ON ll.writer = a.adminIdx
+		WHERE ll.locCode = #{locCode}
+	</select>
+</mapper> 

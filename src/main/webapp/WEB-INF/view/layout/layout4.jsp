@@ -37,6 +37,7 @@
     
     <script src="<%=cp%>/resource/js/plugins.js"></script>
 	<script src="<%=cp%>/resource/js/ui_script.js"></script>
+	<script src="<%=cp%>/resource/js/basic.js"></script>
     <!-- //javascript -->
     
 	<!--[if lt IE 9]>
@@ -63,5 +64,21 @@
 	<footer id="footer">
 	    <tiles:insertAttribute name="footer"/>
 	</footer>
+	
+	<!-- pop_layer -->
+	<div id="popup" class="pop_bg">
+		<article class="pop_wrap">
+			<h1>팝업 타이틀</h1>
+			<div class="pop_cont">
+				<p>내용<br/>내용</p>
+				<p class="t_center mt20">
+					<a href="#" class="button w72 btn_gray">취소</a>
+					<a href="#" class="button w72 btn_red">등록</a>
+				</p>
+			</div>
+			<!-- 팝업을 닫을때는 .pop_close 클래스를 활용 하거나, popupHide 함수 활용 -->
+			<a href="#" class="btn_close pop_close">닫기</a>
+		</article>
+	</div>
 </body>
 </html>
