@@ -11,7 +11,7 @@ public class Location {
 	private String lng;
 	private String memo;
 	private String created;
-	private String enable;
+	private int enable;
 	private String saveFilename;
 	
 	private int logCode;
@@ -88,11 +88,11 @@ public class Location {
 		this.created = created;
 	}
 
-	public String getEnable() {
+	public int getEnable() {
 		return enable;
 	}
 
-	public void setEnable(String enable) {
+	public void setEnable(int enable) {
 		this.enable = enable;
 	}
 

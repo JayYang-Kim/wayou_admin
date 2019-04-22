@@ -27,6 +27,7 @@
 	<form name="search_form" action="<%=cp%>/travel/admin/location/list" method="post">
 		<div class="list_search">
 			<select title="활성여부" name="enable">
+				<option value="2" ${enable == 2 ? "selected='selected'" : ""}>전체</option>
 				<option value="1" ${enable == 1 ? "selected='selected'" : ""}>활성화</option>
 				<option value="0" ${enable == 0 ? "selected='selected'" : ""}>비활성</option>
 			</select>
@@ -47,7 +48,8 @@
 		<col style="width:5%" />
 		<col style="width:10%" />
 		<col style="width:7%" span="2" />
-		<col style="" />
+		<col style="width:7%" />
+		<col style="width:4%" />
 		<col style="width:8%" />
 		<col style="width:7%" />
 		<col style="width:4%" />
@@ -59,6 +61,7 @@
 			<th scope="col">위도</th>
 			<th scope="col">경도</th>
 			<th scope="col">메모</th>
+			<th scope="col">활성여부</th>
 			<th scope="col">작성자</th>
 			<th scope="col">작성일</th>
 			<th scope="col">첨부</th>
@@ -76,6 +79,7 @@
 				<td>${dto.lat}</td>
 				<td>${dto.lng}</td>
 				<td>${dto.memo}</td>
+				<td>${dto.enable == 1 ? "활성화" : "비활성"}</td>
 				<td>${dto.adminId}<br/>(${dto.adminName})</td>
 				<td>${dto.created}</td>
 				<td>

@@ -12,8 +12,8 @@
 	</insert>
 	
 	<insert id="insertLocationLog" parameterType="com.sp.travel.location.Location">
-		INSERT INTO locationLog(logCode, locCode, lat, lng, memo, writer)
-    		VALUES(LOCATIONLOG_SEQ.NEXTVAL, #{locCode}, #{lat}, #{lat}, #{memo, jdbcType = CLOB}, #{adminIdx})
+		INSERT INTO locationLog(logCode, locCode, lat, lng, memo, writer, enable)
+    		VALUES(LOCATIONLOG_SEQ.NEXTVAL, #{locCode}, #{lat}, #{lat}, #{memo, jdbcType = CLOB}, #{adminIdx}, #{enable})
 	</insert>
 	
 	<!-- sql -->
@@ -46,19 +46,16 @@
         	<if test="searchValue != null and searchValue != ''">
 	     	    <include refid="where-list"/>
 	     	</if>
-	     	AND l.enable = #{enable}
+	     	<if test="enable == 0 or enable == 1">
+	     		AND l.enable = #{enable}
+	     	</if>
         </where>
 	</select>
 	
 	<select id="listLocation" parameterType="map" resultType="com.sp.travel.location.Location">
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, tb.* FROM (
-		        SELECT l.locCode, lc.locName, lat, lng, memo,
-				    CASE 
-				        WHEN l.enable = 1 THEN '활성화' 
-				        WHEN l.enable = 0 THEN '비활성' 
-				    END AS enable,
-				    l.adminIdx, a.adminId, a.adminName, l.saveFilename, 
+		        SELECT l.locCode, lc.locName, lat, lng, memo, l.enable, l.adminIdx, a.adminId, a.adminName, l.saveFilename, 
 					TO_CHAR(l.created, 'YYYY-MM-DD') AS created
 				FROM location l
 				JOIN locationCode lc
@@ -69,7 +66,9 @@
 		        	<if test="searchValue != null and searchValue != ''">
 			     	    <include refid="where-list"/>
 			     	</if>
-			     	AND l.enable = #{enable}
+			     	<if test="enable == 0 or enable == 1">
+			     		AND l.enable = #{enable}
+			     	</if>
 		        </where>
 		        ORDER BY l.locCode DESC
 		    )  tb
@@ -80,12 +79,7 @@
 	</select>
 	
 	<select id="readLocation" parameterType="Integer" resultType="com.sp.travel.location.Location">
-		SELECT l.locCode, lc.locName, lat, lng, memo, 
-			CASE 
-		        WHEN l.enable = 1 THEN '활성화' 
-		        WHEN l.enable = 0 THEN '비활성' 
-		    END AS enable, 
-			l.adminIdx, a.adminId, a.adminName, l.saveFilename, 
+		SELECT l.locCode, lc.locName, lat, lng, memo, l.enable, l.adminIdx, a.adminId, a.adminName, l.saveFilename, 
 			TO_CHAR(l.created, 'YYYY-MM-DD') AS created
 		FROM location l
 		JOIN locationCode lc
@@ -95,16 +89,91 @@
 		WHERE l.locCode = #{locCode}
 	</select>
 	
+	<select id="preReadLocation" parameterType="map" resultType="com.sp.travel.location.Location">
+		SELECT tb.* FROM (
+		    SELECT locCode
+		    FROM location
+		    <where>
+	        	<if test="searchValue != null and searchValue != ''">
+		     	    <include refid="where-list"/>
+		     	</if>
+		     	<if test="enable == 0 or enable == 1">
+		     		AND enable = #{enable}
+		     	</if>
+		     	AND locCode &gt; #{locCode}
+	        </where>
+		    ORDER BY locCode ASC
+		) tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="nextReadLocation" parameterType="map" resultType="com.sp.travel.location.Location">
+		SELECT tb.* FROM (
+		    SELECT locCode
+		    FROM location
+		    <where>
+	        	<if test="searchValue != null and searchValue != ''">
+		     	    <include refid="where-list"/>
+		     	</if>
+		     	<if test="enable == 0 or enable == 1">
+		     		AND enable = #{enable}
+		     	</if>
+		     	AND locCode &lt; #{locCode}
+	        </where>
+		    ORDER BY locCode DESC
+		) tb WHERE ROWNUM = 1
+	</select>
+	
 	<select id="listLocationLog" parameterType="Integer" resultType="com.sp.travel.location.Location">
-		SELECT ll.logCode, ll.locCode, lc.locName, ll.lat, ll.lng, ll.memo, 
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT ll.logCode, ll.locCode, lc.locName, ll.lat, ll.lng, ll.memo, ll.enable,
+					ll.writer AS adminIdx, 
+					a.adminId, a.adminName, 
+					TO_CHAR(ll.created, 'YYYY-MM-DD HH24:MI:SS') AS created
+				FROM locationLog ll
+				JOIN locationCode lc
+					ON ll.locCode = lc.locCode
+				JOIN admin a
+					ON ll.writer = a.adminIdx
+		        WHERE ll.locCode = #{locCode}
+		        ORDER BY ll.created DESC
+		    ) tb
+	<![CDATA[	    
+		    WHERE ROWNUM <= 10
+		) WHERE rnum >= 1
+	]]>
+	</select>
+	
+	<select id="allLocationLog" parameterType="Integer" resultType="com.sp.travel.location.Location">
+        SELECT ll.logCode, ll.locCode, lc.locName, ll.lat, ll.lng, ll.memo, ll.enable
 			ll.writer AS adminIdx, 
 			a.adminId, a.adminName, 
-			TO_CHAR(ll.created, 'YYYY-MM-DD') AS created
+			TO_CHAR(ll.created, 'YYYY-MM-DD HH24:MI:SS') AS created
 		FROM locationLog ll
 		JOIN locationCode lc
 			ON ll.locCode = lc.locCode
 		JOIN admin a
 			ON ll.writer = a.adminIdx
-		WHERE ll.locCode = #{locCode}
+        WHERE ll.locCode = #{locCode}
+        ORDER BY ll.created DESC
 	</select>
+	
+	<update id="updateLocation" parameterType="com.sp.travel.location.Location">
+		UPDATE location SET
+			lat = #{lat},
+			lng = #{lng},
+			memo = #{memo, jdbcType = CLOB},
+			enable = #{enable},
+			adminIdx = #{adminIdx},
+			saveFilename = #{saveFilename, jdbcType = VARCHAR}
+		WHERE locCode = #{locCode}
+	</update>
+	
+	<delete id="deleteLocation" parameterType="Integer">
+		DELETE FROM location WHERE locCode = #{locCode}
+	</delete>
+	
+	<delete id="deleteLocationLog" parameterType="Integer">
+		DELETE FROM locationLog WHERE locCode = #{locCode}
+	</delete>
 </mapper> 

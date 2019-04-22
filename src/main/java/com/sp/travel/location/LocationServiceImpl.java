@@ -89,6 +89,32 @@ public class LocationServiceImpl implements LocationService{
 		
 		return dto;
 	}
+	
+	@Override
+	public Location preReadLocation(Map<String, Object> map) throws Exception {
+		Location dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.location.preReadLocation", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public Location nextReadLocation(Map<String, Object> map) throws Exception {
+		Location dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.location.nextReadLocation", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
 
 	@Override
 	public List<Location> listLocationLog(int locCode) throws Exception {
@@ -101,5 +127,69 @@ public class LocationServiceImpl implements LocationService{
 		}
 		
 		return list;
+	}
+
+	@Override
+	public List<Location> allLocationLog(int locCode) throws Exception {
+		List<Location> list = null;
+		
+		try {
+			list = dao.selectList("travel.locatin.allLocationLog", locCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int updateLocation(Location dto, String pathname) throws Exception {
+		int result = 0;
+		
+		try {
+			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathname);
+			
+			if(saveFilename != null) {
+				if(dto.getSaveFilename() != null && dto.getSaveFilename().length() != 0) {
+					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+				}
+				
+				dto.setSaveFilename(saveFilename);
+			}
+			
+			dao.updateData("travel.location.updateLocation", dto);
+			dao.insertData("travel.location.insertLocationLog", dto);
+			
+			result = 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int deleteLocation(int locCode, String pathname) throws Exception {
+		int result = 0;
+		
+		try {
+			Location dto = readLocation(locCode);
+			if(dto == null) {
+				return result;
+			}
+			
+			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+			
+			dao.deleteData("travel.location.deleteLocationLog", locCode);
+			dao.deleteData("travel.location.deleteLocation", locCode);
+			
+			result = 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return result;
 	}
 }

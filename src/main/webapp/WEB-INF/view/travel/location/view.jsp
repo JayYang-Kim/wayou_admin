@@ -32,7 +32,7 @@
 			<th scope="row">지역정보</th>
 			<td>${dto.locName}(${dto.locCode})</td>
 			<th scope="row">활성여부</th>
-			<td>${dto.enable}</td>
+			<td>${dto.enable == 1 ? '활성화' : '비활성'}</td>
 		</tr>
 		<tr>
 			<th scope="row">위도</th>
@@ -63,15 +63,17 @@
 
 <div class="tbl_btn">
 	<p class="f_left">
-		<c:if test="${not empty preReadParty}">
-			<a href="<%=cp%>/travel/admin/party/view?${query}&partyCode=${preReadParty.partyCode}" class="button h30 w70 btn_wht">이전</a>
+		<c:if test="${not empty preReadLocation}">
+			<a href="<%=cp%>/travel/admin/location/view${query}&locCode=${preReadLocation.locCode}" class="button h30 w70 btn_wht">이전</a>
 		</c:if>
-		<c:if test="${not empty nextReadParty}">
-			<a href="<%=cp%>/travel/admin/party/view?${query}&partyCode=${nextReadParty.partyCode}" class="button h30 w70 btn_wht">다음</a>
+		<c:if test="${not empty nextReadLocation}">
+			<a href="<%=cp%>/travel/admin/location/view${query}&locCode=${nextReadLocation.locCode}" class="button h30 w70 btn_wht">다음</a>
 		</c:if>
 	</p>
 	<p class="f_right">
-		<a href="<%=cp%>/travel/admin/location/list?${query}" class="button h30 w70 btn_blk">목록</a>
+		<a href="<%=cp%>/travel/admin/location/update${query}&locCode=${dto.locCode}" class="button h30 w70 btn_wht">수정</a>
+		<a href="<%=cp%>/travel/admin/location/delete${query}&locCode=${dto.locCode}" class="button h30 w70 btn_red">삭제</a>
+		<a href="<%=cp%>/travel/admin/location/list${query}" class="button h30 w70 btn_blk">목록</a>
 	</p>
 </div>
 
@@ -113,4 +115,9 @@
 			</c:if>
 		</tbody>
 	</table>
+	<div class="tbl_btn">
+		<p class="f_right">
+			<a href="#" class="button h30 w70 btn_wht">전체 이력</a>
+		</p>
+	</div>
 </div>

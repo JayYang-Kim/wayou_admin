@@ -16,8 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.admin.AdminSessionInfo;
+import com.sp.common.FileManager;
 import com.sp.common.MyUtil;
 
 @Controller("travel.party.controller")
@@ -27,10 +29,12 @@ public class LocationController {
 	private LocationService locationService;
 	@Autowired
 	private MyUtil myUtil;
+	@Autowired
+	private FileManager fileManager;
 	
 	@RequestMapping(value="/travel/admin/location/list")
 	public String main(@RequestParam(value="page", defaultValue="1") int current_page,
-			@RequestParam(defaultValue="1") int enable,
+			@RequestParam(defaultValue="2") int enable,
 			@RequestParam(defaultValue="location") String searchKey,
 			@RequestParam(defaultValue="") String searchValue,
 			HttpServletRequest req,
@@ -149,7 +153,8 @@ public class LocationController {
 	@RequestMapping(value="/travel/admin/location/view")
 	public String readLocation(@RequestParam int locCode,
 			@RequestParam int page,
-			@RequestParam(defaultValue="1") int enable,
+			@RequestParam(value="logPage", defaultValue="1") int current_logPage, 
+			@RequestParam(defaultValue="2") int enable,
 			@RequestParam(defaultValue="location") String searchKey,
 			@RequestParam(defaultValue="") String searchValue,
 			HttpServletRequest req,
@@ -170,14 +175,148 @@ public class LocationController {
 			return "redirect:/travel/admin/location/list" + query;
 		}
 		
+		Map<String, Object> map = new HashMap<>();
+		map.put("locCode", locCode);
+		map.put("searchKey", searchKey);
+		map.put("searchValue", searchValue);
+		map.put("enable", enable);
+		
+		Location preReadLocation = locationService.preReadLocation(map);
+		Location nextReadLocation = locationService.nextReadLocation(map);
+		
 		dto.setMemo(myUtil.htmlSymbols(dto.getMemo()));
 		
 		List<Location> listLocationLog = locationService.listLocationLog(locCode);
 		
 		model.addAttribute("dto", dto);
-		model.addAttribute("listLocationLog", listLocationLog);
 		model.addAttribute("query", query);
+		model.addAttribute("preReadLocation", preReadLocation);
+		model.addAttribute("nextReadLocation", nextReadLocation);
+		model.addAttribute("listLocationLog", listLocationLog);
 		
 		return ".travel.location.view";
+	}
+	
+	@RequestMapping(value="/travel/admin/location/update")
+	public String updLocation(@RequestParam int locCode,
+			@RequestParam int page,
+			@RequestParam int enable,
+			@RequestParam(defaultValue="location") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			HttpServletRequest req,
+			Model model) throws Exception {
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+		
+		String query = "?page=" + page + "&enable=" + enable;
+		if(searchValue.length() != 0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		Location dto = locationService.readLocation(locCode);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("query", query);
+		model.addAttribute("mode", "update");
+		
+		return ".travel.location.add";
+	}
+	
+	@RequestMapping(value="/travel/admin/location/update", method = RequestMethod.POST)
+	public String updateLocationSubmit(Location dto,
+			@RequestParam int page,
+			@RequestParam int enable,
+			@RequestParam(defaultValue="location") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			HttpServletRequest req,
+			HttpSession session) throws Exception {
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+		
+		String query = "?page=" + page + "&enable=" + enable;
+		if(searchValue.length() != 0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+"uploads"+File.separator+"bbs";
+		
+		
+		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
+		
+		dto.setAdminIdx(info.getAdminIdx());
+		
+		try {
+			locationService.updateLocation(dto, pathname);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/travel/admin/location/list" + query;
+	}
+	
+	@RequestMapping(value="/travel/admin/location/delete")
+	public String deleteLocationSubmit(@RequestParam int locCode,
+			@RequestParam int page,
+			@RequestParam int enable,
+			@RequestParam(defaultValue="location") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			HttpServletRequest req,
+			HttpSession session) throws Exception {
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+		
+		String query = "?page=" + page + "&enable=" + enable;
+		if(searchValue.length() != 0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+"uploads"+File.separator+"bbs";
+		
+		try {
+			locationService.deleteLocation(locCode, pathname);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/travel/admin/location/list" + query;
+	}
+	
+	@RequestMapping(value="/travel/admin/location/deleteImg", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteImg(@RequestParam int locCode,
+			HttpSession session) throws Exception{
+		
+		Map<String, Object> model = new HashMap<>();
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+"uploads"+File.separator+"amdin";
+		
+		Location dto = locationService.readLocation(locCode);
+		
+		String msg = "true";
+		
+		if(dto == null) {
+			msg = "false";
+			
+			model.put("msg", msg);
+			return model;
+		}
+		
+		if(dto.getSaveFilename() != null) {
+			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+			dto.setSaveFilename("");
+			locationService.updateLocation(dto, pathname);
+		}
+		
+		model.put("msg", msg);
+		return model;
 	}
 }
