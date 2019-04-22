@@ -1,5 +1,8 @@
 package com.sp.hotel;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,53 @@ public class HotelServiceImpl implements HotelService {
 			dto.setSaveFilename(saveFilename);
 			
 			result=dao.insertData("hotel.insertHotel", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<Hotel> listHotel(Map<String, Object> map) {
+		List<Hotel> list = null;
+		
+		try {
+			list = dao.selectList("hotel.listHotel",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int hotelCount(Map<String, Object> map) {
+		int result=0;
+		try {
+			result=dao.selectOne("hotel.hotelCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Hotel readHotel(int num) {
+		Hotel dto = null;
+		try {
+			dto=dao.selectOne("hotel.readHotel", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public int updateHotel(Hotel dto, String pathname) {
+		int result=0;
+		try {
+			result=dao.updateData("hotel.updateHotel", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
