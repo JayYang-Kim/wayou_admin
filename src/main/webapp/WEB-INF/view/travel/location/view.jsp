@@ -108,7 +108,7 @@
 			</c:if>
 			<c:if test="${empty listLocationLog}">
 				<tr>
-					<td colspan="6">등록된 이력 리스트가 없습니다.</td>
+					<td colspan="5">등록된 이력 리스트가 없습니다.</td>
 				</tr>
 			</c:if>
 		</tbody>
