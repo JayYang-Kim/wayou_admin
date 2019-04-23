@@ -118,7 +118,6 @@ public class HotelController {
 	@RequestMapping(value="/hotel/hotelInfo/updateHotel", method=RequestMethod.GET)
 	public String updateHotelForm(
 			@RequestParam int hotelCode,
-
 			Model model) {
 	
 		Hotel dto = hotelService.readHotel(hotelCode);
@@ -148,8 +147,11 @@ public class HotelController {
 			@RequestParam int hotelCode,
 			Model model) {
 		Hotel dto = hotelService.readHotel(hotelCode);
+		List<Room> list = hotelService.listRoom();
 		
+		model.addAttribute("list", list);
 		model.addAttribute("dto", dto);
+		
 		return ".hotel.hotelInfo.roomInfo.list";
 	}
 	
@@ -162,15 +164,41 @@ public class HotelController {
 		
 		model.addAttribute("hotel", hotel);
 		model.addAttribute("hname", hname);
+		model.addAttribute("hotelCode", hotelCode);
+		model.addAttribute("mode", "created");
 		
 		return ".hotel.hotelInfo.roomInfo.insertRoom";
 	}
+	
 	@RequestMapping(value="/hotel/hotelInfo/roomInfo/insertRoom", method=RequestMethod.POST)
 	public String insertRoomSubmit(
 			Room dto,
-			Model model
-			) {
-		return "redirect:/hotel/hotelInfo/roomInfo/list";
+			Model model,
+			HttpSession session
+			) throws Exception{
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root+"uploads"+File.separator+"hotel";
+		
+		hotelService.insertRoom(dto, pathname);
+		
+		return "redirect:/hotel/hotelInfo/roomInfo/list?hotelCode="+dto.getHotelCode();
+	}
+
+	@RequestMapping(value="/hotel/hotelInfo/roomInfo/updateRoom", method=RequestMethod.GET)
+	public String updateRoomForm(
+			@RequestParam int roomCode,
+			@RequestParam int hotelCode,
+			Model model) {
+		Hotel hotel = hotelService.readHotel(hotelCode);
+		String hname=hotel.getHname();
+		
+		model.addAttribute("hotel", hotel);
+		model.addAttribute("hname", hname);
+		model.addAttribute("hotelCode", hotelCode);
+		model.addAttribute("mode", "update");
+		
+		return ".hotel.hotelInfo.roomInfo.insertRoom";
 	}
 
 }

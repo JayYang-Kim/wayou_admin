@@ -9,4 +9,8 @@ public interface HotelService {
 	public int hotelCount(Map<String, Object> map);
 	public Hotel readHotel(int num);
 	public int updateHotel(Hotel dto, String pathname);
+	
+	public int insertRoom(Room dto, String pathname);
+	public int insertFile(Room dto);
+	public List<Room> listRoom();
 }

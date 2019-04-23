@@ -7,6 +7,40 @@
 %>
 <script type="text/javascript">
 
+
+$(function(){
+	  $("body").on("change", "input[name=upload]", function(){
+		  if(! $(this).val()) {
+			  return;	
+		  }
+		
+		  var b=false;
+		  $("input[name=upload]").each(function(){
+			  if(! $(this).val()) {
+				  b=true;
+			  	  return;
+			  }
+		  });
+		
+		  if(b) return;
+
+		  var $tr, $td, $th, $input;
+		
+	      $tr=$("<tr>");
+	      $th=$("<th>", {style:"border-top:none"});
+	      $tr.append($th);
+	      $th=$("</th>");
+	      $tr.append($th);
+	      $td=$("<td>");
+	      $input=$("<input>", {type:"file", name:"upload", class:"boxTF", style:"height: 25px;"});
+	      $td.append($input);
+	      $tr.append($td);
+	    
+	      $("#tb").append($tr);
+	  });
+});
+
+
 function sendRoom(mode) {
     var f = document.insertRoomForm;
 	/* 	
@@ -61,27 +95,28 @@ function sendRoom(mode) {
 		<col style="width:30%">
 		<col>
 	</colgroup>
+	<tbody id="tb">
 		<tr>
 			<th>객실 호수</th>
-			<td><input type="text" value="${dto.roomNum}"></td>
+			<td><input type="text" name="roomNum" value="${dto.roomNum}"></td>
 		</tr>
 	 	<tr>
 	 		<th>룹타입</th>
 	 		<td>
 	 			<select id="roomtypeCode" name="roomtypeCode">
-	 				<option value="1" ${dto.locCode=="1"?"selected='selected'":""}>싱글</option>
-    				<option value="2" ${dto.locCode=="2"?"selected='selected'":""}>더블</option>
-    				<option value="3" ${dto.locCode=="3"?"selected='selected'":""}>트윈</option>
+	 				<option value="1" ${dto.roomtypeCode=="1"?"selected='selected'":""}>싱글</option>
+    				<option value="2" ${dto.roomtypeCode=="2"?"selected='selected'":""}>더블</option>
+    				<option value="3" ${dto.roomtypeCode=="3"?"selected='selected'":""}>트윈</option>
 	 			</select>
 	 		</td>
 	 	</tr>
 	 	<tr>
 			<th>최대 인원</th>
-			<td><input type="text" value="${dto.hCount}"></td>
+			<td><input type="text" name="hCount" value="${dto.hCount}"></td>
 		</tr>
 		<tr>
 			<th>가격</th>
-			<td><input type="text" value="${dto.price}"></td>
+			<td><input type="text" name="price" value="${dto.price}"></td>
 		</tr>
 		<tr>
 	 		<th>기본정보</th>
@@ -89,19 +124,27 @@ function sendRoom(mode) {
 	 	</tr>
 	 	<tr>
 	 		<th>공지사항</th>
-	 		<td><textarea name="information">${dto.notice}</textarea></td>
+	 		<td><textarea name="notice">${dto.notice}</textarea></td>
 	 	</tr>
 	 	<tr>
 	 		<th>취소규정</th>
-	 		<td><textarea name="information">${dto.cancel_notice}</textarea></td>
+	 		<td><textarea name="cancel_notice">${dto.cancel_notice}</textarea></td>
 	 	</tr>
-      	 	
+      	<tr>
+	 		<th>객실 이미지 등록</th>
+	 		<td>
+				<input type="file" name="upload" class="boxTF" size="53" accept="image/*" style="height: 25px;">
+			</td>
+	 	</tr>
+	 	</tbody> 	
 	 </table>
 	 <div class="btn_wrap view_btn">
 		
-		<button type='button' class='button btn_blk insertHotelSubmit' onclick="sendHotel('${mode}');">${mode=='update'?'수정완료':'등록완료'}</button>
+		<button type='button' class='button btn_blk insertHotelSubmit' onclick="sendRoom('${mode}');">${mode=='update'?'수정완료':'등록완료'}</button>
 		<button type='button' class='button btn_blk insertHotelCancel' onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/list?hotelCode=${hotel.hotelCode}';">${mode=='update'?'수정취소':'등록취소'}</button>
-	 
+	 	
 	 </div>
+	 
+	 <input type="hidden" name="hotelCode" value="${hotelCode}">
 </form>
 </div>

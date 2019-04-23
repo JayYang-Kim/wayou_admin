@@ -26,6 +26,17 @@
 				</tr>
 			</thead>
 			<tbody>
+			<c:forEach var="dto" items="${list}">
+					<tr>
+						<td>${dto.roomName}</td>
+						<td>${dto.roomNum}</td>
+						<td>${dto.hCount}</td>
+						<td>${dto.price}</td>
+						<td><button type='button' class='button btnUpdateHotel' data-hotelCode="${dto.roomCode}">방 수정</button></td>
+						<td><button type='button' class='button btnInsertRoom' onclick="location.href='';">삭제</button></td>
+					</tr>
+				</c:forEach>
+			
 			</tbody>
 			
 		</table>

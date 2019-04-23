@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.common.FileManager;
 import com.sp.common.dao.CommonDAO;
@@ -78,6 +79,63 @@ public class HotelServiceImpl implements HotelService {
 		}
 		return result;
 	}
+	
+	@Override
+	public int insertRoom(Room dto, String pathname) {
+		int result=0;
+		try {
+			int seq=dao.selectOne("room.seq");
+			dto.setRoomCode(seq);
+			
+			result=dao.insertData("room.insertRoom",dto);
+			
+			if(! dto.getUpload().isEmpty()) {
+				for(MultipartFile mf : dto.getUpload()) {
+					if(mf.isEmpty())
+						continue;
+					
+					String saveFilename=fileManager.doFileUpload(mf, pathname);
+					if(saveFilename!=null) {
+						String originalFilename=mf.getOriginalFilename();
+						
+						
+						dto.setOriginalFilename(originalFilename);
+						dto.setSaveFilename(saveFilename);
+						
+						insertFile(dto);
+					}
+					
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 
+	@Override
+	public int insertFile(Room dto) {
+		int result=0;
+		try {
+			result=dao.insertData("room.insertFile", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<Room> listRoom() {
+		List<Room> list = null;
+		try {
+			list=dao.selectList("room.listRoom");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
 	
 }
