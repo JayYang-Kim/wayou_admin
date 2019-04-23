@@ -251,7 +251,7 @@ function myForm_Postcode() {
 				<th scope="row"><b class="t_red">*</b> 비밀번호 (Pass Word)</th>
 				<td>
 					<div class="inp_wid adminPwd">
-						<input type="password" name="adminPwd"  style="width:150px;" value="${dto.adminPwd}" />
+						<input type="password" name="adminPwd"  style="width:150px;" />
 					</div>
 			<tr>
 				<th scope="row"><b class="t_red">*</b> 비밀번호 확인 (Pass Word)</th>
@@ -359,10 +359,8 @@ function myForm_Postcode() {
 					<c:if test="${not empty dto.saveFilename}">
 				         | <button type="button" onclick="deleteFile('${dto.saveFilename}')" class="button btn_blk" style="width:80px;">파일삭제</button>
 				    </c:if>
-					</div>
-				</td>
-				<td>
 					<input type="hidden" name="saveFilename" value="${dto.saveFilename}">
+					</div>
 				</td>
 			</tr>
 	</table>
