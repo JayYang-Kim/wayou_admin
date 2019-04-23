@@ -34,7 +34,7 @@
 			<select title="검색조건선택" name="searchKey">
            		<option value="location" ${searchKey == 'location' ? "selected='selected'" : ""}>지역명</option>
            		<option value="memo" ${searchKey == 'memo' ? "selected='selected'" : ""}>메모</option>
-           		<option value="writer" ${searchKey == 'writer' ? "selected='selected'" : ""}>아이디</option>
+           		<option value="adminId" ${searchKey == 'adminId' ? "selected='selected'" : ""}>아이디</option>
 			</select>
 			<input type="text" title="검색내용입력" name="searchValue" value="${searchValue}" />
 			<button type="button" class="button" onclick="sendSearch()">검색</button>

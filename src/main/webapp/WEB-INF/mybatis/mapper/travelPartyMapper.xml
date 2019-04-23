@@ -31,7 +31,9 @@
 	
 	<select id="dataCount" parameterType="map" resultType="Integer">
 		SELECT NVL(COUNT(*), 0)
-		FROM party
+		FROM party p
+		JOIN tb_user tu
+		ON p.userIdx = tu.userIdx 
 		<where>
 			<if test="searchValue != null and searchValue != ''">
 	     	    <include refid="where-list"/>
@@ -104,7 +106,9 @@
 	<select id="preReadParty" parameterType="map" resultType="com.sp.travel.party.Party">
 		SELECT tb.* FROM (
 		    SELECT partyCode, subject
-		    FROM party
+		    FROM party p
+			JOIN tb_user tu
+			ON p.userIdx = tu.userIdx 
 		    <where>
 				<if test="keyword != null and keyword != '' ">
             		<include refid="where-list"/>
@@ -125,7 +129,9 @@
 	<select id="nextReadParty" parameterType="map" resultType="com.sp.travel.party.Party">
 		SELECT tb.* FROM (
 		    SELECT partyCode, subject
-		    FROM party
+		    FROM party p
+			JOIN tb_user tu
+			ON p.userIdx = tu.userIdx 
 		    <where>
 				<if test="keyword != null and keyword != '' ">
             		<include refid="where-list"/>

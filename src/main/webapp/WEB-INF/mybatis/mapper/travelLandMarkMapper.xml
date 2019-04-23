@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="travel.landmark">
+	<select id="listLocation" resultType="com.sp.travel.landmark.LandMark">
+		SELECT locCode, locName FROM locationCode 
+	</select>
+	
+	<select id="listTag" resultType="com.sp.travel.landmark.LandMark">
+		SELECT tagCode, tagName FROM lndtagCode
+	</select>
+	
+	<select id="seqLandCode" resultType="Integer">
+		SELECT LANDMARK_SEQ.NEXTVAL FROM dual
+	</select>
+	
+	<insert id="insertLanmark" parameterType="com.sp.travel.landmark.LandMark">
+		INSERT INTO landmark(landCode, locCode, landName, address1, address2, lat, lng, memo, tagCode, adminIdx)
+			VALUES(LANDMARK_SEQ.NEXTVAL, #{locCode}, #{landName}, #{address1}, #{address2}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{tagCode, jdbcType = INTEGER}, #{adminIdx})
+	</insert>
+	
+	<insert id="insertLanmarkLog" parameterType="com.sp.travel.landmark.LandMark">
+		INSERT INTO landmarkLog(logCode, landCode, locCode, tagCode, address1, address2, landName, lat, lng, memo, writer)
+			VALUES(LANDMARKLOG_SEQ.NEXTVAL, #{landCode}, #{locCode}, #{tagCode}, #{address1}, #{address2}, #{landName}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{adminIdx})			
+	</insert>
+	
+	<insert id="insertFile" parameterType="com.sp.travel.landmark.LandMark">
+		INSERT INTO landmarkFile(fileCode, landCode, saveFilename)
+			VALUES(LANDMARKFILE_SEQ.NEXTVAL, #{landCode}, #{saveFilename, jdbcType = VARCHAR})			
+	</insert>
+</mapper> 

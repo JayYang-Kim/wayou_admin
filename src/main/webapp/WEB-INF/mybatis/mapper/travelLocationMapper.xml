@@ -25,7 +25,7 @@
 			<when test="searchKey == 'memo'">
 			    DBMS_LOB.INSTR(memo, #{searchValue}) &gt; 0
 			</when>
-			<when test="searchKey == 'writer'">
+			<when test="searchKey == 'adminId'">
 			    INSTR(adminId, #{searchValue}) &gt; 0
 			</when>
 			<otherwise>
@@ -91,35 +91,43 @@
 	
 	<select id="preReadLocation" parameterType="map" resultType="com.sp.travel.location.Location">
 		SELECT tb.* FROM (
-		    SELECT locCode
-		    FROM location
+		    SELECT l.locCode
+		    FROM location l
+		    JOIN locationCode lc
+				ON l.locCode = lc.locCode
+		    JOIN admin a
+		    	ON l.adminIdx = a.adminIdx
 		    <where>
 	        	<if test="searchValue != null and searchValue != ''">
 		     	    <include refid="where-list"/>
 		     	</if>
 		     	<if test="enable == 0 or enable == 1">
-		     		AND enable = #{enable}
+		     		AND l.enable = #{enable}
 		     	</if>
-		     	AND locCode &gt; #{locCode}
+		     	AND l.locCode &gt; #{locCode}
 	        </where>
-		    ORDER BY locCode ASC
+		    ORDER BY l.locCode ASC
 		) tb WHERE ROWNUM = 1
 	</select>
 	
 	<select id="nextReadLocation" parameterType="map" resultType="com.sp.travel.location.Location">
 		SELECT tb.* FROM (
-		    SELECT locCode
-		    FROM location
+		    SELECT l.locCode
+		    FROM location l
+		    JOIN locationCode lc
+				ON l.locCode = lc.locCode
+		    JOIN admin a
+		    	ON l.adminIdx = a.adminIdx
 		    <where>
 	        	<if test="searchValue != null and searchValue != ''">
 		     	    <include refid="where-list"/>
 		     	</if>
 		     	<if test="enable == 0 or enable == 1">
-		     		AND enable = #{enable}
+		     		AND l.enable = #{enable}
 		     	</if>
-		     	AND locCode &lt; #{locCode}
+		     	AND l.locCode &lt; #{locCode}
 	        </where>
-		    ORDER BY locCode DESC
+		    ORDER BY l.locCode DESC
 		) tb WHERE ROWNUM = 1
 	</select>
 	
