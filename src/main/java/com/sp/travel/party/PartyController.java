@@ -26,6 +26,8 @@ public class PartyController {
 	
 	@RequestMapping(value="/travel/admin/party/list")
 	public String listParty(@RequestParam(value="page", defaultValue="1") int current_page,
+			@RequestParam(defaultValue="2") int enabled,
+			@RequestParam(defaultValue="3") int confirmCode,
 			@RequestParam(defaultValue="all") String searchKey,
 			@RequestParam(defaultValue="") String searchValue,
 			HttpServletRequest req,
@@ -40,6 +42,8 @@ public class PartyController {
 		int rows = 10;
 		
 		Map<String, Object> map = new HashMap<>();
+		map.put("enabled", enabled);
+		map.put("confirmCode", confirmCode);
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
 		
@@ -75,7 +79,7 @@ public class PartyController {
 		String cp = req.getContextPath();
 		String query = "";
 		String listUrl = cp + "/travel/admin/party/list";
-		String articleUrl = cp + "/travel/admin/party/view?page=" + current_page;
+		String articleUrl = cp + "/travel/admin/party/view?page=" + current_page + "&enabled=" + enabled + "&confirmCode=" + confirmCode;
 		
 		if(searchValue.length()!=0) {
 			query = "searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
@@ -92,6 +96,8 @@ public class PartyController {
 		model.addAttribute("total_page", total_page);
 		model.addAttribute("paging", paging);
 		model.addAttribute("articleUrl", articleUrl);
+		model.addAttribute("enabled", enabled);
+		model.addAttribute("confirmCode", confirmCode);
 		model.addAttribute("searchKey", searchKey);
 		model.addAttribute("searchValue", searchValue);
 		
@@ -101,6 +107,8 @@ public class PartyController {
 	@RequestMapping(value="/travel/admin/party/view")
 	public String readParty(@RequestParam int partyCode,
 			@RequestParam(value="page", defaultValue="1") int current_page,
+			@RequestParam(defaultValue="2") int enabled,
+			@RequestParam(defaultValue="3") int confirmCode,
 			@RequestParam(defaultValue="all") String searchKey,
 			@RequestParam(defaultValue="") String searchValue,
 			HttpServletRequest req,
@@ -110,7 +118,7 @@ public class PartyController {
 			searchValue = URLDecoder.decode(searchValue, "UTF-8");
 		}
 		
-		String query = "page=" + current_page;
+		String query = "page=" + current_page + "&enabled=" + enabled + "&confirmCode=" + confirmCode;
 		if(searchValue.length() != 0) {
 			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
 		}
@@ -124,6 +132,8 @@ public class PartyController {
 		dto.setContent(myUtil.htmlSymbols(dto.getContent()));
 		
 		Map<String, Object> map = new HashMap<>();
+		map.put("enabled", enabled);
+		map.put("confirmCode", confirmCode);
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
 		map.put("partyCode", partyCode);

@@ -1,6 +1,7 @@
 package com.sp.travel.location;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -287,6 +289,28 @@ public class LocationController {
 		}
 		
 		return "redirect:/travel/admin/location/list" + query;
+	}
+	
+	@RequestMapping(value="/travel/admin/location/download")
+	public void download(@RequestParam int locCode,
+			HttpServletRequest req,
+			HttpServletResponse resp,
+			HttpSession session
+			) throws Exception {
+		
+		String root=session.getServletContext().getRealPath("/");
+		String pathname=root+"uploads"+File.separator+"bbs";
+		
+		Location dto = locationService.readLocation(locCode);
+		
+		if(dto!=null) {
+			boolean b=fileManager.doFileDownload(dto.getSaveFilename(), dto.getOriginalFilename(), pathname, resp);
+			if(b) return;
+		}
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out=resp.getWriter();
+		out.print("<script>alert('파일 다운로드를 실패했습니다.');history.back();</script>");
 	}
 	
 	@RequestMapping(value="/travel/admin/location/deleteImg", method = RequestMethod.POST)

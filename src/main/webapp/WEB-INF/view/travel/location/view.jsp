@@ -7,8 +7,27 @@
 %>
 
 <script type="text/javascript">
-	$(function(){
+	$("body").on("click", ".btn_update", function(){
+		var title = $(".pop_wrap").find("h1"); 
+		var content = $(".pop_wrap .pop_cont p:first-child");
+		var link = $(".pop_wrap .pop_cont p.t_center a.btn_blk");
+		var linkUrl = "<%=cp%>/travel/admin/location/update${query}&locCode=${dto.locCode}";
+		
+		title.html("지역 수정");
+		content.html("지역 정보를 수정하시겠습니까?");
+		link.attr("href", linkUrl);
+	});
 	
+	$("body").on("click", ".btn_delete", function(){
+		var title = $(".pop_wrap").find("h1"); 
+		var content = $(".pop_wrap .pop_cont p:first-child");
+		var link = $(".pop_wrap .pop_cont p.t_center a.btn_blk");
+		var linkUrl = "<%=cp%>/travel/admin/location/delete${query}&locCode=${dto.locCode}";
+		
+		title.html("지역 삭제");
+		content.html("지역 정보를 삭제하시겠습니까?");
+		
+		link.attr("href", linkUrl);
 	});
 </script>
 
@@ -48,7 +67,7 @@
 		</tr>
 		<tr>
 			<th scope="row">이미지</th>
-			<td colspan="3">${dto.saveFilename}</td>
+			<td colspan="3"><a href="<%=cp%>/travel/admin/location/download?locCode=${dto.locCode}">${dto.originalFilename}</a></td>
 		</tr>
 		<tr>
 			<th scope="row">메모</th>
@@ -71,8 +90,10 @@
 		</c:if>
 	</p>
 	<p class="f_right">
-		<a href="<%=cp%>/travel/admin/location/update${query}&locCode=${dto.locCode}" class="button h30 w70 btn_wht">수정</a>
-		<a href="<%=cp%>/travel/admin/location/delete${query}&locCode=${dto.locCode}" class="button h30 w70 btn_red">삭제</a>
+		<button type="button" class="btn_update button h30 w70 btn_wht" onclick="layerShow('#popup')">수정</button>
+		<button type="button" class="btn_delete button h30 w70 btn_red" onclick="layerShow('#popup')">삭제</button>
+		<%-- <a href="<%=cp%>/travel/admin/location/update${query}&locCode=${dto.locCode}" class="button h30 w70 btn_wht">수정</a>
+		<a href="<%=cp%>/travel/admin/location/delete${query}&locCode=${dto.locCode}" class="button h30 w70 btn_red">삭제</a> --%>
 		<a href="<%=cp%>/travel/admin/location/list${query}" class="button h30 w70 btn_blk">목록</a>
 	</p>
 </div>

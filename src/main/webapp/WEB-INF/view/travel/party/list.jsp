@@ -26,6 +26,17 @@
 	</div>
 	<form name="search_form" action="<%=cp%>/travel/admin/party/list" method="post">
 		<div class="list_search">
+			<select title="활성여부" name="enabled">
+				<option value="2" ${enabled == '2' ? "selected='selected'" : ""}>전체</option>
+				<option value="0" ${enabled == '0' ? "selected='selected'" : ""}>활성화</option>
+				<option value="1" ${enabled == '1' ? "selected='selected'" : ""}>비활성</option>
+			</select>
+			<select title="확인여부" name="confirmCode">
+				<option value="3" ${confirmCode == '3' ? "selected='selected'" : ""}>전체</option>
+				<option value="0" ${confirmCode == '0' ? "selected='selected'" : ""}>대기</option>
+				<option value="1" ${confirmCode == '1' ? "selected='selected'" : ""}>수락</option>
+				<option value="2" ${confirmCode == '2' ? "selected='selected'" : ""}>거절</option>
+			</select>
 			<select title="검색조건선택" name="searchKey">
 				<option value="all" ${searchKey == 'all' ? "selected='selected'" : ""}>제목 + 내용</option>
            		<option value="subject" ${searchKey == 'subject' ? "selected='selected'" : ""}>제목</option>
@@ -34,8 +45,6 @@
            		<option value="endDate" ${searchKey == 'endDate' ? "selected='selected'" : ""}>종료일</option>
            		<option value="userId" ${searchKey == 'userId' ? "selected='selected'" : ""}>아이디</option>
            		<option value="userCount" ${searchKey == 'userCount' ? "selected='selected'" : ""}>인원수</option>
-           		<option value="userCount" ${searchKey == 'enabled' ? "selected='selected'" : ""}>활성여부</option>
-           		<option value="userCount" ${searchKey == 'confirmCode' ? "selected='selected'" : ""}>확인여부</option>
 			</select>
 			<input type="text" title="검색내용입력" name="searchValue" value="${searchValue}" />
 			<button type="button" class="button" onclick="sendSearch()">검색</button>
