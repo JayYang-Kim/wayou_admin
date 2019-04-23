@@ -25,7 +25,7 @@ public class LocationServiceImpl implements LocationService{
 			list = dao.selectList("travel.location.listLoc");
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 		
 		return list;
 	}
@@ -38,6 +38,7 @@ public class LocationServiceImpl implements LocationService{
 			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathName);
 			if(saveFilename != null) {
 				dto.setSaveFilename(saveFilename);
+				dto.setOriginalFilename(dto.getUpload().getOriginalFilename());
 			}
 			dao.insertData("travel.location.insertLocation", dto);
 			dao.insertData("travel.location.insertLocationLog", dto);
@@ -81,7 +82,7 @@ public class LocationServiceImpl implements LocationService{
 	public Location readLocation(int locCode) throws Exception {
 		Location dto = null;
 		
-		try {
+		try { 
 			dto = dao.selectOne("travel.location.readLocation", locCode);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,11 +151,11 @@ public class LocationServiceImpl implements LocationService{
 			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathname);
 			
 			if(saveFilename != null) {
-				if(dto.getSaveFilename() != null && dto.getSaveFilename().length() != 0) {
+				if(dto.getSaveFilename()!=null && dto.getSaveFilename().length()!=0)
 					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
-				}
 				
 				dto.setSaveFilename(saveFilename);
+				dto.setOriginalFilename(dto.getUpload().getOriginalFilename());
 			}
 			
 			dao.updateData("travel.location.updateLocation", dto);

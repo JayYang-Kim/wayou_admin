@@ -13,6 +13,7 @@ public class Location {
 	private String created;
 	private int enable;
 	private String saveFilename;
+	private String originalFilename;
 	
 	private int logCode;
 	
@@ -102,6 +103,14 @@ public class Location {
 
 	public void setSaveFilename(String saveFilename) {
 		this.saveFilename = saveFilename;
+	}
+	
+	public String getOriginalFilename() {
+		return originalFilename;
+	}
+
+	public void setOriginalFilename(String originalFilename) {
+		this.originalFilename = originalFilename;
 	}
 
 	public int getLogCode() {
