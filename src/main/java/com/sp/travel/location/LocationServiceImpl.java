@@ -25,7 +25,7 @@ public class LocationServiceImpl implements LocationService{
 			list = dao.selectList("travel.location.listLoc");
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 		
 		return list;
 	}
@@ -82,7 +82,7 @@ public class LocationServiceImpl implements LocationService{
 	public Location readLocation(int locCode) throws Exception {
 		Location dto = null;
 		
-		try {
+		try { 
 			dto = dao.selectOne("travel.location.readLocation", locCode);
 		} catch (Exception e) {
 			e.printStackTrace();
