@@ -16,7 +16,7 @@
 	
 	<insert id="insertLanmark" parameterType="com.sp.travel.landmark.LandMark">
 		INSERT INTO landmark(landCode, locCode, landName, address1, address2, lat, lng, memo, tagCode, adminIdx)
-			VALUES(LANDMARK_SEQ.NEXTVAL, #{locCode}, #{landName}, #{address1}, #{address2}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{tagCode, jdbcType = INTEGER}, #{adminIdx})
+			VALUES(#{landCode}, #{locCode}, #{landName}, #{address1}, #{address2}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{tagCode, jdbcType = INTEGER}, #{adminIdx})
 	</insert>
 	
 	<insert id="insertLanmarkLog" parameterType="com.sp.travel.landmark.LandMark">
@@ -28,4 +28,60 @@
 		INSERT INTO landmarkFile(fileCode, landCode, saveFilename)
 			VALUES(LANDMARKFILE_SEQ.NEXTVAL, #{landCode}, #{saveFilename, jdbcType = VARCHAR})			
 	</insert>
+	
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'locName'">
+				INSTR(locName, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'created'">
+				(TO_CHAR(l.created, 'YYYYMMDD') = #{searchValue}
+					OR TO_CHAR(l.created, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<otherwise>
+				INSTR(${searchKey}, #{searchValue}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM landmark l
+		JOIN locationCode lc
+		    ON l.locCode = lc.locCode
+		JOIN lndtagCode lt
+		    ON l.tagCode = lt.tagCode
+		JOIN admin a
+		    ON l.adminIdx = a.adminIdx
+		<where>
+			<if test="searchValue != null and searchValue != ''">
+				<include refid="where-list"></include>
+			</if>
+		</where>
+	</select>
+	
+	<select id="listLandmark" parameterType="map" resultType="com.sp.travel.landmark.LandMark">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT l.locCode, locName, l.landCode, landName, l.address1, l.address2, lat, lng, l.adminIdx, adminId, adminName,
+		            TO_CHAR(l.created, 'YYYY-MM-DD HH24:MI:SS') created
+		        FROM landmark l
+		        JOIN locationCode lc
+		            ON l.locCode = lc.locCode
+		        JOIN lndtagCode lt
+		            ON l.tagCode = lt.tagCode
+		        JOIN admin a
+		            ON l.adminIdx = a.adminIdx
+				<where>
+					<if test="searchValue != null and searchValue != ''">
+						<include refid="where-list"></include>
+					</if>
+				</where>
+		        ORDER BY l.created DESC
+		    ) tb
+	<![CDATA[
+		    WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+	</select>
 </mapper> 
