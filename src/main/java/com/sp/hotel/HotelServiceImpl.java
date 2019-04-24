@@ -136,6 +136,57 @@ public class HotelServiceImpl implements HotelService {
 		
 		return list;
 	}
+
+	@Override
+	public Room readRoom(int num) {
+		Room dto = null;
+		try {
+			dto=dao.selectOne("room.readRoom", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+	@Override
+	public List<Room> listFile(int num) {
+		List<Room> listFile = null;
+		try {
+			listFile=dao.selectList("room.listFile", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listFile;
+	}
+
+	@Override
+	public int updateRoom(Room dto, String pathname) {
+		int result=0;
+		try {
+			result=dao.updateData("room.updateRoom", dto);
+			
+			if(! dto.getUpload().isEmpty()) {
+				for(MultipartFile mf:dto.getUpload()) {
+					if(mf.isEmpty())
+						continue;
+					
+					String saveFilename=fileManager.doFileUpload(mf, pathname);
+					if(saveFilename!=null) {
+						String originalFilename=mf.getOriginalFilename();
+						
+						
+						dto.setOriginalFilename(originalFilename);
+						dto.setSaveFilename(saveFilename);
+						
+						insertFile(dto);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	
 }

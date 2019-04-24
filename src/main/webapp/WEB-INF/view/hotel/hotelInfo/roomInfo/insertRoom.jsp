@@ -86,7 +86,7 @@ function sendRoom(mode) {
 </script>
 
 <div style="height: 50px; margin-left: 20px;">
-		<h1>${hname} 객실 등록</h1>
+		<h1>${hotel.hname} 객실 등록</h1>
 </div>
 <div>
 <form name="insertRoomForm" method="post" enctype="multipart/form-data">
@@ -133,10 +133,22 @@ function sendRoom(mode) {
       	<tr>
 	 		<th>객실 이미지 등록</th>
 	 		<td>
-				<input type="file" name="upload" class="boxTF" size="53" accept="image/*" style="height: 25px;">
+				<input type="file" name="upload" class="boxTF" size="53" accept="image/*" >
 			</td>
 	 	</tr>
-	 	</tbody> 	
+	 	</tbody> 
+	 	
+	 	<c:if test="${mode=='update'}">
+		   <c:forEach var="vo" items="${listFile}">
+				  <tr id="f${vo.fileCode}"> 
+				      <th>등록된 객실 이미지</th>
+				      <td> 
+							${vo.originalFilename}
+							| <a href="javascript:deleteFile('${vo.fileCode}');">삭제</a>	        
+				      </td>
+				  </tr>
+		   </c:forEach>
+		</c:if>
 	 </table>
 	 <div class="btn_wrap view_btn">
 		
@@ -145,6 +157,7 @@ function sendRoom(mode) {
 	 	
 	 </div>
 	 
-	 <input type="hidden" name="hotelCode" value="${hotelCode}">
+	 <input type="hidden" name="hotelCode" value="${hotel.hotelCode}">
+	 <input type="hidden" name="roomCode" value="${dto.roomCode}">
 </form>
 </div>

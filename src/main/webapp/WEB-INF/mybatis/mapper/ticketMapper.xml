@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ticket">
+
+	<select id="seq" resultType="Integer">
+		SELECT ROOMINFO_SEQ.NEXTVAL FROM dual
+	</select>
+	
+	<insert id="insertRoom" parameterType="com.sp.ticket.Ticket">
+		INSERT INTO RoomInfo(ROOMCODE, hotelcode, ROOMTYPECODE, ROOMNUM, HCOUNT, price, information, notice, CANCEL_NOTICE)
+			VALUES(#{roomCode}, #{hotelCode}, #{roomtypeCode}, #{roomNum}, #{hCount}, #{price},
+						#{information, jdbcType=VARCHAR},#{notice, jdbcType=VARCHAR}, #{cancel_notice, jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="insertFile" parameterType="com.sp.ticket.Ticket">
+		INSERT INTO roomfile(fileCode, roomCode, saveFilename, originalFilename)
+			VALUES(ROOMFILE_SEQ.NEXTVAL, #{roomCode}, #{saveFilename}, #{originalFilename})
+	</insert>
+</mapper>

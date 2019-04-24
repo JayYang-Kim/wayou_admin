@@ -146,11 +146,11 @@ public class HotelController {
 	public String listRoom(
 			@RequestParam int hotelCode,
 			Model model) {
-		Hotel dto = hotelService.readHotel(hotelCode);
+		Hotel hotel = hotelService.readHotel(hotelCode);
 		List<Room> list = hotelService.listRoom();
 		
 		model.addAttribute("list", list);
-		model.addAttribute("dto", dto);
+		model.addAttribute("hotel", hotel);
 		
 		return ".hotel.hotelInfo.roomInfo.list";
 	}
@@ -190,15 +190,33 @@ public class HotelController {
 			@RequestParam int roomCode,
 			@RequestParam int hotelCode,
 			Model model) {
+		
 		Hotel hotel = hotelService.readHotel(hotelCode);
-		String hname=hotel.getHname();
+		
+		Room dto = hotelService.readRoom(roomCode);
+		List<Room> listFile = hotelService.listFile(roomCode);
 		
 		model.addAttribute("hotel", hotel);
-		model.addAttribute("hname", hname);
-		model.addAttribute("hotelCode", hotelCode);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("listFile", listFile);
 		model.addAttribute("mode", "update");
 		
 		return ".hotel.hotelInfo.roomInfo.insertRoom";
+	}
+	
+	@RequestMapping(value="/hotel/hotelInfo/roomInfo/updateRoom", method=RequestMethod.POST)
+	public String updateRoomSubmit(
+			Room dto,
+			HttpSession session) throws Exception {
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root+"uploads"+File.separator+"hotel";
+		
+
+		hotelService.updateRoom(dto, pathname);
+
+		return "redirect:/hotel/hotelInfo/roomInfo/list?hotelCode="+dto.getHotelCode();
 	}
 
 }

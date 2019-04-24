@@ -180,14 +180,12 @@ function hotel_Postcode() {
 </script>
 
 
-<h1 id="page_tit">숙박관리</h1>
-<!-- 현재 페이지 정보 -->
-<div class="page_info">
-	<h2>숙박관리</h2>
-	<p><strong>숙박 등록ㆍ관리</strong></p>
-</div>
 
-<div>
+
+<div class="body">
+	<div style="height: 50px; margin-left: 20px;">
+		<h1>호텔 List</h1>
+	</div>
 	<div class="list_search_wrap">
 		<div class="list_search">
 			<select name="searchKey" id="searchKey" title="검색조건선택">

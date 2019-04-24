@@ -10,7 +10,7 @@
 
 <div class="body">
 	<div style="height: 50px; margin-left: 20px;">
-		<h1>${dto.hname} 객실 목록</h1>
+		<h1>${hotel.hname} 객실 목록</h1>
 	</div>
 	
 	</div>
@@ -32,7 +32,7 @@
 						<td>${dto.roomNum}</td>
 						<td>${dto.hCount}</td>
 						<td>${dto.price}</td>
-						<td><button type='button' class='button btnUpdateHotel' data-hotelCode="${dto.roomCode}">방 수정</button></td>
+						<td><button type='button' class='button btnUpdateHotel' onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/updateRoom?hotelCode=${hotel.hotelCode}&roomCode=${dto.roomCode}';">방 수정</button></td>
 						<td><button type='button' class='button btnInsertRoom' onclick="location.href='';">삭제</button></td>
 					</tr>
 				</c:forEach>
@@ -41,7 +41,7 @@
 			
 		</table>
 		<div class="btn_wrap view_btn">
-				<button class="button btn" type="button" onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/insertRoom?hotelCode=${dto.hotelCode}';">객실 추가하기</button>
+				<button class="button btn" type="button" onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/insertRoom?hotelCode=${hotel.hotelCode}';">객실 추가하기</button>
 				<button class="button btn" type="button" onclick="location.href='<%=cp%>/hotel/hotelInfo/list';">호텔 목록으로</button>
 		</div>
 	</div>

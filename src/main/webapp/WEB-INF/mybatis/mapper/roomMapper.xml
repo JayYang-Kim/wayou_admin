@@ -19,18 +19,28 @@
 	</insert>
 	
 	<select id="listRoom" parameterType="map" resultType="com.sp.hotel.Room">
-		
-   		SELECT roomName, roomNum, hCount, price
+   		SELECT roomName,roomCode, roomNum, hCount, price
    		FROM roomInfo r
    		JOIN ROOMTYPE t ON r.roomtypecode=t.roomtypecode
    		ORDER BY roomnum ASC
-     
 	</select>
 	
 	<select id="readRoom" parameterType="Integer" resultType="com.sp.hotel.Room">
 		SELECT ROOMCODE, hotelcode, ROOMTYPECODE, ROOMNUM, HCOUNT, price, information, notice, CANCEL_NOTICE
 		FROM roomInfo
-		WHERE hotelCode=#{hotelCode}
+		WHERE roomCode=#{roomCode}
 	</select>
 	
+	<select id="listFile" parameterType="Integer" resultType="com.sp.hotel.Room">
+		SELECT fileCode, roomCode, saveFilename, originalFilename
+		from roomfile
+		where roomCode=#{roomCode}
+	</select>
+	
+	<update id="updateRoom" parameterType="com.sp.hotel.Room">
+		UPDATE roomInfo
+		SET roomCode=#{roomCode}, hotelCode=#{hotelCode}, roomtypeCode=#{roomtypeCode}, roomNum=#{roomNum}, hCount=#{hCount}, price=#{price},
+			information=#{information, jdbcType=VARCHAR},notice=#{notice, jdbcType=VARCHAR}, cancel_notice=#{cancel_notice, jdbcType=VARCHAR}
+		WHERE roomCode=#{roomCode}
+	</update>
 </mapper>
