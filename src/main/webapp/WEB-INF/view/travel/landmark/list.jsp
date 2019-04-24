@@ -22,7 +22,7 @@
 
 <div class="list_search_wrap">
 	<div class="search_clean">
-		<button type="button" class="button" onclick="location.href='<%=cp%>/travel/admin/location/list'">새로고침</button>
+		<button type="button" class="button" onclick="location.href='<%=cp%>/travel/admin/landmark/list'">새로고침</button>
 	</div>
 	<form name="search_form" action="<%=cp%>/travel/admin/landmark/list" method="post">
 		<div class="list_search">
@@ -30,7 +30,7 @@
            		<option value="locName" ${searchKey == 'locName' ? "selected='selected'" : ""}>지역명</option>
            		<option value="landName" ${searchKey == 'landName' ? "selected='selected'" : ""}>랜드마크명</option>
            		<option value="tagName" ${searchKey == 'tagName' ? "selected='selected'" : ""}>태그명</option>
-           		<option value="writer" ${searchKey == 'writer' ? "selected='selected'" : ""}>아이디</option>
+           		<option value="adminId" ${searchKey == 'adminId' ? "selected='selected'" : ""}>아이디</option>
            		<option value="created" ${searchKey == 'created' ? "selected='selected'" : ""}>작성일</option>
 			</select>
 			<input type="text" title="검색내용입력" name="searchValue" value="${searchValue}" />
@@ -42,14 +42,13 @@
 <table class="table tbl_hover">
 	<caption>지역 리스트</caption>
 	<colgroup>
-		<col style="width:5%" />
-		<col style="width:10%" />
-		<col style="width:7%" span="2" />
+		<col style="width:3%" />
 		<col style="width:7%" />
-		<col style="width:4%" />
+		<col style="width:7%" />
+		<col style="width:10%" span="2" />
+		<col style="width:5%" span="2" />
 		<col style="width:8%" />
 		<col style="width:7%" />
-		<col style="width:4%" />
 	</colgroup>
 	<thead>
 		<tr>
@@ -65,21 +64,23 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td></td>
-			<td></td>
-			<td>
-				<a class="udline" href="#">
-					<span></span>
-				</a>
-			</td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-		</tr>
+		<c:forEach var="dto" items="${list}">
+			<tr>
+				<td>${dto.listNum}</td>
+				<td>${dto.locName}(${dto.locCode})</td>
+				<td>
+					<a class="udline" href="#">
+						<span>${dto.landName}</span>
+					</a>
+				</td>
+				<td>${dto.address1}</td>
+				<td>${dto.address2}</td>
+				<td>${dto.lat}</td>
+				<td>${dto.lng}</td>
+				<td>${dto.adminId}(${dto.adminName})</td>
+				<td>${dto.created}</td>
+			</tr>
+		</c:forEach>
 	</tbody>
 </table>
 <div class="t_center mt30">

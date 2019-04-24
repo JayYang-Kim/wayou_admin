@@ -73,7 +73,6 @@ public class LandMarkServiceImpl implements LandMarkService{
 			result = 1;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
 		}
 		
 		return result;
@@ -81,14 +80,28 @@ public class LandMarkServiceImpl implements LandMarkService{
 	
 	@Override
 	public int dataCount(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("travel.landmark.dataCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	@Override
 	public List<LandMark> listLandMark(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<LandMark> list = null;
+		
+		try {
+			list = dao.selectList("travel.landmark.listLandmark", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 	
 	@Override
