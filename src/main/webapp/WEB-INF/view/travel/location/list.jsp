@@ -89,11 +89,18 @@
 				</td>
 			</tr>
 		</c:forEach>
+		<c:if test="${empty list}">
+			<tr>
+				<td colspan="9">등록된 정보가 없습니다.</td>
+			</tr>
+		</c:if>
 	</tbody>
 </table>
 <div class="t_center mt30">
 	${paging}
 </div>
-<div class="btn_wrap">
-	<p class="f_right"><a href="<%=cp%>/travel/admin/location/add" class="button h30 btn_brown w70">등록</a></p>
-</div>
+<c:if test="${sessionScope.admin.departCode == 4 || sessionScope.admin.departCode == 3}">
+	<div class="btn_wrap">
+		<p class="f_right"><a href="<%=cp%>/travel/admin/location/add" class="button h30 btn_brown w70">등록</a></p>
+	</div>
+</c:if>

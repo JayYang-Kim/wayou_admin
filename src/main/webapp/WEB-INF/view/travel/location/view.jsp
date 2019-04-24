@@ -90,8 +90,10 @@
 		</c:if>
 	</p>
 	<p class="f_right">
-		<button type="button" class="btn_update button h30 w70 btn_wht" onclick="layerShow('#popup')">수정</button>
-		<button type="button" class="btn_delete button h30 w70 btn_red" onclick="layerShow('#popup')">삭제</button>
+		<c:if test="${sessionScope.admin.departCode == 4 || sessionScope.admin.departCode == 3}">
+			<button type="button" class="btn_update button h30 w70 btn_wht" onclick="layerShow('#popup')">수정</button>
+			<button type="button" class="btn_delete button h30 w70 btn_red" onclick="layerShow('#popup')">삭제</button>
+		</c:if>
 		<%-- <a href="<%=cp%>/travel/admin/location/update${query}&locCode=${dto.locCode}" class="button h30 w70 btn_wht">수정</a>
 		<a href="<%=cp%>/travel/admin/location/delete${query}&locCode=${dto.locCode}" class="button h30 w70 btn_red">삭제</a> --%>
 		<a href="<%=cp%>/travel/admin/location/list${query}" class="button h30 w70 btn_blk">목록</a>

@@ -8,6 +8,11 @@
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script type="text/javascript">
 	$(function(){
+		$("select[name=tagCode]").val(${dto.tagCode}).attr("selected", "selected");
+		$("select[name=locCode]").val(${dto.locCode}).attr("selected", "selected");
+	});
+
+	$(function(){
 		$("body").on("change", "input[name=upload]", function(){
   			if(! $(this).val()) {
   				return;	
@@ -39,6 +44,13 @@
   	      	$(".table tbody").append($tr);
   	  	});
 	});
+	
+	function deleteFile(fileCode) {
+		var url="<%=cp%>/travel/admin/landmark/deleteFile";
+		$.post(url, {fileCode : fileCode}, function(data) {
+			$("#f"+fileCode).remove();
+		}, "json");
+	}
 
 	function postCode() {
 	    new daum.Postcode({
@@ -81,7 +93,7 @@
 	        }
 	    }).open();
 	}
-
+	
 	function landMarkSend() {
 		var f = document.landmark_form;
 		var str;
@@ -177,6 +189,9 @@
 				</td>
 				<th scope="row"><b class="t_red">*</b> 랜드마크명</th>
 				<td>
+					<c:if test="${mode == 'update'}">
+						<input type="hidden" name="landCode" value="${dto.landCode}"/>
+					</c:if>
 					<input type="text" class="width1" name="landName" title="랜드마크명" placeholder="랜드마크명" value="${dto.landName}" />
 				</td>
 			</tr>
@@ -220,6 +235,17 @@
 					<input type="file" class="w_100" name="upload" placeholder="파일첨부" title="파일첨부">
 				</td>
 			</tr>
+			<c:if test="${mode == 'update'}">
+				<c:forEach var="dto_landmarkFile" items="${listLandmarkFile}">
+					<tr id="f${dto_landmarkFile.fileCode}" class="file_img">
+						<th scope="row">이미지</th>
+						<td colspan="3">
+							${dto_landmarkFile.saveFilename}
+							| <a href="javascript:deleteFile('${dto_landmarkFile.fileCode}');">삭제</a>
+						</td>
+					</tr>
+				</c:forEach>
+			</c:if>
 		</tbody>
 	</table>
 </form>

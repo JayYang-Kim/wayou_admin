@@ -31,11 +31,11 @@ public class LocationServiceImpl implements LocationService{
 	}
 
 	@Override
-	public int insertLocation(Location dto, String pathName) throws Exception {
+	public int insertLocation(Location dto, String pathname) throws Exception {
 		int result = 0;
 		
 		try {
-			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathName);
+			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathname);
 			if(saveFilename != null) {
 				dto.setSaveFilename(saveFilename);
 				dto.setOriginalFilename(dto.getUpload().getOriginalFilename());

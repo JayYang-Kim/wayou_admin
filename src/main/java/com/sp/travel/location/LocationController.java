@@ -141,10 +141,10 @@ public class LocationController {
 		dto.setAdminIdx(info.getAdminIdx());
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathName = root + "uploads" + File.separator + "photo";
+		String pathname = root + File.separator + "uploads" + File.separator + "location";
 		
 		try {
-			locationService.insertLocation(dto, pathName);
+			locationService.insertLocation(dto, pathname);
 		} catch (Exception e) {
 			return "redirect:/travel/admin/location/add";
 		}
@@ -155,7 +155,6 @@ public class LocationController {
 	@RequestMapping(value="/travel/admin/location/view")
 	public String readLocation(@RequestParam int locCode,
 			@RequestParam int page,
-			@RequestParam(value="logPage", defaultValue="1") int current_logPage, 
 			@RequestParam(defaultValue="2") int enable,
 			@RequestParam(defaultValue="location") String searchKey,
 			@RequestParam(defaultValue="") String searchValue,
@@ -244,9 +243,8 @@ public class LocationController {
 			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
 		}
 		
-		String root=session.getServletContext().getRealPath("/");
-		String pathname=root+"uploads"+File.separator+"bbs";
-		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "location";
 		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		
@@ -279,8 +277,8 @@ public class LocationController {
 			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
 		}
 		
-		String root=session.getServletContext().getRealPath("/");
-		String pathname=root+"uploads"+File.separator+"bbs";
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "location";
 		
 		try {
 			locationService.deleteLocation(locCode, pathname);
@@ -298,8 +296,8 @@ public class LocationController {
 			HttpSession session
 			) throws Exception {
 		
-		String root=session.getServletContext().getRealPath("/");
-		String pathname=root+"uploads"+File.separator+"bbs";
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "location";
 		
 		Location dto = locationService.readLocation(locCode);
 		
@@ -320,8 +318,8 @@ public class LocationController {
 		
 		Map<String, Object> model = new HashMap<>();
 		
-		String root=session.getServletContext().getRealPath("/");
-		String pathname=root+"uploads"+File.separator+"amdin";
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "location";
 		
 		Location dto = locationService.readLocation(locCode);
 		

@@ -92,6 +92,11 @@
 				<td>${dto.confirmCode == 0 ? "대기" : dto.confirmCode == 1 ? "수락" : "거절"}</td>
 			</tr>
 		</c:forEach>
+		<c:if test="${empty list}">
+			<tr>
+				<td colspan="9">등록된 정보가 없습니다.</td>
+			</tr>
+		</c:if>
 	</tbody>
 </table>
 <div class="t_center mt30">

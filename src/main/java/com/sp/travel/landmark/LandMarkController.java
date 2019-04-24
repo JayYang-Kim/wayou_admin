@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.admin.AdminSessionInfo;
 import com.sp.common.FileManager;
@@ -122,7 +124,7 @@ public class LandMarkController {
 		}
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + "uploads" + File.separator + "notice";	
+		String pathname = root + File.separator + "uploads" + File.separator + "landmark";	
 		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		dto.setAdminIdx(info.getAdminIdx());
@@ -134,5 +136,170 @@ public class LandMarkController {
 		}
 		
 		return "redirect:/travel/admin/landmark/list";
+	}
+	
+	@RequestMapping(value="/travel/admin/landmark/view")
+	public String view(@RequestParam int landCode,
+			@RequestParam int page,
+			@RequestParam(defaultValue="locName") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			Model model) throws Exception {
+		
+		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		
+		String query = "?page=" + page;
+		
+		if(searchValue.length() != 0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		LandMark dto = landmarkService.readLandMark(landCode);
+		
+		if(dto == null) {
+			return "redirect:/travel/admin/landmark/list" + query;
+		}
+		
+		dto.setMemo(myUtil.htmlSymbols(dto.getMemo()));
+		
+		List<LandMark> listLandmarkFile = landmarkService.listFile(landCode);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchKey", searchKey);
+		map.put("searchValue", searchValue);
+		map.put("landCode", landCode);
+		
+		LandMark preReadLandmark = landmarkService.preReadLandMark(map);
+		LandMark nextReadLandmark = landmarkService.nextReadLandMark(map);
+		
+		List<LandMark> listLandmarkLog = landmarkService.listLandMarkLog(landCode);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("listLandmarkFile", listLandmarkFile);
+		model.addAttribute("preReadLandmark", preReadLandmark);
+		model.addAttribute("nextReadLandmark", nextReadLandmark);
+		model.addAttribute("listLandmarkLog", listLandmarkLog);
+		model.addAttribute("query", query);
+		
+		return ".travel.landmark.view";
+	}
+	
+	@RequestMapping(value="/travel/admin/landmark/update", method = RequestMethod.GET)
+	public String update(@RequestParam int landCode,
+			@RequestParam int page,
+			@RequestParam(defaultValue="locName") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			Model model) throws Exception {
+		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		
+		String query = "?page=" + page;
+		
+		if(searchValue.length() != 0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		LandMark dto = landmarkService.readLandMark(landCode);
+		
+		if(dto == null) {
+			return "redirect:/travel/admin/landmark/list" + query;
+		}
+		
+		List<LandMark> listLocation = landmarkService.listLocation();
+		List<LandMark> listTag = landmarkService.listTag();
+		List<LandMark> listLandmarkFile = landmarkService.listFile(landCode);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("listLocation", listLocation);
+		model.addAttribute("listTag", listTag);
+		model.addAttribute("listLandmarkFile", listLandmarkFile);
+		model.addAttribute("query", query);
+		model.addAttribute("mode", "update");
+		
+		return ".travel.landmark.add";
+	}
+	
+	@RequestMapping(value="/travel/admin/landmark/update", method = RequestMethod.POST)
+	public String updateSubmit(LandMark dto,
+			@RequestParam int page,
+			@RequestParam(defaultValue="locName") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			HttpSession session) throws Exception {
+		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		
+		String query = "?page=" + page;
+		
+		if(searchValue.length() != 0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "landmark";			
+		
+		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
+		dto.setAdminIdx(info.getAdminIdx());
+		
+		try {
+			landmarkService.updateLandMark(dto, pathname);
+		} catch (Exception e) {
+			return "redirect:/travel/admin/landmark/update" + query + "&landCode=" + dto.getLandCode();
+		}
+		
+		return "redirect:/travel/admin/landmark/list" + query;
+	}
+	
+	@RequestMapping(value="/travel/admin/landmark/delete")
+	public String delete(@RequestParam int landCode,
+			@RequestParam int page,
+			@RequestParam(defaultValue="locName") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			HttpSession session) throws Exception {
+		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		
+		String query = "?page=" + page;
+		
+		if(searchValue.length() != 0) {
+			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		}
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "landmark";			
+		
+		try {
+			landmarkService.deleteLandMark(landCode, pathname);
+		} catch (Exception e) {
+			return "redirect:/travel/admin/landmark/view" + query + "&landCode=" + landCode;
+		}
+		
+		return "redirect:/travel/admin/landmark/list" + query;
+	}
+	
+	@RequestMapping(value="/travel/admin/landmark/deleteFile", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteFile(
+			@RequestParam int fileCode,
+			HttpServletResponse resp,
+			HttpSession session) throws Exception {
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "landmark";	
+		
+		Map<String, Object> model = new HashMap<>(); 
+		
+		String msg = "true";
+		
+		LandMark dto = landmarkService.readFile(fileCode);
+		
+		if(dto!=null) {
+			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+		}
+		
+		try {
+			landmarkService.deleteFile(fileCode);
+		} catch (Exception e) {
+			msg = "false";
+		}
+		
+		model.put("msg", msg);
+		
+		return model;
 	}
 }

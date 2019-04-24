@@ -1,5 +1,6 @@
 package com.sp.travel.landmark;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -106,44 +107,127 @@ public class LandMarkServiceImpl implements LandMarkService{
 	
 	@Override
 	public LandMark readLandMark(int landCode) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		LandMark dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.landmark.readLandmark", landCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
 	}
 	
 	@Override
 	public LandMark preReadLandMark(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		LandMark dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.landmark.preReadLandmark", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
 	}
 	
 	@Override
 	public LandMark nextReadLandMark(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		LandMark dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.landmark.nextReadLandmark", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
 	}
 	
 	@Override
 	public int updateLandMark(LandMark dto, String pathname) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		
+		try {
+			dao.updateData("travel.landmark.updateLandmark", dto);
+			
+			if(! dto.getUpload().isEmpty()) {
+				for(MultipartFile mf:dto.getUpload()) {
+					if(mf.isEmpty()) {
+						continue;
+					}
+					
+					String saveFilename = fileManager.doFileUpload(mf, pathname);
+					if(saveFilename!=null) {
+						dto.setSaveFilename(saveFilename);
+						insertFile(dto);
+					}
+				}
+			}
+			
+			dao.insertData("travel.landmark.insertLanmarkLog", dto);
+			
+			result = 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return result;
 	}
 	
 	@Override
 	public int deleteLandMark(int landCode, String pathname) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		
+		try {
+			List<LandMark> listFile = listFile(landCode);
+			if(listFile!=null) {
+				Iterator<LandMark> it = listFile.iterator();
+				while(it.hasNext()) {
+					LandMark dto = it.next();
+					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+				}
+			}
+			
+			deleteAllFile(landCode);
+			
+			dao.deleteData("travel.landmark.deleteLandmarkLog", landCode);
+			dao.deleteData("travel.landmark.deleteLandmark", landCode);
+			
+			result = 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return result;
 	}
 	
 	@Override
 	public List<LandMark> listLandMarkLog(int landCode) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<LandMark> list = null;
+		
+		try {
+			list = dao.selectList("travel.landmark.listLandmarkLog", landCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 	
 	@Override
 	public List<LandMark> allLandMarkLog(int landCode) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<LandMark> list = null;
+		
+		try {
+			list = dao.selectList("travel.landmark.allLandmarkLog", landCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 
 	@Override
@@ -161,20 +245,56 @@ public class LandMarkServiceImpl implements LandMarkService{
 	}
 
 	@Override
-	public List<LandMark> listFile(int num) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<LandMark> listFile(int landCode) throws Exception {
+		List<LandMark> list = null;
+		
+		try {
+			list = dao.selectList("travel.landmark.listLandmarkFile", landCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 
 	@Override
-	public LandMark readFile(int fileNum) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public LandMark readFile(int fileCode) throws Exception {
+		LandMark dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.landmark.readLandmarkFile", fileCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
 	}
 
 	@Override
-	public int deleteFile(Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteFile(int fileCode) throws Exception {
+		int result = 0;
+		
+		try {
+			result = dao.deleteData("travel.landmark.deleteLandmarkFile", fileCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int deleteAllFile(int landCode) throws Exception {
+		int result = 0;
+		
+		try {
+			result = dao.deleteData("travel.landmark.deleteAllLandmarkFile", landCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return result;
 	}
 }

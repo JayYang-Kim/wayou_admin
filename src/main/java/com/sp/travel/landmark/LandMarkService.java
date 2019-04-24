@@ -16,9 +16,10 @@ public interface LandMarkService {
 	public int deleteLandMark(int landCode, String pathname) throws Exception;
 	
 	public int insertFile(LandMark dto) throws Exception;
-	public List<LandMark> listFile(int num) throws Exception;
-	public LandMark readFile(int fileNum) throws Exception;
-	public int deleteFile(Map<String, Object> map) throws Exception;
+	public List<LandMark> listFile(int landCode) throws Exception;
+	public LandMark readFile(int fileCode) throws Exception;
+	public int deleteFile(int fileCode) throws Exception;
+	public int deleteAllFile(int landCode) throws Exception;
 	
 	public List<LandMark> listLandMarkLog(int landCode) throws Exception;
 	public List<LandMark> allLandMarkLog(int landCode) throws Exception;
