@@ -1,4 +1,4 @@
-package com.sp.ticket;
+package com.sp.store;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import com.sp.common.FileManager;
 import com.sp.common.dao.CommonDAO;
 
 @Service("ticket.TicketService")
-public class TicketServiceImpl implements TicketService {
+public class StoreServiceImpl implements StoreService {
 
 	@Autowired
 	private CommonDAO dao;
