@@ -13,6 +13,9 @@ public class Location {
 	private String created;
 	private int enable;
 	private String saveFilename;
+	private String originalFilename;
+	
+	private int logCode;
 	
 	private int adminIdx;
 	private String adminId;
@@ -101,7 +104,23 @@ public class Location {
 	public void setSaveFilename(String saveFilename) {
 		this.saveFilename = saveFilename;
 	}
+	
+	public String getOriginalFilename() {
+		return originalFilename;
+	}
 
+	public void setOriginalFilename(String originalFilename) {
+		this.originalFilename = originalFilename;
+	}
+
+	public int getLogCode() {
+		return logCode;
+	}
+
+	public void setLogCode(int logCode) {
+		this.logCode = logCode;
+	}
+	
 	public int getAdminIdx() {
 		return adminIdx;
 	}

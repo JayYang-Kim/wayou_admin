@@ -7,28 +7,26 @@
 	</select>
 
 	<insert id="insertLocation" parameterType="com.sp.travel.location.Location">
-		INSERT INTO location(locCode, lat, lng, memo, enable, adminIdx, saveFilename)
-			VALUES(#{locCode}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{enable}, #{adminIdx}, #{saveFilename, jdbcType = VARCHAR})
+		INSERT INTO location(locCode, lat, lng, memo, enable, adminIdx, saveFilename, originalFilename)
+			VALUES(#{locCode}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{enable}, #{adminIdx}, #{saveFilename, jdbcType = VARCHAR}, #{originalFilename, jdbcType = VARCHAR})
+	</insert>
+	
+	<insert id="insertLocationLog" parameterType="com.sp.travel.location.Location">
+		INSERT INTO locationLog(logCode, locCode, lat, lng, memo, writer, enable)
+    		VALUES(LOCATIONLOG_SEQ.NEXTVAL, #{locCode}, #{lat}, #{lat}, #{memo, jdbcType = CLOB}, #{adminIdx}, #{enable})
 	</insert>
 	
 	<!-- sql -->
 	<sql id="where-list">
 		<choose>
 			<when test="searchKey == 'location'">
-			   INSTR(locName, #{searchValue}) &gt; 0
+			   INSTR(lc.locName, #{searchValue}) &gt; 0
 			</when>
 			<when test="searchKey == 'memo'">
 			    DBMS_LOB.INSTR(memo, #{searchValue}) &gt; 0
 			</when>
-			<when test="searchKey == 'created'">
-			   (TO_CHAR(created, 'YYYYMMDD') = #{searchValue}
-		          OR TO_CHAR(created, 'YYYY-MM-DD') = #{searchValue})
-			</when>
-			<when test="searchKey == 'enable'">
-			   INSTR(enable, #{searchValue}) &gt; 0
-			</when>
-			<when test="searchKey == 'writer'">
-			   INSTR(enable, #{searchValue}) &gt; 0
+			<when test="searchKey == 'adminId'">
+			    INSTR(adminId, #{searchValue}) &gt; 0
 			</when>
 			<otherwise>
 			    INSTR(${searchKey}, #{searchValue}) &gt; 0
@@ -36,4 +34,155 @@
 		</choose>
 	</sql>
 	<!-- /sql -->
-</mapper>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM location l
+		JOIN locationCode lc
+			ON l.locCode = lc.locCode
+		JOIN admin a
+			ON l.adminIdx = a.adminIdx 
+		<where>
+        	<if test="searchValue != null and searchValue != ''">
+	     	    <include refid="where-list"/>
+	     	</if>
+	     	<if test="enable == 0 or enable == 1">
+	     		AND l.enable = #{enable}
+	     	</if>
+        </where>
+	</select>
+	
+	<select id="listLocation" parameterType="map" resultType="com.sp.travel.location.Location">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT l.locCode, lc.locName, lat, lng, memo, l.enable, l.adminIdx, a.adminId, a.adminName, l.saveFilename,
+					TO_CHAR(l.created, 'YYYY-MM-DD') AS created
+				FROM location l
+				JOIN locationCode lc
+					ON l.locCode = lc.locCode
+				JOIN admin a
+					ON l.adminIdx = a.adminIdx 
+		        <where>
+		        	<if test="searchValue != null and searchValue != ''">
+			     	    <include refid="where-list"/>
+			     	</if>
+			     	<if test="enable == 0 or enable == 1">
+			     		AND l.enable = #{enable}
+			     	</if>
+		        </where>
+		        ORDER BY l.locCode DESC
+		    )  tb
+	<![CDATA[	    
+		    WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readLocation" parameterType="Integer" resultType="com.sp.travel.location.Location">
+		SELECT l.locCode, lc.locName, lat, lng, memo, l.enable, l.adminIdx, a.adminId, a.adminName, l.saveFilename, l.originalFilename,
+			TO_CHAR(l.created, 'YYYY-MM-DD') AS created
+		FROM location l
+		JOIN locationCode lc
+			ON l.locCode = lc.locCode
+		JOIN admin a
+			ON l.adminIdx = a.adminIdx
+		WHERE l.locCode = #{locCode}
+	</select>
+	
+	<select id="preReadLocation" parameterType="map" resultType="com.sp.travel.location.Location">
+		SELECT tb.* FROM (
+		    SELECT l.locCode
+		    FROM location l
+		    JOIN locationCode lc
+				ON l.locCode = lc.locCode
+		    JOIN admin a
+		    	ON l.adminIdx = a.adminIdx
+		    <where>
+	        	<if test="searchValue != null and searchValue != ''">
+		     	    <include refid="where-list"/>
+		     	</if>
+		     	<if test="enable == 0 or enable == 1">
+		     		AND l.enable = #{enable}
+		     	</if>
+		     	AND l.locCode &gt; #{locCode}
+	        </where>
+		    ORDER BY l.locCode ASC
+		) tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="nextReadLocation" parameterType="map" resultType="com.sp.travel.location.Location">
+		SELECT tb.* FROM (
+		    SELECT l.locCode
+		    FROM location l
+		    JOIN locationCode lc
+				ON l.locCode = lc.locCode
+		    JOIN admin a
+		    	ON l.adminIdx = a.adminIdx
+		    <where>
+	        	<if test="searchValue != null and searchValue != ''">
+		     	    <include refid="where-list"/>
+		     	</if>
+		     	<if test="enable == 0 or enable == 1">
+		     		AND l.enable = #{enable}
+		     	</if>
+		     	AND l.locCode &lt; #{locCode}
+	        </where>
+		    ORDER BY l.locCode DESC
+		) tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="listLocationLog" parameterType="Integer" resultType="com.sp.travel.location.Location">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT ll.logCode, ll.locCode, lc.locName, ll.lat, ll.lng, ll.memo, ll.enable,
+					ll.writer AS adminIdx, 
+					a.adminId, a.adminName, 
+					TO_CHAR(ll.created, 'YYYY-MM-DD HH24:MI:SS') AS created
+				FROM locationLog ll
+				JOIN locationCode lc
+					ON ll.locCode = lc.locCode
+				JOIN admin a
+					ON ll.writer = a.adminIdx
+		        WHERE ll.locCode = #{locCode}
+		        ORDER BY ll.created DESC
+		    ) tb
+	<![CDATA[	    
+		    WHERE ROWNUM <= 10
+		) WHERE rnum >= 1
+	]]>
+	</select>
+	
+	<select id="allLocationLog" parameterType="Integer" resultType="com.sp.travel.location.Location">
+        SELECT ll.logCode, ll.locCode, lc.locName, ll.lat, ll.lng, ll.memo, ll.enable
+			ll.writer AS adminIdx, 
+			a.adminId, a.adminName, 
+			TO_CHAR(ll.created, 'YYYY-MM-DD HH24:MI:SS') AS created
+		FROM locationLog ll
+		JOIN locationCode lc
+			ON ll.locCode = lc.locCode
+		JOIN admin a
+			ON ll.writer = a.adminIdx
+        WHERE ll.locCode = #{locCode}
+        ORDER BY ll.created DESC
+	</select>
+	
+	<update id="updateLocation" parameterType="com.sp.travel.location.Location">
+		UPDATE location SET
+			lat = #{lat},
+			lng = #{lng},
+			memo = #{memo, jdbcType = CLOB},
+			enable = #{enable},
+			adminIdx = #{adminIdx},
+			saveFilename = #{saveFilename, jdbcType = VARCHAR},
+			originalFilename = #{originalFilename, jdbcType = VARCHAR}
+		WHERE locCode = #{locCode}
+	</update>
+	
+	<delete id="deleteLocation" parameterType="Integer">
+		DELETE FROM location WHERE locCode = #{locCode}
+	</delete>
+	
+	<delete id="deleteLocationLog" parameterType="Integer">
+		DELETE FROM locationLog WHERE locCode = #{locCode}
+	</delete>
+</mapper> 

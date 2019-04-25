@@ -1,7 +1,11 @@
 package com.sp.hotel;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sp.common.FileManager;
 import com.sp.common.dao.CommonDAO;
@@ -29,5 +33,160 @@ public class HotelServiceImpl implements HotelService {
 		return result;
 	}
 
+	@Override
+	public List<Hotel> listHotel(Map<String, Object> map) {
+		List<Hotel> list = null;
+		
+		try {
+			list = dao.selectList("hotel.listHotel",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int hotelCount(Map<String, Object> map) {
+		int result=0;
+		try {
+			result=dao.selectOne("hotel.hotelCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Hotel readHotel(int num) {
+		Hotel dto = null;
+		try {
+			dto=dao.selectOne("hotel.readHotel", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public int updateHotel(Hotel dto, String pathname) {
+		int result=0;
+		try {
+			result=dao.updateData("hotel.updateHotel", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@Override
+	public int insertRoom(Room dto, String pathname) {
+		int result=0;
+		try {
+			int seq=dao.selectOne("room.seq");
+			dto.setRoomCode(seq);
+			
+			result=dao.insertData("room.insertRoom",dto);
+			
+			if(! dto.getUpload().isEmpty()) {
+				for(MultipartFile mf : dto.getUpload()) {
+					if(mf.isEmpty())
+						continue;
+					
+					String saveFilename=fileManager.doFileUpload(mf, pathname);
+					if(saveFilename!=null) {
+						String originalFilename=mf.getOriginalFilename();
+						
+						
+						dto.setOriginalFilename(originalFilename);
+						dto.setSaveFilename(saveFilename);
+						
+						insertFile(dto);
+					}
+					
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int insertFile(Room dto) {
+		int result=0;
+		try {
+			result=dao.insertData("room.insertFile", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public List<Room> listRoom() {
+		List<Room> list = null;
+		try {
+			list=dao.selectList("room.listRoom");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public Room readRoom(int num) {
+		Room dto = null;
+		try {
+			dto=dao.selectOne("room.readRoom", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+	@Override
+	public List<Room> listFile(int num) {
+		List<Room> listFile = null;
+		try {
+			listFile=dao.selectList("room.listFile", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listFile;
+	}
+
+	@Override
+	public int updateRoom(Room dto, String pathname) {
+		int result=0;
+		try {
+			result=dao.updateData("room.updateRoom", dto);
+			
+			if(! dto.getUpload().isEmpty()) {
+				for(MultipartFile mf:dto.getUpload()) {
+					if(mf.isEmpty())
+						continue;
+					
+					String saveFilename=fileManager.doFileUpload(mf, pathname);
+					if(saveFilename!=null) {
+						String originalFilename=mf.getOriginalFilename();
+						
+						
+						dto.setOriginalFilename(originalFilename);
+						dto.setSaveFilename(saveFilename);
+						
+						insertFile(dto);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	
 }

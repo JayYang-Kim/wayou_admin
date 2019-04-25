@@ -3,17 +3,72 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hotel">
 	<insert id="insertHotel" parameterType="com.sp.hotel.Hotel">
-		INSERT INTO hotelinfo(hotelcode, hname, address1, address2, information, tel, email, name, savefilename, adminidx, locCode)
+		INSERT INTO hotelinfo(hotelcode, hname, address1, address2, information, tel, email, name, savefilename, adminidx, locCode, postcode)
 			VALUES(HOTELINFO_SEQ.NEXTVAL, #{hname}, #{address1}, #{address2}, #{information}, #{tel},
-						#{email},#{name}, #{saveFilename, jdbcType=VARCHAR}, #{adminIdx}, #{locCode})
+						#{email},#{name}, #{saveFilename}, #{adminIdx}, #{locCode}, #{postcode})
 	</insert>
 	
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'hname'">
+				INSTR(hname, #{keyword}) &gt; 0
+			</when>
+			<when test="searchKey == 'location'">
+				INSTR(locName, #{keyword}) &gt; 0
+			</when>
+			<when test="searchKey == 'hname'">
+				INSTR(name, #{keyword}) &gt; 0
+			</when>
+		</choose>
+	</sql>
 	
-<!-- 	
-	<insert id="insertRoomInfo" parameterType="com.sp.hotel.Room">
-		INSERT INTO roominfo(roomcode, hotelcode, roomtypecode, roomnum, hcount, price, information, notice, cancel_notice)
-			VALUES(ROOMINFO_SEQ.NEXTVAL, #{hotelcode}, #{roomtypecode}, #{roomnum}, #{hcount}, 
-						#{price}, #{information}, #{notice}, #{cancel_notice})
+	<!-- 호텔 목록 수 가져오기 -->
+	<select id="hotelCount" parameterType="map" resultType="Integer">
+		SELECT NVL(count(*),0)
+		FROM hotelInfo h
+		JOIN locationCode3 l ON h.loccode=l.loccode
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				<include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 호텔 리스트 -->
+	<select id="listHotel" parameterType="map" resultType="com.sp.hotel.Hotel">
+		SELECT * FROM (
+    		SELECT ROWNUM rnum, tb.* FROM (
+        		SELECT hotelCode, hname, locName, name
+        		FROM hotelInfo h
+        		JOIN locationCode3 l ON h.loccode=l.loccode
+        		<where>
+        			<if test="keyword!=null and keyword!=''">
+						<include refid="where-list"/>
+					</if> 
+        		</where>
+        		ORDER BY hotelCode DESC
+     <![CDATA[
+    		)tb WHERE rownum <= #{end}
+		) where rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readHotel" parameterType="Integer" resultType="com.sp.hotel.Hotel">
+		SELECT hotelCode, hname,address1, address2, information, tel, email, name, savefilename, loccode, postcode
+		FROM hotelInfo
+		WHERE hotelCode=#{hotelCode}
+	</select>
+	
+	<update id="updateHotel" parameterType="com.sp.hotel.Hotel">
+		UPDATE hotelInfo
+		SET hname=#{hname}, address1=#{address1}, address2=#{address2}, information=#{information}, tel=#{tel}, email=#{email}
+			, name=#{name}, saveFilename=#{saveFilename}, locCode=#{locCode}, postcode=#{postcode}
+		WHERE hotelCode=#{hotelCode}
+	</update>
+	
+	<insert id="insertRoom" parameterType="com.sp.hotel.Room">
+		INSERT INTO RoomInfo(ROOMCODE, hotelcode, ROOMTYPECODE, ROOMNUM,HCOUNT,price, information, notice,CANCEL_NOTICE)
+			VALUES(ROOMINFO_SEQ.NEXTVAL, #{hotelCode}, #{roomtypeCode}, #{roomNum}, #{hCount}, #{price},
+						#{information},#{notice}, #{cancel_notice})
 	</insert>
- -->
 </mapper>

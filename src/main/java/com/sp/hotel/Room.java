@@ -1,11 +1,38 @@
 package com.sp.hotel;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class Room {
 	private int roomCode, hotelCode;
 	private int roomtypeCode, roomNum;
+	private String roomName;
 	private int hCount, price;
 	private String information, notice, cancel_notice;
 	
+	private int fileCode;
+	private String saveFilename, originalFilename;
+	private List<MultipartFile> upload;
+	
+	public int getFileCode() {
+		return fileCode;
+	}
+	public void setFileCode(int fileCode) {
+		this.fileCode = fileCode;
+	}
+	public String getSaveFilename() {
+		return saveFilename;
+	}
+	public void setSaveFilename(String saveFilename) {
+		this.saveFilename = saveFilename;
+	}
+	public String getOriginalFilename() {
+		return originalFilename;
+	}
+	public void setOriginalFilename(String originalFilename) {
+		this.originalFilename = originalFilename;
+	}
 	public int getRoomCode() {
 		return roomCode;
 	}
@@ -60,5 +87,19 @@ public class Room {
 	public void setCancel_notice(String cancel_notice) {
 		this.cancel_notice = cancel_notice;
 	}
+	public List<MultipartFile> getUpload() {
+		return upload;
+	}
+	public void setUpload(List<MultipartFile> upload) {
+		this.upload = upload;
+	}
+	public String getRoomName() {
+		return roomName;
+	}
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
+	}
+
+	
 	
 }

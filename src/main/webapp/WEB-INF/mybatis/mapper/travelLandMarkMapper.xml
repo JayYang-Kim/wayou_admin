@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="travel.landmark">
+	<select id="listLocation" resultType="com.sp.travel.landmark.LandMark">
+		SELECT locCode, locName FROM locationCode 
+	</select>
+	
+	<select id="listTag" resultType="com.sp.travel.landmark.LandMark">
+		SELECT tagCode, tagName FROM lndtagCode
+	</select>
+	
+	<select id="seqLandCode" resultType="Integer">
+		SELECT LANDMARK_SEQ.NEXTVAL FROM dual
+	</select>
+	
+	<insert id="insertLanmark" parameterType="com.sp.travel.landmark.LandMark">
+		INSERT INTO landmark(landCode, locCode, landName, address1, address2, lat, lng, memo, tagCode, adminIdx)
+			VALUES(#{landCode}, #{locCode}, #{landName}, #{address1}, #{address2}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{tagCode, jdbcType = INTEGER}, #{adminIdx})
+	</insert>
+	
+	<insert id="insertLanmarkLog" parameterType="com.sp.travel.landmark.LandMark">
+		INSERT INTO landmarkLog(logCode, landCode, locCode, tagCode, address1, address2, landName, lat, lng, memo, writer)
+			VALUES(LANDMARKLOG_SEQ.NEXTVAL, #{landCode}, #{locCode}, #{tagCode}, #{address1}, #{address2}, #{landName}, #{lat}, #{lng}, #{memo, jdbcType = CLOB}, #{adminIdx})			
+	</insert>
+	
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'locName'">
+				INSTR(lc.locName, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'created'">
+				(TO_CHAR(l.created, 'YYYYMMDD') = #{searchValue}
+					OR TO_CHAR(l.created, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<otherwise>
+				INSTR(${searchKey}, #{searchValue}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM landmark l
+		JOIN locationCode lc
+		    ON l.locCode = lc.locCode
+		JOIN lndtagCode lt
+		    ON l.tagCode = lt.tagCode
+		JOIN admin a
+		    ON l.adminIdx = a.adminIdx
+		<where>
+			<if test="searchValue != null and searchValue != ''">
+				<include refid="where-list"></include>
+			</if>
+		</where>
+	</select>
+	
+	<select id="listLandmark" parameterType="map" resultType="com.sp.travel.landmark.LandMark">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT l.locCode, locName, l.landCode, landName, l.address1, l.address2, lat, lng, l.adminIdx, adminId, adminName,
+		            TO_CHAR(l.created, 'YYYY-MM-DD HH24:MI:SS') created
+		        FROM landmark l
+		        JOIN locationCode lc
+		            ON l.locCode = lc.locCode
+		        JOIN lndtagCode lt
+		            ON l.tagCode = lt.tagCode
+		        JOIN admin a
+		            ON l.adminIdx = a.adminIdx
+				<where>
+					<if test="searchValue != null and searchValue != ''">
+						<include refid="where-list"></include>
+					</if>
+				</where>
+		        ORDER BY l.landCode DESC
+		    ) tb
+	<![CDATA[
+		    WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readLandmark" parameterType="Integer" resultType="com.sp.travel.landmark.LandMark">
+		SELECT l.locCode, locName, l.landCode, landName, l.address1, l.address2, lat, lng, l.memo, l.adminIdx, adminId, adminName, l.tagCode, lt.tagName,
+    		TO_CHAR(l.created, 'YYYY-MM-DD HH24:MI:SS') created
+		FROM landmark l
+		JOIN locationCode lc
+		    ON l.locCode = lc.locCode
+		JOIN lndtagCode lt
+		    ON l.tagCode = lt.tagCode
+		JOIN admin a
+		    ON l.adminIdx = a.adminIdx
+		WHERE l.landCode = #{landCode}
+	</select>
+	
+	<select id="preReadLandmark" parameterType="map" resultType="com.sp.travel.landmark.LandMark">
+		SELECT tb.* FROM (
+		    SELECT l.landCode
+		    FROM landmark l
+		    JOIN locationCode lc
+		        ON l.locCode = lc.locCode
+		    JOIN lndtagCode lt
+		        ON l.tagCode = lt.tagCode
+		    JOIN admin a
+		        ON l.adminIdx = a.adminIdx
+		    <where>
+				<if test="searchValue != null and searchValue != ''">
+					<include refid="where-list"></include>
+				</if>
+				AND l.landCode &gt; #{landCode}
+			</where>
+		    ORDER BY l.landCode ASC
+		)tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="nextReadLandmark" parameterType="map" resultType="com.sp.travel.landmark.LandMark">
+		SELECT tb.* FROM (
+		    SELECT l.landCode
+		    FROM landmark l
+		    JOIN locationCode lc
+		        ON l.locCode = lc.locCode
+		    JOIN lndtagCode lt
+		        ON l.tagCode = lt.tagCode
+		    JOIN admin a
+		        ON l.adminIdx = a.adminIdx
+			<where>
+				<if test="searchValue != null and searchValue != ''">
+					<include refid="where-list"></include>
+				</if>
+				AND l.landCode &lt; #{landCode}
+			</where>
+		    ORDER BY l.landCode DESC
+		)tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="listLandmarkLog" parameterType="Integer" resultType="com.sp.travel.landmark.LandMark">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT ll.logCode, ll.landCode, lm.landName, ll.locCode, lc.locName, ll.tagCode, lt.tagName, ll.address1, ll.address2, ll.lat, ll.lng, ll.memo, ll.writer AS adminIdx, a.adminId, a.adminName, TO_CHAR(ll.created, 'YYYY-MM-DD HH24:MI:SS') created
+		        FROM landmarkLog ll
+		        JOIN landmark lm
+		            ON ll.landCode = lm.landCode
+		        JOIN locationCode lc
+		            ON ll.locCode = lc.locCode
+		        JOIN lndtagCode lt
+		            ON ll.tagCode = lt.tagCode
+		        JOIN admin a
+		            ON ll.writer = a.adminIdx
+		        WHERE lm.landCode = #{landCode}
+		    ) tb
+	<![CDATA[
+		    WHERE ROWNUM <= 10
+		) WHERE rnum >= 1
+	]]>
+	</select>
+	
+	<select id="allLandmarkLog" parameterType="Integer" resultType="com.sp.travel.landmark.LandMark">
+		SELECT ll.logCode, ll.landCode, lm.landName, ll.locCode, lc.locName, ll.tagCode, lt.tagName, ll.address1, ll.address2, ll.lat, ll.lng, ll.memo, ll.writer AS adminIdx, a.adminId, a.adminName, TO_CHAR(ll.created, 'YYYY-MM-DD HH24:MI:SS') created
+		FROM landmarkLog ll
+		JOIN landmark lm
+		    ON ll.landCode = lm.landCode
+		JOIN locationCode lc
+		    ON ll.locCode = lc.locCode
+		JOIN lndtagCode lt
+		    ON ll.tagCode = lt.tagCode
+		JOIN admin a
+		    ON ll.writer = a.adminIdx
+		WHERE lm.landCode = #{landCode}
+	</select>
+	
+	<update id="updateLandmark" parameterType="com.sp.travel.landmark.LandMark">
+		UPDATE landmark SET
+			locCode = #{locCode},
+			landName = #{landName},
+			address1 = #{address1},
+			address2 = #{address2},
+			lat = #{lat},
+			lng = #{lng},
+			memo = #{memo, jdbcType = CLOB},
+			tagCode = #{tagCode, jdbcType = INTEGER},
+			adminIdx = #{adminIdx}
+		WHERE landCode = #{landCode}
+	</update>
+	
+	<delete id="deleteLandmark" parameterType="Integer">
+		DELETE FROM landmark WHERE landCode = #{landCode}
+	</delete>
+	
+	<delete id="deleteLandmarkLog" parameterType="Integer">
+		DELETE FROM landmarkLog WHERE landCode = #{landCode}
+	</delete>
+	
+	<!-- 파일 관련 -->
+	<insert id="insertFile" parameterType="com.sp.travel.landmark.LandMark">
+		INSERT INTO landmarkFile(fileCode, landCode, saveFilename)
+			VALUES(LANDMARKFILE_SEQ.NEXTVAL, #{landCode}, #{saveFilename, jdbcType = VARCHAR})			
+	</insert>
+	
+	<select id="listLandmarkFile" parameterType="Integer" resultType="com.sp.travel.landmark.LandMark">
+		SELECT fileCode, landCode, saveFilename, 
+		    TO_CHAR(created, 'YYYY-MM-DD HH24:MI:SS') created
+		FROM landmarkFile
+		WHERE landCode = #{landCode}
+	</select>
+	
+	<select id="readLandmarkFile" parameterType="Integer" resultType="com.sp.travel.landmark.LandMark">
+		SELECT fileCode, landCode, saveFilename, 
+		    TO_CHAR(created, 'YYYY-MM-DD HH24:MI:SS') created
+		FROM landmarkFile
+		WHERE fileCode = #{fileCode}
+	</select>
+	
+	<delete id="deleteLandmarkFile" parameterType="Integer">
+		DELETE FROM landmarkFile WHERE fileCode = #{fileCode}
+	</delete>
+	
+	<delete id="deleteAllLandmarkFile" parameterType="Integer">
+		DELETE FROM landmarkFile WHERE landCode = #{landCode}
+	</delete>
+</mapper> 

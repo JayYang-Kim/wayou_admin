@@ -145,24 +145,24 @@
 </table>
 <div class="mt20 mb20">
 	<h3>참가현황 : ${dto.partyPeopleCount} / ${dto.max}</h3>
-	<c:if test="${not empty joinPartyList}">
-		<table class="table tbl_hover td_bor_no mt20">
-			<caption>FAQ 정보</caption>
-			<colgroup>
-				<col style="width:10%">
-				<col style="width:20%">
-				<col style="width:20%">
-				<col style="width:20%">
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col">유저정보</th>
-					<th scope="col">상태</th>
-					<th scope="col">참가내용</th>
-					<th scope="col">작성일</th>
-				</tr>
-			</thead>
-			<tbody>
+	<table class="table tbl_hover td_bor_no mt20">
+		<caption>참가현황</caption>
+		<colgroup>
+			<col style="width:10%">
+			<col style="width:20%">
+			<col style="width:20%">
+			<col style="width:20%">
+		</colgroup>
+		<thead>
+			<tr>
+				<th scope="col">유저정보</th>
+				<th scope="col">상태</th>
+				<th scope="col">참가내용</th>
+				<th scope="col">작성일</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:if test="${not empty joinPartyList}">
 				<c:forEach var="dto2" items="${joinPartyList}">
 					<tr>
 						<td>${dto2.userId}<br/>(${dto2.userName})</td>
@@ -171,9 +171,14 @@
 						<td>${dto2.created}</td>
 					</tr>
 				</c:forEach>
-			</tbody>
-		</table>
-	</c:if>
+			</c:if>
+			<c:if test="${empty joinPartyList}">
+				<tr>
+					<td colspan="4">참가신청 이력이 없습니다.</td>
+				</tr>
+			</c:if>
+		</tbody>
+	</table>
 </div>
 <div class="tbl_btn">
 	<p class="f_left">
