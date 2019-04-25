@@ -8,8 +8,8 @@
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script type="text/javascript">
 	$(function(){
-		$("select[name=tagCode]").val(${dto.tagCode}).attr("selected", "selected");
-		$("select[name=locCode]").val(${dto.locCode}).attr("selected", "selected");
+		$("select[name=tagCode]").val("${dto.tagCode}").attr("selected", "selected");
+		$("select[name=locCode]").val("${dto.locCode}").attr("selected", "selected");
 	});
 
 	$(function(){

@@ -29,6 +29,38 @@
 		
 		link.attr("href", linkUrl);
 	});
+	
+	<%-- $("body").on("click", ".btn_allLog", function(){
+		var title = $(".pop_wrap").find("h1"); 
+		var content = $(".pop_wrap .pop_cont p");
+		var btn = $(".pop_wrap .pop_cont p.t_center");
+		
+		btn.remove();
+		title.html("전체 이력현황");
+		content.css({"height":"550", "overflow-y":"auto"});
+		
+		var url = "<%=cp%>/travel/admin/location/allLog";
+		var query = "locCode=${dto.locCode}";
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : query,
+			success:function(data) {
+				content.html(data);
+			},
+		    beforeSend:function(e) {
+		    	e.setRequestHeader("AJAX", true);
+		    },
+		    error:function(e) {
+		    	if(e.status==403) {
+		    		location.href="<%=cp%>/admin/login";
+		    		return;
+		    	}
+		    	
+		    	console.log(e.responseText);
+		    }
+		});
+	}); --%>
 </script>
 
 <h1 id="page_tit">여행관리</h1>
@@ -140,7 +172,7 @@
 	</table>
 	<div class="tbl_btn">
 		<p class="f_right">
-			<a href="#" class="button h30 w70 btn_wht">전체 이력</a>
+			<button type="button" class="btn_allLog button h30 w70 btn_wht" onclick="layerShow('#popup')">전체 이력</button>
 		</p>
 	</div>
 </div>
