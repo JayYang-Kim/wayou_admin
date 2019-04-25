@@ -6,17 +6,15 @@
 	String cp=request.getContextPath();
 %>
 
-
-
 <div>
-  <form name="insertHotelForm" method="post" enctype="multipart/form-data">
+  <form name="insertTicketForm" method="post" enctype="multipart/form-data">
 	<table class="table left_tbl form_tbl">
 	<colgroup>
 		<col style="width:30%">
 		<col>
 	</colgroup>
 	 	<tr>
-	 		<th >호텔명</th>
+	 		<th >티켓명</th>
 	 		<td><input type="text" name="hname" value="${dto.hname}"></td>
 	 	</tr>
 	 	<tr>
@@ -33,7 +31,7 @@
 	 		<th>주소</th>
 	 		<td>
 		 		<input type="text" id="postcode" name="postcode" placeholder="우편번호" value="${dto.postcode}">
-				<input type="button" onclick="hotel_Postcode()" value="우편번호 찾기"><br>
+				<input type="button" onclick="store_Postcode()" value="우편번호 찾기"><br>
 				<input type="text" id="address1" name="address1" value="${dto.address1}" placeholder="주소"><br>
 				<input type="text" id="address2" name="address2" value="${dto.address2}" placeholder="상세주소">
 				<input type="text" id="extraAddress"  placeholder="참고항목">
@@ -55,23 +53,7 @@
 	 		<th>기본정보</th>
 	 		<td><textarea name="information">${dto.information}</textarea></td>
 	 	</tr>
-	 	<tr>
-	 	<th>호텔 이미지 등록</th>
-	 	<td>
-			<input type="file" name="upload" class="boxTF" size="53" accept="image/*" style="height: 25px;">
-		</td>
-	 	</tr>
-	 	<c:if test="${mode=='update'}">
-	 		<tr>
-	 			<th style="border-top: none;"></th>
-	 			<td>
-	 				${dto.saveFilename}
-	 				<c:if test="${not empty dto.saveFilename}">
-	 					| <span style="cursor: pointer;" data-num="${dto.hotelCode}" id="deleteHotelImg">이미지삭제</span>
-	 				</c:if>
-	 			</td>
-	 		</tr>
-	 	</c:if>
+	 	
 	</table>
 	<div class="btn_wrap view_btn">
 		

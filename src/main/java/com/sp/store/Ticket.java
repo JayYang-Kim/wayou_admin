@@ -1,4 +1,4 @@
-package com.sp.ticket;
+package com.sp.store;
 
 import java.util.List;
 

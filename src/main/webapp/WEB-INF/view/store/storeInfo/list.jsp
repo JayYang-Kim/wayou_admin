@@ -11,23 +11,23 @@
 
 $(function() {
 
-	$(".btnInsertHotel").click(function() {	
+	$(".btnInsertStore").click(function() {	
 		
-		var isClass = $("#insertForm").hasClass("insertHotel");
+		var isClass = $("#insertForm").hasClass("insertStore");
 		if(isClass) {
-			$("#insertForm").removeClass("insertHotel");
+			$("#insertForm").removeClass("insertStore");
 			$("#insertForm").empty();
 			return false;
 		}
 	
-		var url="<%=cp%>/hotel/hotelInfo/insertHotel";
+		var url="<%=cp%>/store/storeInfo/insertStore";
 		$.ajax({
 			type:"get",
 			url:url,
 			dataType : "html",
 			success:function(data){
 				$("#insertForm").html(data);
-				$("#insertForm").addClass("insertHotel");
+				$("#insertForm").addClass("insertStore");
 			},
 			beforeSend:function(e) {
 				e.setRequestHeader("AJAX", true);
@@ -132,7 +132,7 @@ $(function() {
 	
 
 
-function hotel_Postcode() {
+function store_Postcode() {
     new daum.Postcode({
         oncomplete: function(data) {
             
@@ -179,19 +179,23 @@ function hotel_Postcode() {
 
 </script>
 
+<h1 id="page_tit">티켓관리</h1>
+<!-- 현재 페이지 정보 -->
+<div class="page_info">
+	<h2>티켓관리</h2>
+	<p><strong>티켓 등록ㆍ관리</strong></p>
+</div>
 
 
 
-<div class="body">
-	<div style="height: 50px; margin-left: 20px;">
-		<h1>호텔 List</h1>
-	</div>
+<div>
+
 	<div class="list_search_wrap">
 		<div class="list_search">
 			<select name="searchKey" id="searchKey" title="검색조건선택">
-				<option value="hname">호텔명</option>
+				<option value="storeName">스토어명</option>
 				<option value="location">지역</option>
-				<option value="name">사업자명</option>
+				<option value="name">대표자명</option>
 			</select>
 			<input type="text" name="searchValue" id="searchValue" title="검색내용입력" />
 			<span class="btn">
@@ -199,13 +203,13 @@ function hotel_Postcode() {
 			</span>
 		</div>
 	</div>
-	<div class="hotel-body" style="width: 100%;">
+	<div class="store-body" style="width: 100%;">
 		<table class="table td_bor_no" style="width: 100%;">
 			<thead>
 				<tr>
-					<th width="100">호텔명</th>
+					<th width="100">스토어명</th>
 					<th width="50">지역</th>
-					<th width="70">사업자명</th>
+					<th width="70">대표자명</th>
 					<th width="100" colspan="2">관리</th>
 				</tr>
 			</thead>
@@ -215,8 +219,8 @@ function hotel_Postcode() {
 						<td>${dto.hname}</td>
 						<td>${dto.locName}</td>
 						<td>${dto.name}</td>
-						<td><button type='button' class='button btnUpdateHotel' data-hotelCode="${dto.hotelCode}">호텔 정보 수정</button></td>
-						<td><button type='button' class='button btnInsertRoom' onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/list?hotelCode=${dto.hotelCode}';">객실 추가ㆍ수정</button></td>
+						<td><button type='button' class='button btnUpdateStore' data-hotelCode="${dto.storeCode}">스토어 정보 수정</button></td>
+						<td><button type='button' class='button btnInsertTicket' onclick="location.href='<%=cp%>/store/storeInfo/ticketInfo/list?hotelCode=${dto.hotelCode}';">객실 추가ㆍ수정</button></td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -229,14 +233,13 @@ function hotel_Postcode() {
 		   </tr>
 		</table>
 	</div>
-	
 	<div>
-		<div class="btn_wrap view_btn">
-			<button type='button' class='button btn_blk btnInsertHotel'>새로운 호텔 등록</button>
-		</div>
-		<div id="insertForm" class="mt30">
-			
-		</div>
+	<div class="btn_wrap view_btn">
+		<button type='button' class='button btn_blk btnInsertStore'>새로운 스토어 등록</button>
+	</div>
+	<div id="insertForm" class="mt30">
+		
+	</div>
 	</div>
 
 </div>
