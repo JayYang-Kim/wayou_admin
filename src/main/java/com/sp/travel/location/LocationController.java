@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.admin.AdminSessionInfo;
 import com.sp.common.FileManager;
@@ -311,34 +310,15 @@ public class LocationController {
 		out.print("<script>alert('파일 다운로드를 실패했습니다.');history.back();</script>");
 	}
 	
-	@RequestMapping(value="/travel/admin/location/deleteImg", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> deleteImg(@RequestParam int locCode,
-			HttpSession session) throws Exception{
+	@RequestMapping(value="/travel/admin/location/allLog", method = RequestMethod.POST)
+	public String allLog(@RequestParam int locCode,
+			Model model) throws Exception{
+		List<Location> allLocationLog = locationService.allLocationLog(locCode);
 		
-		Map<String, Object> model = new HashMap<>();
+		model.addAttribute("allLocationLog", allLocationLog);
 		
-		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + File.separator + "uploads" + File.separator + "location";
-		
-		Location dto = locationService.readLocation(locCode);
-		
-		String msg = "true";
-		
-		if(dto == null) {
-			msg = "false";
-			
-			model.put("msg", msg);
-			return model;
-		}
-		
-		if(dto.getSaveFilename() != null) {
-			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
-			dto.setSaveFilename("");
-			locationService.updateLocation(dto, pathname);
-		}
-		
-		model.put("msg", msg);
-		return model;
+		return "travel/location/listLog";
 	}
+	
+	
 }

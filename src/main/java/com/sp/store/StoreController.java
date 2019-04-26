@@ -1,4 +1,4 @@
-package com.sp.ticket;
+package com.sp.store;
 
 import java.io.File;
 
@@ -13,36 +13,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.sp.common.MyUtil;
 
 @Controller("ticket.TicketController")
-public class TicketController {
+public class StoreController {
 	
 	@Autowired
-	private TicketService ticketService;
+	private StoreService ticketService;
 	
 	@Autowired
 	private MyUtil myUtil;
 	
 	
 	
-	@RequestMapping(value= {"/ticket/main"}, method=RequestMethod.GET)
+	@RequestMapping(value= {"/store/main"}, method=RequestMethod.GET)
 	public String method() {
-		return ".ticket.main";
+		return ".store.main";
 	}
 	
-	@RequestMapping(value="/ticket/ticketInfo/list", method=RequestMethod.GET)
+	@RequestMapping(value="/store/storeInfo/list", method=RequestMethod.GET)
 	public String listTicket(
 			Model model) {
 		
 		
-		return ".ticket.list";
+		return ".store.storeInfo.list";
 	}
 	
-	@RequestMapping(value="/ticket/ticketInfo/insertTicket", method=RequestMethod.GET)
-	public String insertTicketForm(
+	@RequestMapping(value="/store/storeInfo/insertStore", method=RequestMethod.GET)
+	public String insertStoreForm(
 			Model model) {
 
 		model.addAttribute("mode", "created");
 		
-		return ".ticket.ticketInfo.insertTicket";
+		return "store/storeInfo/insertStore";
 	}
 	
 	@RequestMapping(value="/ticket/ticketInfo/insertTicket", method=RequestMethod.POST)

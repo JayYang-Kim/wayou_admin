@@ -135,7 +135,7 @@ public class LocationServiceImpl implements LocationService{
 		List<Location> list = null;
 		
 		try {
-			list = dao.selectList("travel.locatin.allLocationLog", locCode);
+			list = dao.selectList("travel.location.allLocationLog", locCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -153,7 +153,7 @@
 	</select>
 	
 	<select id="allLocationLog" parameterType="Integer" resultType="com.sp.travel.location.Location">
-        SELECT ll.logCode, ll.locCode, lc.locName, ll.lat, ll.lng, ll.memo, ll.enable
+        SELECT ll.logCode, ll.locCode, lc.locName, ll.lat, ll.lng, ll.memo, ll.enable,
 			ll.writer AS adminIdx, 
 			a.adminId, a.adminName, 
 			TO_CHAR(ll.created, 'YYYY-MM-DD HH24:MI:SS') AS created
