@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sp.admin.AdminSessionInfo;
 import com.sp.common.MyUtil;
 
 @Controller("travel.user.userController")
@@ -127,11 +131,47 @@ public class UserController {
 		User preReadUser = userService.preReadUser(map);
 		User nextReadUser = userService.nextReadUser(map);
 		
+		List<User> listBlackCountLog = userService.listBlackCountLog(userIdx);
+		List<User> allBlackCountLog = userService.allBlackCountLog(userIdx);
+		
 		model.addAttribute("dto", dto);
 		model.addAttribute("preReadUser", preReadUser);
 		model.addAttribute("nextReadUser", nextReadUser);
+		model.addAttribute("listBlackCountLog", listBlackCountLog);
+		model.addAttribute("allBlackCountLog", allBlackCountLog);
 		model.addAttribute("query", query);
 		
 		return ".travel.user.view";
+	}
+	
+	@RequestMapping(value="/travel/admin/user/updateBlackCount", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> updBlackCount(@RequestParam int userIdx,
+			@RequestParam int blackCount,
+			HttpSession session) throws Exception {
+		
+		String msg = null;
+		int result = 0;
+		try {
+			Map<String, Object> map = new HashMap<>();
+			map.put("userIdx", userIdx);
+			map.put("blackCount", blackCount);
+			
+			AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
+			
+			result = userService.updateBlackCount(map, info.getAdminIdx());
+			
+			msg = "true";
+		} catch (Exception e) {
+			msg = "false";
+			
+			e.printStackTrace();
+		}
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put("msg", msg);
+		model.put("blackCount", result);
+		
+		return model;
 	}
 }

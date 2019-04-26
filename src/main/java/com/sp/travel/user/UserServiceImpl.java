@@ -80,11 +80,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int updateBlackCount(int userIdx) throws Exception {
+	public int updateBlackCount(Map<String, Object> map, int adminIdx) throws Exception {
 		int result = 0;
 		
 		try {
-			result = dao.updateData("travel.user.updateBlackCount", userIdx);
+			dao.updateData("travel.user.updateBlackCount", map);
+			result = dao.selectOne("travel.user.readBlackCount", map);
+			
+			User dto = dao.selectOne("travel.user.readUser", map);
+			dto.setAdminIdx(adminIdx);
+			
+			dao.insertData("travel.user.insertBlackCountLog", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -94,16 +100,28 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int insertBlackCountLog(Map<String, Object> map) throws Exception {
-		int result = 0;
+	public List<User> listBlackCountLog(int userIdx) throws Exception {
+		List<User> list = null;
 		
 		try {
-			result = dao.insertData("travel.user.insertBlackCountLog", map);
+			list = dao.selectList("travel.user.listBlackCountLog", userIdx);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
 		}
 		
-		return result;
+		return list;
+	}
+
+	@Override
+	public List<User> allBlackCountLog(int userIdx) throws Exception {
+		List<User> list = null;
+		
+		try {
+			list = dao.selectList("travel.user.allBlackCountLog", userIdx);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 }

@@ -88,7 +88,7 @@
 		     	</if>
 		     	AND userIdx &gt; #{userIdx}
 	        </where>
-	        ORDER BY userIdx DESC
+	        ORDER BY userIdx ASC
 		) tb WHERE ROWNUM = 1
 	</select>
 
@@ -108,7 +108,60 @@
 		     	</if>
 		     	AND userIdx &lt; #{userIdx}
 	        </where>
-	        ORDER BY userIdx ASC
+	        ORDER BY userIdx DESC
 		) tb WHERE ROWNUM = 1
+	</select>
+	
+	<update id="updateBlackCount" parameterType="map">
+		UPDATE tb_user SET
+			<if test="blackCount == 1">
+				enabled = 0,
+			</if>
+			<if test="blackCount == 0">
+				enabled = 1,
+			</if> 
+			blackCount = #{blackCount}
+		WHERE userIdx = #{userIdx}
+	</update>
+	
+	<select id="readBlackCount" parameterType="map" resultType="Integer">
+		SELECT blackCount
+		FROM tb_user
+		WHERE userIdx = #{userIdx}
+	</select>
+	
+	<insert id="insertBlackCountLog" parameterType="com.sp.travel.user.User">
+		INSERT INTO blackCountLog(logCode, blackCount, userIdx, adminIdx)
+			VALUES(BLACKCOUNTLOG_SEQ.NEXTVAL, #{blackCount}, #{userIdx}, #{adminIdx})
+	</insert>
+	
+	<select id="listBlackCountLog" parameterType="Integer" resultType="com.sp.travel.user.User">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT logCode, bl.blackCount, bl.userIdx, tu.userId, tu.userName, bl.adminIdx, a.adminId, a.adminName,
+		            TO_CHAR(bl.created, 'YYYY-MM-DD HH24:MI:SS') created
+		        FROM blackCountLog bl
+		        JOIN tb_user tu
+		            ON bl.userIdx = tu.userIdx
+		        JOIN admin a
+		            ON bl.adminIdx = a.adminIdx
+		        WHERE bl.userIdx = #{userIdx}
+		        ORDER BY bl.created DESC
+		    ) tb
+	<![CDATA[
+		    WHERE ROWNUM <= 10
+		) WHERE rnum >= 1
+	]]>
+	</select>
+		
+	<select id="allBlackCountLog" parameterType="Integer" resultType="com.sp.travel.user.User">
+		SELECT logCode, bl.blackCount, bl.userIdx, tu.userId, tu.userName, bl.adminIdx, a.adminId, a.adminName,
+		    TO_CHAR(bl.created, 'YYYY-MM-DD') created
+		FROM blackCountLog bl
+		JOIN tb_user tu
+		    ON bl.userIdx = tu.userIdx
+		JOIN admin a
+		    ON bl.adminIdx = a.adminIdx
+		WHERE bl.userIdx = #{userIdx}
 	</select>
 </mapper>
