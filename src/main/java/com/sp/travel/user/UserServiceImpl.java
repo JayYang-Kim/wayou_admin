@@ -78,6 +78,71 @@ public class UserServiceImpl implements UserService {
 		
 		return dto;
 	}
+	
+	@Override
+	public int dataCountBlack(Map<String, Object> map) throws Exception {
+		int result = 0;
+		
+		try {
+			result = dao.selectOne("travel.user.dataCountBlack", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<User> listBlack(Map<String, Object> map) throws Exception {
+		List<User> list = null;
+		
+		try {
+			list = dao.selectList("travel.user.listBlack", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public User readBlack(int userIdx) throws Exception {
+		User dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.user.readBlack", userIdx);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public User preReadBlack(Map<String, Object> map) throws Exception {
+		User dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.user.preReadBlack", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public User nextReadBlack(Map<String, Object> map) throws Exception {
+		User dto = null;
+		
+		try {
+			dto = dao.selectOne("travel.user.nextReadBlack", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
 
 	@Override
 	public int updateBlackCount(Map<String, Object> map, int adminIdx) throws Exception {

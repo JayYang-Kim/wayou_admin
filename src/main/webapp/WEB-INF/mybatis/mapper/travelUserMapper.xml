@@ -6,14 +6,14 @@
 	<sql id="where-list">
 		<choose>
 			<when test="searchKey == 'userCreated_date'">
-			   (TO_CHAR(userCreated_date, 'YYYYMMDD') = #{searchValue}
-		          OR TO_CHAR(userCreated_date, 'YYYY-MM-DD') = #{searchValue})
+				(TO_CHAR(userCreated_date, 'YYYYMMDD') = #{searchValue}
+		        	OR TO_CHAR(userCreated_date, 'YYYY-MM-DD') = #{searchValue})
 			</when>
 			<when test="searchKey == 'roleCodeName'">
-			   INSTR(r.roleCodeName, #{searchValue}) &gt; 0
+				INSTR(r.roleCodeName, #{searchValue}) &gt; 0
 			</when>
 			<otherwise>
-			    INSTR(${searchKey}, #{searchValue}) &gt; 0
+				INSTR(${searchKey}, #{searchValue}) &gt; 0
 			</otherwise>
 		</choose>
 	</sql>
@@ -44,7 +44,7 @@
 				    TO_CHAR(userBirth, 'YYYY-MM-DD') AS userBirth
 				FROM tb_user tu
 				JOIN role r
-				ON tu.roleCode = r.roleCode
+					ON tu.roleCode = r.roleCode
 		        <where>
 		        	<if test="searchValue != null and searchValue != ''">
 			     	    <include refid="where-list"/>
@@ -68,7 +68,7 @@
 		    TO_CHAR(userBirth, 'YYYY-MM-DD') AS userBirth
 		FROM tb_user tu
 		JOIN role r
-		ON tu.roleCode = r.roleCode
+			ON tu.roleCode = r.roleCode
 		WHERE userIdx = #{userIdx}
 	</select>
 	
@@ -78,7 +78,7 @@
 		    SELECT userIdx, userId, userName
 			FROM tb_user tu
 			JOIN role r
-			ON tu.roleCode = r.roleCode
+				ON tu.roleCode = r.roleCode
 			<where>
 	        	<if test="searchValue != null and searchValue != ''">
 		     	    <include refid="where-list"/>
@@ -98,7 +98,7 @@
 		    SELECT userIdx, userId, userName
 			FROM tb_user tu
 			JOIN role r
-			ON tu.roleCode = r.roleCode
+				ON tu.roleCode = r.roleCode
 			<where>
 	        	<if test="searchValue != null and searchValue != ''">
 		     	    <include refid="where-list"/>
@@ -107,6 +107,104 @@
 		     		AND enabled = #{enabled}
 		     	</if>
 		     	AND userIdx &lt; #{userIdx}
+	        </where>
+	        ORDER BY userIdx DESC
+		) tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="dataCountBlack" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM tb_user tu
+		JOIN role r
+			ON tu.roleCode = r.roleCode 
+		<where>
+			<if test="searchValue != null and searchValue != ''">
+	     	    <include refid="where-list"/>
+	     	</if>
+	     	<if test="enabled != 2">
+	     		AND enabled = #{enabled}
+	     	</if>
+	     	AND blackCount = 1
+		</where>
+	</select>
+	
+	<select id="listBlack" parameterType="map" resultType="com.sp.travel.user.User">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT userIdx, tu.roleCode, r.roleCodeName, userId, userPwd, userName, postCode, userAddr1, userAddr2, etc, userTel, userEmail,
+				    TO_CHAR(userCreated_date, 'YYYY-MM-DD') AS userCreated_date,
+				    TO_CHAR(userModify_date, 'YYYY-MM-DD') AS userModify_date,
+				    blackCount, enabled, identCode,
+				    TO_CHAR(userBirth, 'YYYY-MM-DD') AS userBirth
+				FROM tb_user tu
+				JOIN role r
+					ON tu.roleCode = r.roleCode
+		        <where>
+		        	<if test="searchValue != null and searchValue != ''">
+			     	    <include refid="where-list"/>
+			     	</if>
+			     	<if test="enabled != 2">
+			     		AND enabled = #{enabled}
+			     	</if>
+			     	AND blackCount = 1
+		        </where>
+		        ORDER BY userIdx DESC
+		<![CDATA[
+		    ) tb WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+		]]>
+	</select>
+	
+	<select id="readBlack" parameterType="Integer" resultType="com.sp.travel.user.User">
+		SELECT userIdx, tu.roleCode, r.roleCodeName, userId, userPwd, userName, postCode, userAddr1, userAddr2, etc, userTel, userEmail,
+		    TO_CHAR(userCreated_date, 'YYYY-MM-DD') AS userCreated_date,
+		    TO_CHAR(userModify_date, 'YYYY-MM-DD') AS userModify_date,
+		    blackCount, enabled, identCode,
+		    TO_CHAR(userBirth, 'YYYY-MM-DD') AS userBirth
+		FROM tb_user tu
+		JOIN role r
+			ON tu.roleCode = r.roleCode
+		WHERE userIdx = #{userIdx}
+			AND blackCount = 1
+	</select>
+	
+	<!-- 이전글 -->
+	<select id="preReadBlack" parameterType="map" resultType="com.sp.travel.user.User">
+		SELECT tb.* FROM (
+		    SELECT userIdx, userId, userName
+			FROM tb_user tu
+			JOIN role r
+				ON tu.roleCode = r.roleCode
+			<where>
+	        	<if test="searchValue != null and searchValue != ''">
+		     	    <include refid="where-list"/>
+		     	</if>
+		     	<if test="enabled != 2">
+		     		AND enabled = #{enabled}
+		     	</if>
+		     	AND userIdx &gt; #{userIdx}
+		     	AND blackCount = 1
+	        </where>
+	        ORDER BY userIdx ASC
+		) tb WHERE ROWNUM = 1
+	</select>
+
+	<!-- 다음글 -->
+	<select id="nextReadBlack" parameterType="map" resultType="com.sp.travel.user.User">
+		SELECT tb.* FROM (
+		    SELECT userIdx, userId, userName
+			FROM tb_user tu
+			JOIN role r
+				ON tu.roleCode = r.roleCode
+			<where>
+	        	<if test="searchValue != null and searchValue != ''">
+		     	    <include refid="where-list"/>
+		     	</if>
+		     	<if test="enabled != 2">
+		     		AND enabled = #{enabled}
+		     	</if>
+		     	AND userIdx &lt; #{userIdx}
+		     	AND blackCount = 1
 	        </where>
 	        ORDER BY userIdx DESC
 		) tb WHERE ROWNUM = 1

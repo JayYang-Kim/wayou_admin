@@ -23,9 +23,8 @@ import com.sp.admin.AdminSessionInfo;
 import com.sp.common.FileManager;
 import com.sp.common.MyUtil;
 
-@Controller("travel.landmark.controller")
+@Controller("travel.landmark.landmarkController")
 public class LandMarkController {
-	
 	@Autowired
 	private LandMarkService landmarkService;
 	@Autowired

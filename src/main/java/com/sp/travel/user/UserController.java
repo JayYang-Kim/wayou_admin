@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,14 +28,14 @@ public class UserController {
 	@Autowired
 	private MyUtil myUtil;
 	
-	@RequestMapping(value="/travel/admin/user/list")
-	public String list(@RequestParam(defaultValue="2") int enabled,
+	@RequestMapping(value="/travel/admin/{tname}/list")
+	public String list(@PathVariable String tname,
+			@RequestParam(defaultValue="2") int enabled,
 			@RequestParam(value="page", defaultValue="1") int current_page,
 			@RequestParam(defaultValue="userId") String searchKey,
 			@RequestParam(defaultValue="") String searchValue,
 			HttpServletRequest req,
 			Model model) throws Exception {
-		
 		if(req.getMethod().equalsIgnoreCase("GET")) {
 			searchValue = URLDecoder.decode(searchValue, "UTF-8");
 		}
@@ -48,7 +49,11 @@ public class UserController {
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
 		
-		dataCount = userService.dataCount(map);
+		if(tname.equalsIgnoreCase("user")) {
+			dataCount = userService.dataCount(map);
+		} else if(tname.equalsIgnoreCase("black")) {
+			dataCount = userService.dataCountBlack(map);
+		}
 		
 		if(dataCount != 0) {
 			total_page = myUtil.pageCount(rows, dataCount);
@@ -64,7 +69,13 @@ public class UserController {
 		map.put("start", start);
 		map.put("end", end);
 		
-		List<User> list = userService.listUser(map);
+		List<User> list = null;
+		
+		if(tname.equalsIgnoreCase("user")) {
+			list = userService.listUser(map);
+		} else if(tname.equalsIgnoreCase("black")) {
+			list = userService.listBlack(map);
+		}
 		
 		int listNum, n = 0;
 		for(User dto : list) {
@@ -74,17 +85,36 @@ public class UserController {
 		}
 		
 		String cp = req.getContextPath();
-		String listUrl = cp + "/travel/admin/user/list";
-		String articleUrl = cp + "/travel/admin/user/view?page=" + current_page;
+		String listUrl = null;
+		String articleUrl = null;
+		String paging = null;
+		String query = null;
 		
-		if(searchValue.length() != 0) {
-			String query = "searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		if(tname.equalsIgnoreCase("user")) {
+			listUrl = cp + "/travel/admin/"+ tname +"/list";
+			articleUrl = cp + "/travel/admin/"+ tname +"/view?page=" + current_page;
 			
-			listUrl += "?" + query;
-			articleUrl += "&" + query;
+			if(searchValue.length() != 0) {
+				query = "searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+				
+				listUrl += "?" + query;
+				articleUrl += "&" + query;
+			}
+			
+			paging = myUtil.paging(current_page, total_page, listUrl);
+		} else if(tname.equalsIgnoreCase("black")) {
+			listUrl = cp + "/travel/admin/"+ tname +"/list";
+			articleUrl = cp + "/travel/admin/"+ tname +"/view?page=" + current_page;
+			
+			if(searchValue.length() != 0) {
+				query = "searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+				
+				listUrl += "?" + query;
+				articleUrl += "&" + query;
+			}
+			
+			paging = myUtil.paging(current_page, total_page, listUrl);
 		}
-		
-		String paging = myUtil.paging(current_page, total_page, listUrl);
 		
 		model.addAttribute("list", list);
 		model.addAttribute("dataCount", dataCount);
@@ -96,11 +126,12 @@ public class UserController {
 		model.addAttribute("searchValue", searchValue);
 		model.addAttribute("enabled", enabled);
 		
-		return ".travel.user.list";
+		return ".travel."+ tname +".list";
 	}
 	
-	@RequestMapping(value="/travel/admin/user/view")
-	public String view(@RequestParam int userIdx,
+	@RequestMapping(value="/travel/admin/{tname}/view")
+	public String view(@PathVariable String tname,
+			@RequestParam int userIdx,
 			@RequestParam(defaultValue="2") int enabled,
 			@RequestParam(defaultValue="1") int page,
 			@RequestParam(defaultValue="userId") String searchKey,
@@ -116,10 +147,16 @@ public class UserController {
 			query += "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8"); 
 		}
 		
-		User dto = userService.readUser(userIdx);
+		User dto = null;
+		
+		if(tname.equalsIgnoreCase("user")) {
+			dto = userService.readUser(userIdx);
+		} else if(tname.equalsIgnoreCase("black")) {
+			dto = userService.readBlack(userIdx);
+		}
 		
 		if(dto == null) {
-			return "redirect:/travel/admin/user/list?" + query;
+			return "redirect:/travel/admin/"+ tname +"/list?" + query;
 		}
 		
 		Map<String, Object> map = new HashMap<>();
@@ -128,8 +165,16 @@ public class UserController {
 		map.put("searchValue", searchValue);
 		map.put("enabled", enabled);
 		
-		User preReadUser = userService.preReadUser(map);
-		User nextReadUser = userService.nextReadUser(map);
+		User preReadUser = null;
+		User nextReadUser = null;
+		
+		if(tname.equalsIgnoreCase("user")) {
+			preReadUser = userService.preReadUser(map);
+			nextReadUser = userService.nextReadUser(map);
+		} else if(tname.equalsIgnoreCase("black")) {
+			preReadUser = userService.preReadBlack(map);
+			nextReadUser = userService.nextReadBlack(map);
+		}
 		
 		List<User> listBlackCountLog = userService.listBlackCountLog(userIdx);
 		List<User> allBlackCountLog = userService.allBlackCountLog(userIdx);
@@ -141,12 +186,13 @@ public class UserController {
 		model.addAttribute("allBlackCountLog", allBlackCountLog);
 		model.addAttribute("query", query);
 		
-		return ".travel.user.view";
+		return ".travel."+ tname +".view";
 	}
 	
-	@RequestMapping(value="/travel/admin/user/updateBlackCount", method = RequestMethod.POST)
+	@RequestMapping(value="/travel/admin/{tname}/updateBlackCount", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> updBlackCount(@RequestParam int userIdx,
+	public Map<String, Object> updBlackCount(@PathVariable String tname,
+			@RequestParam int userIdx,
 			@RequestParam int blackCount,
 			HttpSession session) throws Exception {
 		

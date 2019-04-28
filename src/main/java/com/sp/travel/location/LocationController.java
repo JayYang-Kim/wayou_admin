@@ -23,9 +23,8 @@ import com.sp.admin.AdminSessionInfo;
 import com.sp.common.FileManager;
 import com.sp.common.MyUtil;
 
-@Controller("travel.party.controller")
+@Controller("travel.location.locationController")
 public class LocationController {
-	
 	@Autowired
 	private LocationService locationService;
 	@Autowired
