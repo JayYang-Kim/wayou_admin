@@ -17,8 +17,14 @@ function updateAdmin(adminIdx){
 }
 
 </script>
-<div style="padding-left:10px; padding-bottom:15px;">
-<h1>| 인사 관리 - ${dto.adminName}&nbsp;${dto.positionName}</h1></div>
+
+<h1 id="page_tit">직원관리</h1>
+<!-- 현재 페이지 정보 -->
+<div class="page_info">
+	<h2>인사관리</h2>
+	<p><strong>리스트&nbsp;>&nbsp;${dto.adminName}&nbsp;(${dto.positionName})</strong></p>
+</div>
+
 <table class="table left_tbl">
 	<caption>테이블 제목</caption>
 	<colgroup>

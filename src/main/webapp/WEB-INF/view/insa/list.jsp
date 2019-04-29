@@ -16,7 +16,13 @@
 		alert(ra);
 	}
 </script>
-<h1>| 인사 리스트</h1>
+
+<h1 id="page_tit">직원관리</h1>
+<!-- 현재 페이지 정보 -->
+<div class="page_info">
+	<h2>인사관리</h2>
+	<p><strong>리스트</strong></p>
+</div>
 
 <div>
 	<div class="list_search_wrap">

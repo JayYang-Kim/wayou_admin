@@ -230,8 +230,12 @@ function myForm_Postcode() {
     }).open();
 }
 </script>
-<div style="padding-left:10px; padding-bottom:15px;">
-<h1>내정보 수정</h1></div>
+<h1 id="page_tit">직원관리</h1>
+<!-- 현재 페이지 정보 -->
+<div class="page_info">
+	<h2>인사관리</h2>
+	<p><strong>내정보 수정</strong></p>
+</div>
 <div>
 	<form name="updateForm" method="post" enctype="multipart/form-data">
 	<table class="table left_tbl form_tbl">
@@ -251,7 +255,7 @@ function myForm_Postcode() {
 				<th scope="row"><b class="t_red">*</b> 비밀번호 (Pass Word)</th>
 				<td>
 					<div class="inp_wid adminPwd">
-						<input type="password" name="adminPwd"  style="width:150px;" value="${dto.adminPwd}" />
+						<input type="password" name="adminPwd"  style="width:150px;" />
 					</div>
 			<tr>
 				<th scope="row"><b class="t_red">*</b> 비밀번호 확인 (Pass Word)</th>
@@ -359,10 +363,8 @@ function myForm_Postcode() {
 					<c:if test="${not empty dto.saveFilename}">
 				         | <button type="button" onclick="deleteFile('${dto.saveFilename}')" class="button btn_blk" style="width:80px;">파일삭제</button>
 				    </c:if>
-					</div>
-				</td>
-				<td>
 					<input type="hidden" name="saveFilename" value="${dto.saveFilename}">
+					</div>
 				</td>
 			</tr>
 	</table>
