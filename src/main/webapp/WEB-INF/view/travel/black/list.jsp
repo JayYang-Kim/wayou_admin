@@ -17,14 +17,14 @@
 <!-- 현재 페이지 정보 -->
 <div class="page_info">
 	<h2>여행관리</h2>
-	<p><strong>고객리스트</strong></p>
+	<p><strong>블랙리스트 관리</strong></p>
 </div>
 
 <div class="list_search_wrap">
 	<div class="search_clean">
-		<button type="button" class="button" onclick="location.href='<%=cp%>/travel/admin/user/list'">새로고침</button>
+		<button type="button" class="button" onclick="location.href='<%=cp%>/travel/admin/black/list'">새로고침</button>
 	</div>
-	<form name="search_form" action="<%=cp%>/travel/admin/user/list" method="post">
+	<form name="search_form" action="<%=cp%>/travel/admin/black/list" method="post">
 		<div class="list_search">
 			<select title="활성여부" name="enabled">
 				<option value="2" ${enabled == '2' ? "selected='selected'" : ""}>전체</option>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="travel.notice">
+	<select id="seqNotiCode" resultType="Integer">
+		SELECT TRAVELNOTICE_SEQ.NEXTVAL FROM dual
+	</select>
+	
+	<insert id="insertNotice" parameterType="com.sp.travel.board.Board">
+		INSERT INTO travelNotice(notiCode, subject, content, adminIdx)
+			VALUES(#{notiCode}, #{subject}, #{content}, #{adminIdx})
+	</insert>
+	
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'adminId'">
+				INSTR(a.adminId, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'created'">
+				(TO_CHAR(tn.created, 'YYYYMMDD') = #{searchValue}
+					OR TO_CHAR(tn.created, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<otherwise>
+				INSTR(${searchKey}, #{searchValue}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="dataCountNotice" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM travelNotice tn
+		JOIN admin a
+		    ON tn.adminIdx = a.adminIdx
+		<where>
+			<if test="searchValue != null and searchValue != ''">
+				<include refid="where-list"></include>
+			</if>
+		</where>
+	</select>
+	
+	<select id="listNotice" parameterType="map" resultType="com.sp.travel.board.Board">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT tn.notiCode, subject, content, tn.adminIdx, adminId, adminName,
+				    TO_CHAR(tn.created, 'YYYY-MM-DD') created
+				FROM travelNotice tn
+				JOIN admin a
+				    ON tn.adminIdx = a.adminIdx
+				<where>
+					<if test="searchValue != null and searchValue != ''">
+						<include refid="where-list"></include>
+					</if>
+				</where>
+		        ORDER BY tn.notiCode DESC
+		    ) tb
+	<![CDATA[
+		    WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readNotice" parameterType="Integer" resultType="com.sp.travel.board.Board">
+		SELECT tn.notiCode, subject, content, tn.adminIdx, a.adminId, a.adminName,
+		    TO_CHAR(tn.created, 'YYYY-MM-DD') created
+		FROM travelNotice tn
+		JOIN admin a
+		    ON tn.adminIdx = a.adminIdx
+		WHERE tn.notiCode = #{notiCode}
+	</select>
+	
+	<select id="preReadNotice" parameterType="map" resultType="com.sp.travel.board.Board">
+		SELECT tb.* FROM (
+		    SELECT tn.notiCode,
+			    TO_CHAR(tn.created, 'YYYY-MM-DD') created
+			FROM travelNotice tn
+			JOIN admin a
+			    ON tn.adminIdx = a.adminIdx
+		    <where>
+				<if test="searchValue != null and searchValue != ''">
+					<include refid="where-list"></include>
+				</if>
+				AND tn.notiCode &gt; #{notiCode}
+			</where>
+		    ORDER BY tn.notiCode ASC
+		)tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="nextReadNotice" parameterType="map" resultType="com.sp.travel.board.Board">
+		SELECT tb.* FROM (
+		    SELECT tn.notiCode,
+			    TO_CHAR(tn.created, 'YYYY-MM-DD') created
+			FROM travelNotice tn
+			JOIN admin a
+			    ON tn.adminIdx = a.adminIdx
+			<where>
+				<if test="searchValue != null and searchValue != ''">
+					<include refid="where-list"></include>
+				</if>
+				AND tn.notiCode &lt; #{notiCode}
+			</where>
+		    ORDER BY tn.notiCode DESC
+		)tb WHERE ROWNUM = 1
+	</select>
+	
+	<update id="updateNotice" parameterType="com.sp.travel.board.Board">
+		UPDATE travelNotice SET
+			subject = #{subject},
+			content = #{content},
+			adminIdx = #{adminIdx}
+		WHERE notiCode = #{notiCode}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="Integer">
+		DELETE FROM travelNotice WHERE notiCode = #{notiCode}
+	</delete>
+	
+	<!-- 파일 관련 -->
+	<insert id="insertNoticeFile" parameterType="com.sp.travel.board.Board">
+		INSERT INTO travelNoticeFile(fileCode, notiCode, saveFilename, originalFilename)
+			VALUES(TRAVELNOTICEFILE_SEQ.NEXTVAL, #{notiCode}, #{saveFilename}, #{originalFilename})			
+	</insert>
+	
+	<select id="listNoticeFile" parameterType="Integer" resultType="com.sp.travel.board.Board">
+		SELECT fileCode, notiCode, saveFilename, originalFilename
+		FROM travelNoticeFile
+		WHERE notiCode = #{notiCode}
+	</select>
+	
+	<select id="readNoticeFile" parameterType="Integer" resultType="com.sp.travel.board.Board">
+		SELECT fileCode, notiCode, saveFilename, originalFilename
+		FROM travelNoticeFile
+		WHERE fileCode = #{fileCode}
+	</select>
+	
+	<delete id="deleteNoticeFile" parameterType="Integer">
+		DELETE FROM travelNoticeFile WHERE fileCode = #{fileCode}
+	</delete>
+	
+	<delete id="deleteAllNoticeFile" parameterType="Integer">
+		DELETE FROM travelNoticeFile WHERE notiCode = #{notiCode}
+	</delete>
+</mapper> 

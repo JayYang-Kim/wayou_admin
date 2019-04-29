@@ -44,7 +44,7 @@
 	});
 	
 	$("body").on("click", ".save_confirm", function(){
-		var url = "<%=cp%>/travel/admin/user/updateBlackCount";
+		var url = "<%=cp%>/travel/admin/black/updateBlackCount";
 		var query = "userIdx=${dto.userIdx}&blackCount=" + $("select[name='blackCount']").val();
 		
 		$.ajax({
@@ -93,7 +93,7 @@
 <!-- 현재 페이지 정보 -->
 <div class="page_info">
 	<h2>여행관리</h2>
-	<p>고객 관리 &gt; <strong>상세정보</strong></p>
+	<p>블랙리스트 관리 &gt; <strong>상세정보</strong></p>
 </div>
 
 <table class="table left_tbl">
@@ -152,14 +152,14 @@
 <div class="tbl_btn">
 	<p class="f_left">
 		<c:if test="${not empty preReadUser}">
-			<a href="<%=cp%>/travel/admin/user/view?${query}&userIdx=${preReadUser.userIdx}" class="button h30 w70 btn_wht">이전</a>
+			<a href="<%=cp%>/travel/admin/black/view?${query}&userIdx=${preReadUser.userIdx}" class="button h30 w70 btn_wht">이전</a>
 		</c:if>
 		<c:if test="${not empty nextReadUser}">
-			<a href="<%=cp%>/travel/admin/user/view?${query}&userIdx=${nextReadUser.userIdx}" class="button h30 w70 btn_wht">다음</a>
+			<a href="<%=cp%>/travel/admin/black/view?${query}&userIdx=${nextReadUser.userIdx}" class="button h30 w70 btn_wht">다음</a>
 		</c:if>
 	</p>
 	<p class="f_right">
-		<a href="<%=cp%>/travel/admin/user/list?${query}" class="button h30 w70 btn_blk">목록</a>
+		<a href="<%=cp%>/travel/admin/black/list?${query}" class="button h30 w70 btn_blk">목록</a>
 	</p>
 </div>
 

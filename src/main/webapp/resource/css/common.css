@@ -95,7 +95,7 @@ hr{border-width:1px 0 0 0;}
 .mr40{margin-right:40px;}
 .mr50{margin-right:50px;}
 
-.w_100{width:100%;}
+.w_100{width:100% !important;}
 
 .hide{dosplay:none;}
 .hidden{overflow:hidden;}

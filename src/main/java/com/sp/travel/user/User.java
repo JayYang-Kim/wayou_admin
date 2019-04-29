@@ -1,6 +1,8 @@
 package com.sp.travel.user;
 
 public class User {
+	private String tname;
+	
 	private int listNum;
 	private int userIdx;
 	private int roleCode;
@@ -28,6 +30,12 @@ public class User {
 	private String adminName;
 	private String created;
 	
+	public String getTname() {
+		return tname;
+	}
+	public void setTname(String tname) {
+		this.tname = tname;
+	}
 	public int getListNum() {
 		return listNum;
 	}
