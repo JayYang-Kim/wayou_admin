@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="travel.event">
+	<select id="seqEventCode" resultType="Integer">
+		SELECT TRAVELEVENT_SEQ.NEXTVAL FROM dual
+	</select>
+	
+	<insert id="insertEvent" parameterType="com.sp.travel.board.Board">
+		INSERT INTO travelEvent(eventCode, subject, content, adminIdx, startDate, endDate)
+			VALUES(#{eventCode}, #{subject}, #{content}, #{adminIdx}, #{startDate}, #{endDate})
+	</insert>
+	
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'adminId'">
+				INSTR(a.adminId, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'created'">
+				(TO_CHAR(te.created, 'YYYYMMDD') = #{searchValue}
+					OR TO_CHAR(te.created, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<when test="searchKey == 'startDate'">
+				(TO_CHAR(startDate, 'YYYYMMDD') = #{searchValue}
+					OR TO_CHAR(startDate, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<when test="searchKey == 'endDate'">
+				(TO_CHAR(endDate, 'YYYYMMDD') = #{searchValue}
+					OR TO_CHAR(endDate, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<otherwise>
+				INSTR(${searchKey}, #{searchValue}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<select id="dataCountEvent" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM travelEvent te
+		JOIN admin a
+		    ON te.adminIdx = a.adminIdx
+		<where>
+			<if test="searchValue != null and searchValue != ''">
+				<include refid="where-list"></include>
+			</if>
+		</where>
+	</select>
+	
+	<select id="listEvent" parameterType="map" resultType="com.sp.travel.board.Board">
+		SELECT * FROM (
+		    SELECT ROWNUM rnum, tb.* FROM (
+		        SELECT te.eventCode, subject, content, te.adminIdx, adminId, adminName,
+		        	TO_CHAR(startDate, 'YYYY-MM-DD') startDate,
+		        	TO_CHAR(endDate, 'YYYY-MM-DD') endDate,
+				    TO_CHAR(te.created, 'YYYY-MM-DD') created
+				FROM travelEvent te
+				JOIN admin a
+				    ON te.adminIdx = a.adminIdx
+				<where>
+					<if test="searchValue != null and searchValue != ''">
+						<include refid="where-list"></include>
+					</if>
+				</where>
+		        ORDER BY te.eventCode DESC
+		    ) tb
+	<![CDATA[
+		    WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readEvent" parameterType="Integer" resultType="com.sp.travel.board.Board">
+		SELECT te.eventCode, subject, content, te.adminIdx, a.adminId, a.adminName,
+			TO_CHAR(startDate, 'YYYY-MM-DD') startDate,
+        	TO_CHAR(endDate, 'YYYY-MM-DD') endDate,
+		    TO_CHAR(te.created, 'YYYY-MM-DD') created
+		FROM travelEvent te
+		JOIN admin a
+		    ON te.adminIdx = a.adminIdx
+		WHERE te.eventCode = #{eventCode}
+	</select>
+	
+	<select id="preReadEvent" parameterType="map" resultType="com.sp.travel.board.Board">
+		SELECT tb.* FROM (
+		    SELECT te.eventCode
+			FROM travelEvent te
+			JOIN admin a
+			    ON te.adminIdx = a.adminIdx
+		    <where>
+				<if test="searchValue != null and searchValue != ''">
+					<include refid="where-list"></include>
+				</if>
+				AND te.eventCode &gt; #{eventCode}
+			</where>
+		    ORDER BY te.eventCode ASC
+		)tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="nextReadEvent" parameterType="map" resultType="com.sp.travel.board.Board">
+		SELECT tb.* FROM (
+		    SELECT te.eventCode
+			FROM travelEvent te
+			JOIN admin a
+			    ON te.adminIdx = a.adminIdx
+			<where>
+				<if test="searchValue != null and searchValue != ''">
+					<include refid="where-list"></include>
+				</if>
+				AND te.eventCode &lt; #{eventCode}
+			</where>
+		    ORDER BY te.eventCode DESC
+		)tb WHERE ROWNUM = 1
+	</select>
+	
+	<update id="updateEvent" parameterType="com.sp.travel.board.Board">
+		UPDATE travelEvent SET
+			subject = #{subject},
+			content = #{content},
+			startDate = #{startDate},
+			endDate = #{endDate},
+			adminIdx = #{adminIdx}
+		WHERE eventCode = #{eventCode}
+	</update>
+	
+	<delete id="deleteEvent" parameterType="Integer">
+		DELETE FROM travelEvent WHERE eventCode = #{eventCode}
+	</delete>
+	
+	<!-- 파일 관련 -->
+	<insert id="insertEventFile" parameterType="com.sp.travel.board.Board">
+		INSERT INTO travelEventFile(fileCode, eventCode, saveFilename)
+			VALUES(TRAVELEVENTFILE_SEQ.NEXTVAL, #{eventCode}, #{saveFilename})			
+	</insert>
+	
+	<select id="listEventFile" parameterType="Integer" resultType="com.sp.travel.board.Board">
+		SELECT fileCode, eventCode, saveFilename
+		FROM travelEventFile
+		WHERE eventCode = #{eventCode}
+	</select>
+	
+	<select id="readEventFile" parameterType="Integer" resultType="com.sp.travel.board.Board">
+		SELECT fileCode, eventCode, saveFilename
+		FROM travelEventFile
+		WHERE fileCode = #{fileCode}
+	</select>
+	
+	<delete id="deleteEventFile" parameterType="Integer">
+		DELETE FROM travelEventFile WHERE fileCode = #{fileCode}
+	</delete>
+	
+	<delete id="deleteAllEventFile" parameterType="Integer">
+		DELETE FROM travelEventFile WHERE eventCode = #{eventCode}
+	</delete>
+</mapper> 

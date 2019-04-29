@@ -40,14 +40,14 @@
 	});
 	
 	function deleteFile(fileCode) {
-		var url="<%=cp%>/travel/admin/board/notice/deleteFile";
+		var url="<%=cp%>/travel/admin/board/event/deleteFile";
 		$.post(url, {fileCode : fileCode}, function(data) {
 			$("#f"+fileCode).remove();
 		}, "json");
 	}
 
-	function noticeSend() {
-		var f = document.notice_form;
+	function eventSend() {
+		var f = document.event_form;
 		var str;
 		
 		str = f.subject.value;
@@ -58,20 +58,36 @@
 			return;
 		}
 		
-		str = f.content.value;
+		str = f.subject.value;
 		str = str.trim();
 		if(!str) {
-			alert("내용을 입력해주세요.");
-			f.content.focus();
+			alert("제목을 입력해주세요.");
+			f.subject.focus();
+			return;
+		}
+		
+		str = f.startDate.value;
+		str = str.trim();
+		if(!str) {
+			alert("시작일을 입력해주세요.");
+			f.startDate.focus();
+			return;
+		}
+		
+		str = f.endDate.value;
+		str = str.trim();
+		if(!str) {
+			alert("종료일을 입력해주세요.");
+			f.endDate.focus();
 			return;
 		}
 		
 		var mode = "${mode}";
 		
 		if(mode == "add") {
-			f.action = "<%=cp%>/travel/admin/board/notice/${mode}";	
+			f.action = "<%=cp%>/travel/admin/board/event/${mode}";	
 		} else if(mode == "update") {
-			f.action = "<%=cp%>/travel/admin/board/notice/${mode}${query}";
+			f.action = "<%=cp%>/travel/admin/board/event/${mode}${query}";
 		}
 		
 		f.submit();
@@ -82,12 +98,12 @@
 <!-- 현재 페이지 정보 -->
 <div class="page_info">
 	<h2>여행관리</h2>
-	<p>공지사항 &gt; <strong>등록</strong></p>
+	<p>이벤트 &gt; <strong>등록</strong></p>
 </div>
 
-<form name="notice_form" method="post" enctype="multipart/form-data">
+<form name="event_form" method="post" enctype="multipart/form-data">
 	<table class="table left_tbl form_tbl">
-		<caption>공지사항 등록</caption>
+		<caption>이벤트 등록</caption>
 		<colgroup>
 			<col style="width:20%"/>
 			<col style="width:30%"/>
@@ -99,9 +115,19 @@
 				<th scope="row"><b class="t_red">*</b> 제목</th>
 				<td colspan="3">
 					<c:if test="${mode == 'update'}">
-						<input type="hidden" name="notiCode" value="${dto.notiCode}"/>
+						<input type="hidden" name="eventCode" value="${dto.eventCode}"/>
 					</c:if>
 					<input type="text" class="width1 w_100" name="subject" title="제목" placeholder="제목을 입력해주세요." value="${dto.subject}" />
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><b class="t_red">*</b> 시작일</th>
+				<td>
+					<input class="datepicker" type="text" name="startDate" value="${dto.startDate}" />
+				</td>
+				<th scope="row"><b class="t_red">*</b> 종료일</th>
+				<td>
+					<input class="datepicker" type="text" name="endDate" value="${dto.startDate}"s />
 				</td>
 			</tr>
 			<tr>
@@ -115,7 +141,7 @@
 					<tr id="f${dto_boardFile.fileCode}" class="file_img">
 						<th scope="row">이미지</th>
 						<td colspan="3">
-							${dto_boardFile.originalFilename}
+							${dto_boardFile.saveFilename}
 							| <a href="javascript:deleteFile('${dto_boardFile.fileCode}');">삭제</a>
 						</td>
 					</tr>
@@ -132,7 +158,7 @@
 </form>
 <div class="btn_wrap">
 	<p class="f_right">
-		<a href="<%=cp%>/travel/admin/board/notice/list${query}" class="button h30 btn_wht w70">${mode == "add" ? "취소하기" : "수정취소"}</a>  
-		<button type="button" class="button h30 btn_blk w70" onclick="noticeSend()">${mode == "add" ? "등록하기" : "수정하기"}</button>
+		<a href="<%=cp%>/travel/admin/board/event/list${query}" class="button h30 btn_wht w70">${mode == "add" ? "취소하기" : "수정취소"}</a>  
+		<button type="button" class="button h30 btn_blk w70" onclick="eventSend()">${mode == "add" ? "등록하기" : "수정하기"}</button>
 	</p>
 </div>

@@ -56,6 +56,8 @@ public class BoardController {
 		
 		if(tname.equalsIgnoreCase("notice")) {
 			dataCount = boardService.dataCountNotice(map);
+		} else if(tname.equalsIgnoreCase("event")) {
+			dataCount = boardService.dataCountEvent(map);
 		}
 		
 		if(dataCount != 0) {
@@ -76,6 +78,8 @@ public class BoardController {
 		
 		if(tname.equalsIgnoreCase("notice")) {
 			list = boardService.listNotice(map);
+		} else if(tname.equalsIgnoreCase("event")) {
+			list = boardService.listEvent(map);
 		}
 		
 		int listNum, n = 0;
@@ -129,17 +133,16 @@ public class BoardController {
 		}
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = null;
-		if(tname.equalsIgnoreCase("notice")) {
-			 pathname = root + File.separator + "uploads" + File.separator + tname;
-		}
-		
+		String pathname = root + File.separator + "uploads" + File.separator + tname;
+		 
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		dto.setAdminIdx(info.getAdminIdx());
 		
 		try {
 			if(tname.equalsIgnoreCase("notice")) {
 				boardService.insertNotice(dto, pathname);
+			} else if(tname.equalsIgnoreCase("event")) {
+				boardService.insertEvent(dto, pathname);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,6 +172,8 @@ public class BoardController {
 		
 		if(tname.equalsIgnoreCase("notice")) {
 			dto = boardService.readNotice(notiCode);
+		} else if(tname.equalsIgnoreCase("event")) {
+			dto = boardService.readEvent(eventCode);
 		}
 		
 		if(dto == null) {
@@ -181,6 +186,8 @@ public class BoardController {
 		
 		if(tname.equalsIgnoreCase("notice")) {
 			listBoardFile = boardService.listNoticeFile(notiCode);
+		} else if(tname.equalsIgnoreCase("event")) {
+			listBoardFile = boardService.listEventFile(eventCode);
 		}
 		
 		Map<String, Object> map = new HashMap<>();
@@ -188,13 +195,18 @@ public class BoardController {
 		map.put("searchValue", searchValue);
 		if(tname.equalsIgnoreCase("notice")) {
 			map.put("notiCode", notiCode);
-		} 
+		} else if(tname.equalsIgnoreCase("event")) {
+			map.put("eventCode", eventCode);
+		}
 		
 		Board preReadBoard = null;
 		Board nextReadBoard = null;
 		if(tname.equalsIgnoreCase("notice")) {
 			preReadBoard = boardService.preReadNotice(map);
 			nextReadBoard = boardService.nextReadNotice(map);
+		} else if(tname.equalsIgnoreCase("event")) {
+			preReadBoard = boardService.preReadEvent(map);
+			nextReadBoard = boardService.nextReadEvent(map);
 		}
 		
 		model.addAttribute("dto", dto);
@@ -226,6 +238,8 @@ public class BoardController {
 		
 		if(tname.equalsIgnoreCase("notice")) {
 			dto = boardService.readNotice(notiCode);
+		} else if(tname.equalsIgnoreCase("event")) {
+			dto = boardService.readEvent(eventCode);
 		}
 		
 		if(dto == null) {
@@ -235,6 +249,8 @@ public class BoardController {
 		List<Board> listBoardFile = null;
 		if(tname.equalsIgnoreCase("notice")) {
 			listBoardFile = boardService.listNoticeFile(notiCode);
+		} else if(tname.equalsIgnoreCase("event")) {
+			listBoardFile = boardService.listEventFile(eventCode);
 		}
 		
 		model.addAttribute("dto", dto);
@@ -261,10 +277,7 @@ public class BoardController {
 		}
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = null;
-		if(tname.equalsIgnoreCase("notice")) {
-			 pathname = root + File.separator + "uploads" + File.separator + tname;
-		}			
+		String pathname = root + File.separator + "uploads" + File.separator + tname;	
 		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		dto.setAdminIdx(info.getAdminIdx());
@@ -272,10 +285,14 @@ public class BoardController {
 		try {
 			if(tname.equalsIgnoreCase("notice")) {
 				boardService.updateNotice(dto, pathname);
+			} else if(tname.equalsIgnoreCase("event")) {
+				boardService.updateEvent(dto, pathname);
 			}
 		} catch (Exception e) {
 			if(tname.equalsIgnoreCase("notice")) {
 				return "redirect:/travel/admin/board/"+ tname +"/update" + query + "&notiCode=" + dto.getNotiCode();
+			} else if(tname.equalsIgnoreCase("event")) {
+				return "redirect:/travel/admin/board/"+ tname +"/update" + query + "&eventCode=" + dto.getEventCode();
 			}
 		}
 		
@@ -283,7 +300,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/travel/admin/board/notice/download")
-	public void download(@RequestParam int notiCode,
+	public void download(@RequestParam int fileCode,
 			HttpServletRequest req,
 			HttpServletResponse resp,
 			HttpSession session
@@ -292,7 +309,7 @@ public class BoardController {
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "notice";
 		
-		Board dto = boardService.readNotice(notiCode);
+		Board dto = boardService.readNoticeFile(fileCode);
 		
 		if(dto!=null) {
 			boolean b=fileManager.doFileDownload(dto.getSaveFilename(), dto.getOriginalFilename(), pathname, resp);
@@ -321,18 +338,19 @@ public class BoardController {
 		}
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = null;
-		if(tname.equalsIgnoreCase("notice")) {
-			 pathname = root + File.separator + "uploads" + File.separator + tname;
-		}			
-		
+		String pathname = root + File.separator + "uploads" + File.separator + tname;
+					
 		try {
 			if(tname.equalsIgnoreCase("notice")) {
 				boardService.deleteNotice(notiCode, pathname);
+			} else if(tname.equalsIgnoreCase("event")) {
+				boardService.deleteEvent(eventCode, pathname);
 			}
 		} catch (Exception e) {
 			if(tname.equalsIgnoreCase("notice")) {
 				return "redirect:/travel/admin/board/"+ tname +"/view" + query + "&notiCode=" + notiCode;
+			} else if(tname.equalsIgnoreCase("event")) {
+				return "redirect:/travel/admin/board/"+ tname +"/view" + query + "&eventCode=" + eventCode;
 			}
 		}
 		
@@ -347,11 +365,8 @@ public class BoardController {
 			HttpSession session) throws Exception {
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = null;
-		if(tname.equalsIgnoreCase("notice")) {
-			 pathname = root + File.separator + "uploads" + File.separator + tname;
-		}	
-		
+		String pathname = root + File.separator + "uploads" + File.separator + tname;
+			
 		Map<String, Object> model = new HashMap<>(); 
 		
 		String msg = "true";
@@ -360,6 +375,8 @@ public class BoardController {
 		
 		if(tname.equalsIgnoreCase("notice")) {
 			dto = boardService.readNoticeFile(fileCode);
+		} else if(tname.equalsIgnoreCase("event")) {
+			dto = boardService.readEventFile(fileCode);
 		}
 		
 		if(dto!=null) {
@@ -369,6 +386,8 @@ public class BoardController {
 		try {
 			if(tname.equalsIgnoreCase("notice")) {
 				boardService.deleteNoticeFile(fileCode);
+			} else if(tname.equalsIgnoreCase("event")) {
+				boardService.deleteEventFile(fileCode);
 			}
 		} catch (Exception e) {
 			msg = "false";
