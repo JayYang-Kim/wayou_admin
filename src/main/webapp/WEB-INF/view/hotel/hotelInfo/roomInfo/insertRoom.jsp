@@ -5,6 +5,7 @@
 <%
 	String cp=request.getContextPath();
 %>
+
 <script type="text/javascript">
 
 
@@ -89,7 +90,7 @@ function sendRoom(mode) {
 		<h1>${hotel.hname} 객실 등록</h1>
 </div>
 <div>
-<form name="insertRoomForm" method="post" enctype="multipart/form-data">
+<form name="insertTicketForm" method="post" enctype="multipart/form-data">
 	<table class="table left_tbl form_tbl">
 	<colgroup>
 		<col style="width:30%">
@@ -158,6 +159,8 @@ function sendRoom(mode) {
 	 </div>
 	 
 	 <input type="hidden" name="hotelCode" value="${hotel.hotelCode}">
-	 <input type="hidden" name="roomCode" value="${dto.roomCode}">
+	 <c:if test="${mode=='update'}">
+	 	<input type="hidden" name="roomCode" value="${dto.roomCode}">
+	 </c:if>
 </form>
 </div>

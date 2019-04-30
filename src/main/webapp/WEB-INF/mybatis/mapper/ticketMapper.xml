@@ -4,17 +4,18 @@
 <mapper namespace="ticket">
 
 	<select id="seq" resultType="Integer">
-		SELECT ROOMINFO_SEQ.NEXTVAL FROM dual
+		SELECT TICKET_SEQ.NEXTVAL FROM dual
 	</select>
+
 	
-	<insert id="inserTicket" parameterType="com.sp.store.Ticket">
-		INSERT INTO RoomInfo(ROOMCODE, hotelcode, ROOMTYPECODE, ROOMNUM, HCOUNT, price, information, notice, CANCEL_NOTICE)
-			VALUES(#{roomCode}, #{hotelCode}, #{roomtypeCode}, #{roomNum}, #{hCount}, #{price},
-						#{information, jdbcType=VARCHAR},#{notice, jdbcType=VARCHAR}, #{cancel_notice, jdbcType=VARCHAR})
+	<insert id="insertTicket" parameterType="com.sp.store.Ticket">
+		INSERT INTO store(ticketCode, storeCode, ticketName, adminIdx, ticket_info, sales_start, sales_end, use_start, use_end)
+			VALUES(#{ticketCode}, #{storeCode}, #{ticketName}, #{adminIdx},  #{ticket_info, jdbcType=VARCHAR}, #{sales_start}, #{sales_end},
+						#{use_start}, #{use_end})
 	</insert>
 	
 	<insert id="insertFile" parameterType="com.sp.store.Ticket">
-		INSERT INTO roomfile(fileCode, roomCode, saveFilename, originalFilename)
-			VALUES(ROOMFILE_SEQ.NEXTVAL, #{roomCode}, #{saveFilename}, #{originalFilename})
+		INSERT INTO ticketfile(fileCode, ticketCode, saveFilename, originalFilename)
+			VALUES(TICKETFILE_SEQ.NEXTVAL, #{ticketCode}, #{saveFilename}, #{originalFilename})
 	</insert>
 </mapper>

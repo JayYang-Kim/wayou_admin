@@ -9,6 +9,7 @@ public class Ticket {
 	private String ticketName;
 	private String ticket_info;
 	private int adminIdx;
+	private String sales_start, sales_end;
 	
 	private int fileCode;
 	private String saveFilename, originalFilename;
@@ -67,6 +68,18 @@ public class Ticket {
 	}
 	public void setAdminIdx(int adminIdx) {
 		this.adminIdx = adminIdx;
+	}
+	public String getSales_end() {
+		return sales_end;
+	}
+	public void setSales_end(String sales_end) {
+		this.sales_end = sales_end;
+	}
+	public String getSales_start() {
+		return sales_start;
+	}
+	public void setSales_start(String sales_start) {
+		this.sales_start = sales_start;
 	}
 	
 }
