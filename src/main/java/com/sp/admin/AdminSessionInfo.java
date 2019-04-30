@@ -6,6 +6,7 @@ public class AdminSessionInfo {
 	private String adminName;
 	private int idnCode;
 	private int departCode;
+
 	
 	public int getAdminIdx() {
 		return adminIdx;
