@@ -72,4 +72,16 @@ public class WorkServiceImpl implements WorkService {
 		return result;
 	}
 
+	@Override
+	public Work articleWork(int diaryCode) throws Exception {
+		Work dto = null;
+		
+		try {
+			dto=dao.selectOne("work.articleWork", diaryCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
 }

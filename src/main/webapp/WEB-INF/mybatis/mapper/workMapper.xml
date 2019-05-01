@@ -5,16 +5,16 @@
 	<sql id="where-list">
 		<choose>
 			<when test="condition=='departCode'">
-				INSTR(d.departName, #{word}) &gt;= 0
+				INSTR(d.departName, #{word}) &gt; 0
 			</when>
 			<when test="condition=='positionCode'">
-				INSTR(p.positionName, #{word}) &gt;= 0
+				INSTR(p.positionName, #{word}) &gt; 0
 			</when>
 			<when test="condition=='adminName'">
-				INSTR(a.adminName, #{word}) &gt;= 0
+				INSTR(a.adminName, #{word}) &gt; 0
 			</when>
 			<when test="condition=='subject'">
-				INSTR(w.subject, #{word}) &gt;= 0
+				INSTR(w.subject, #{word}) &gt; 0
 			</when>
 			<when test="condtion=='created'">
 				w.created = #{word}
@@ -43,7 +43,7 @@
 	<select id="listWork" parameterType="map" resultType="com.sp.work.Work">
 		SELECT * FROM (
 		SELECT ROWNUM rnum, tb. * FROM (    
-		SELECT a.adminName, d.departName, p.positionName, w.subject, TO_CHAR(w.created, 'YYYY-MM-DD hh24:mm') created, w.modifyDate FROM admin a
+		SELECT w.diaryCode, a.adminName, d.departName, p.positionName, w.subject, TO_CHAR(w.created, 'YYYY-MM-DD hh24:mm') created, w.modifyDate FROM admin a
 		    JOIN department d ON a.departCode = d.departCode
 		    JOIN position p ON a.positionCode = p.positionCode
 		    JOIN workdiary w ON a.adminIdx = w.adminIdx
@@ -52,7 +52,7 @@
 			     	    <include refid="where-list"/>
 			     	</if>
 			</where>
-				ORDER BY a.adminIdx DESC
+				ORDER BY w.diaryCode DESC, created DESC
 			<![CDATA[
 			        ) tb WHERE ROWNUM <= #{end}
 			    ) WHERE rnum >= #{start}
@@ -71,4 +71,12 @@
 			</if>
 		</where>
 	</select>
+	
+	<select id="articleWork" parameterType="Integer" resultType="com.sp.work.Work">
+		SELECT a.adminIdx, a.adminName, d.departName, p.positionName, w.subject, TO_CHAR(w.created, 'YYYY-MM-DD hh24:mm') created, w.modifyDate, w.memo, w.content, w.dayWork, w.finishWork FROM admin a
+		    JOIN department d ON a.departCode = d.departCode
+		    JOIN position p ON a.positionCode = p.positionCode
+		    JOIN workdiary w ON a.adminIdx = w.adminIdx
+			WHERE w.diaryCode = #{diaryCode}	
+		</select>
 </mapper>

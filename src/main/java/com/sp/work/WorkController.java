@@ -75,10 +75,10 @@ public class WorkController {
 		}
 		String cp = req.getContextPath();
 		String listUrl= cp+"/work/list";
-		String articleUrl=cp+"/work/view?page=";
+		String articleUrl=cp+"/work/article?page="+current_page;
 		
 		if(word.length()!=0) {
-			String query = "&condition=" + condition +"&word="+ URLEncoder.encode(word, "UTF-8");
+			String query = "condition=" + condition +"&word="+ URLEncoder.encode(word, "UTF-8");
 		
 			listUrl +="?" + query;
 			articleUrl +="&" + query;
@@ -129,4 +129,43 @@ public class WorkController {
 		return "redirect:/work/list";
 	}
 
+	@RequestMapping(value="/work/article")
+	public String articleWork(
+			@RequestParam int page,
+			@RequestParam(defaultValue="departCode") String condition,
+			@RequestParam(defaultValue="") String word,
+			@RequestParam int num,
+			HttpServletRequest req,
+			Model model) throws Exception{
+		
+		try {
+			if(req.getMethod().equalsIgnoreCase("GET")) {
+				word=URLDecoder.decode(word, "utf-8");
+			};
+			
+			String query = "?page="+page+"&condition="+condition+"&word="+URLEncoder.encode(word, "utf-8");
+			int diaryCode = num;
+			
+			Work dto =workService.articleWork(diaryCode);
+			
+			if(dto == null) {
+				return "redirect:/work/list/"+query;
+			}
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("diaryCode", diaryCode);
+			map.put("condition", condition);
+			map.put("word", word);
+			
+			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
+			dto.setMemo(myUtil.htmlSymbols(dto.getMemo()));
+			
+			model.addAttribute("dto", dto);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ".work.article";
+	}
 }

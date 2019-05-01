@@ -9,4 +9,5 @@ public interface WorkService {
 	public int searchWork (int AdminIdx) throws Exception;
 	public List<Work> listWork (Map<String, Object> map) throws Exception;
 	public int dataCount(Map<String, Object> map) throws Exception;
+	public Work articleWork (int diaryCode) throws Exception;
 }

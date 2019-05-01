@@ -5,13 +5,15 @@
 <%
 	String cp=request.getContextPath();
 %>
+<!DOCTYPE html>
+<html>
+<body>
 <h1 id="page_tit">직원관리</h1>
 <!-- 현재 페이지 정보 -->
 <div class="page_info">
 	<h2>근무 관리</h2>
 	<p><strong>근무 일지 상세</strong></p>
 </div>
-
 	<table class="table left_tbl form_tbl">
 		<colgroup>
 			<col style="width:20%"/>
@@ -23,7 +25,7 @@
 	<tr>
 		<th scope="row">제목</th>
 		<td>
-			${dto.subject}"
+			${dto.subject}
 		</td>
 		<th scope="row">부서</th>
 		<td>
@@ -52,5 +54,7 @@
 </table>
 <div style="text-align:center; margin-top:10px">
 <button type="button" class="button h30 w70 btn_wht">돌아가기</button>
-<button type="button" class="button h30 w70 btn_wht" onclick="updateReq()">수정하기</button>
+<button type="button" class="button h30 w70 btn_wht" onclick="localhost.href:'<%=cp%>/work/update?num=${num}'">수정하기</button>
 </div>
+</body>
+</html>

@@ -5,6 +5,12 @@
 <%
 	String cp=request.getContextPath();
 %>
+<script type="text/javascript">
+function searchList() {
+	var f = document.searchForm;
+	f.submit();
+}
+</script>
 <body>
 <h1 id="page_tit">직원관리</h1>
 <!-- 현재 페이지 정보 -->
@@ -16,16 +22,16 @@
 	<div class="search_clean">
 		<button type="button" class="button" onclick="location.href='<%=cp%>/work/list'">새로고침</button>
 	</div>
-	<form name="search_form" action="<%=cp%>/work/list" method="post">
+	<form name="searchForm" action="<%=cp%>/work/list" method="post">
 		<div class="list_search">
-			<select title="검색조건선택" name="condition">
+			<select name="condition">
            		<option value="departCode" ${condition == 'departCode' ? "selected='selected'" : ""}>부서</option>
            		<option value="positionCode" ${condition == 'positionCode' ? "selected='selected'" : ""}>직책</option>
            		<option value="adminName" ${condition == 'adminName' ? "selected='selected'" : ""}>작성자</option>
            		<option value="subject" ${condition == 'subject' ? "selected='selected'" : ""}>제목</option>
            		<option value="created" ${condition == 'created' ? "selected='selected'" : ""}>작성일</option>
 			</select>
-			<input type="text" title="검색내용입력" name="word" value="${word}" />
+			<input type="text" name="word" value="${word}" />
 			<button type="button" class="button" onclick="searchList()">검색</button>
 		</div>
 	</form>
@@ -53,7 +59,7 @@
 	<tbody>
 		<c:forEach var="dto" items="${list}">
 		<tr>
-			<td>${dto.listNum}</td>
+			<td><a href="${articleUrl}&num=${dto.diaryCode}">${dto.listNum}</a></td>
 			<td>${dto.departName}</td>
 			<td>${dto.positionName}</td>
 			<td>${dto.adminName}</td>
