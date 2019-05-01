@@ -18,4 +18,19 @@ public interface BoardService {
 	public Board readNoticeFile(int fileCode) throws Exception;
 	public int deleteNoticeFile(int fileCode) throws Exception;
 	public int deleteAllNoticeFile(int notiCode) throws Exception;
+	
+	public int insertEvent(Board dto, String pathname) throws Exception;
+	public int dataCountEvent(Map<String, Object> map) throws Exception;
+	public List<Board> listEvent(Map<String, Object> map) throws Exception;
+	public Board readEvent(int eventCode) throws Exception;
+	public Board preReadEvent(Map<String, Object> map) throws Exception;
+	public Board nextReadEvent(Map<String, Object> map) throws Exception;
+	public int updateEvent(Board dto, String pathname) throws Exception;
+	public int deleteEvent(int eventCode, String pathname) throws Exception;
+	
+	public int insertEventFile(Board dto) throws Exception;
+	public List<Board> listEventFile(int eventCode) throws Exception;
+	public Board readEventFile(int fileCode) throws Exception;
+	public int deleteEventFile(int fileCode) throws Exception;
+	public int deleteAllEventFile(int eventCode) throws Exception;
 }
