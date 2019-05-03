@@ -146,9 +146,15 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public List<Ticket> listTicket() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Ticket> listTicket(Map<String, Object> map) {
+		List<Ticket> Ticketlist = null;
+		
+		try {
+			Ticketlist = dao.selectList("ticket.listTicket",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Ticketlist;
 	}
 
 	@Override
@@ -161,12 +167,96 @@ public class StoreServiceImpl implements StoreService {
 		}
 		return result;
 	}
+	
+
+	@Override
+	public int ticketCount(int num) {
+		int result=0;
+		try {
+			result=dao.selectOne("ticket.ticketCount", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 
 	@Override
 	public List<Ticket> listTicketFile(int num) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Ticket> listFile = null;
+		try {
+			listFile=dao.selectList("ticekt.listFile", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listFile;
 	}
+
+	@Override
+	public Ticket readTicket(int num) {
+		Ticket dto = null;
+		try {
+			dto=dao.selectOne("ticket.readTicket", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public int updateTicket(Ticket dto, String pathname) {
+		int result=0;
+		try {
+			result=dao.updateData("ticket.updateTicket", dto);
+			
+			if(! dto.getUpload().isEmpty()) {
+				for(MultipartFile mf:dto.getUpload()) {
+					if(mf.isEmpty())
+						continue;
+					
+					String saveFilename=fileManager.doFileUpload(mf, pathname);
+					if(saveFilename!=null) {
+						String originalFilename=mf.getOriginalFilename();
+						
+						
+						dto.setOriginalFilename(originalFilename);
+						dto.setSaveFilename(saveFilename);
+						
+						insertTicketFile(dto);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public int insertTicketDetail(TicketDetail dto) {
+		int result=0;
+		try {
+			result=dao.insertData("ticketDetail.insertTicketDetail",dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	@Override
+	public List<TicketDetail> listTicketDetail(int num) {
+		List<TicketDetail> TicketDetaillist = null;
+		
+		try {
+			TicketDetaillist = dao.selectList("ticketDetail.listTicketDetail",num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return TicketDetaillist;
+	}
+
 
 
 }

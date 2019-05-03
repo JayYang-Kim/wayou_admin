@@ -96,11 +96,11 @@ $(function(){
 	 <div class="btn_wrap view_btn">
 		
 		<button type='button' class='button btn_blk insertHotelSubmit' onclick="sendTicket('${mode}');">${mode=='update'?'수정완료':'등록완료'}</button>
-		<button type='button' class='button btn_blk insertHotelCancel' onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/list?hotelCode=${hotel.hotelCode}';">${mode=='update'?'수정취소':'등록취소'}</button>
+		<button type='button' class='button btn_blk insertHotelCancel' onclick="location.href='#';">${mode=='update'?'수정취소':'등록취소'}</button>
 	 	
 	 </div>
 	 
-	 <input type="hidden" name="storeCode" value="${store.storeCode}">
+	 <input type="hidden" name="storeCode" value="${storeCode}">
 	 <c:if test="${mode=='update'}">
 	 	<input type="hidden" name="storeCode" value="${dto.storeCode}">
 	 </c:if>

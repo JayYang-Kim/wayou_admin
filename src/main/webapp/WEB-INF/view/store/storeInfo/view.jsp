@@ -47,10 +47,48 @@ $(function() {
 	
 });
 
+$(function() {
+
+	$(".btnUpdateTicket").click(function() {	
+
+		var isClass = $("#insertForm").hasClass("insertTicket");
+		if(isClass) {
+			$("#insertForm").removeClass("insertTicket");
+			$("#insertForm").empty();
+			return false;
+		}
+	
+		var url="<%=cp%>/store/storeInfo/ticketInfo/updateTicket";
+		var query="storeCode="+$(this).attr("data-storeCode")+"&ticketCode="+$(this).attr("data-ticketCode");
+		
+		$.ajax({
+			type:"get",
+			url:url,
+			data:query,
+			success:function(data){
+				$("#insertForm").html(data);
+				$("#insertForm").addClass("insertTicket");
+			},
+			beforeSend:function(e) {
+				e.setRequestHeader("AJAX", true);
+			},
+			error:function(e) {
+				if(e.status==403){
+					location.href="<%=cp%>/wadmin/admin/login";
+					return;
+				}
+				console.log(e.responseText);
+			}
+		});
+	});
+	
+	
+});
+
 
 function sendTicket(mode) {
     var f = document.insertTicketForm;
-		
+	/* 	
 	if(! f.hname.value) {
 		alert("호텔명을 입력하세요.");
 		f.hname.focus();
@@ -76,7 +114,7 @@ function sendTicket(mode) {
 		f.tel.focus();
 		return;
 	}
- 
+ */ 
 	if(mode=="created") {
 		f.action="<%=cp%>/store/storeInfo/ticketInfo/insertTicket";
 	}
@@ -183,12 +221,13 @@ function sendTicket(mode) {
 
 <div class="tbl_btn">
 	
-	
+	<button class="button btn_blk" type="button" onclick="location.href='<%=cp%>/store/storeInfo/list';">스토어 목록으로</button>
 		<c:if test="${sessionScope.admin.departCode == 4 || sessionScope.admin.departCode == 2}">
-			<button type="button" class="btn_update button h30 w70 btn_wht" onclick="layerShow('#popup')">수정</button>
-			<button type="button" class="btn_delete button h30 w70 btn_red" onclick="layerShow('#popup')">삭제</button>
+			<button type="button" class="btn_update button btn_wht" onclick="layerShow('#popup')">수정</button>
+			<button type="button" class="btn_delete button btn_red" onclick="layerShow('#popup')">삭제</button>
+			
 		</c:if>
-	
+			
 </div>
 
 <div class="ticket-list" style="width: 100%; margin-top: 15px;">
@@ -210,10 +249,9 @@ function sendTicket(mode) {
 			<c:forEach var="dto_ticket" items="${listTicket}">
 				<tr>
 					<td>${dto_ticket.ticketName}</td>
-					<td>${dto_ticket.locName}</td>
-					<td>${dto_ticket.name}</td>
-					<td><button type='button' class='button btnUpdateHotel' data-hotelCode="${dto.hotelCode}">호텔 정보 수정</button></td>
-					<td><button type='button' class='button btnInsertRoom' onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/list?hotelCode=${dto.hotelCode}';">객실 추가ㆍ수정</button></td>
+					<td>${dto_ticket.sales_start} - ${dto_ticket.sales_end}</td>
+					<td><button type='button' class='button btnUpdateTicket' data-ticketCode="${dto_ticket.ticketCode}" data-storeCode="${dto_ticket.storeCode}">티켓 정보 수정</button></td>
+					<td><button type='button' class='button btnInsertRoom' onclick="location.href='<%=cp%>/store/storeInfo/ticketInfo/detail?storeCode=${dto.storeCode}&ticketCode=${dto_ticket.ticketCode}';">티켓 상세 추가ㆍ수정</button></td>
 				</tr>
 			</c:forEach>
 		</tbody>

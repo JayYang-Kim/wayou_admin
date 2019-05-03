@@ -2,7 +2,6 @@ package com.sp.store;
 
 import java.io.File;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,18 +112,28 @@ public class StoreController {
 	@RequestMapping(value="/store/storeInfo/view", method=RequestMethod.GET)
 	public String viewStore(
 			@RequestParam int storeCode,
-			@RequestParam(defaultValue="storeName") String searchKey,
-			@RequestParam(defaultValue="") String searchValue,
+			@RequestParam(value="pageNo", defaultValue="1") int current_page,
 			Model model) throws Exception {
 		String query = null;
+		Store dto = null;
 		
-		searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		int rows=10;
+		int total_page=0;
+		int ticketCount=0;
 		
-		if(searchValue.length() != 0) {
-			query = "&searchKey=" + searchKey + "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+		ticketCount=storeService.ticketCount(storeCode);
+		
+		if(ticketCount!=0) {
+			total_page=myUtil.pageCount(rows, ticketCount);
 		}
 		
-		Store dto = null;
+		if(current_page>total_page) {
+			current_page=total_page;
+		}
+		
+		int start = (current_page-1)*rows+1;
+		int end = current_page*rows;
+		
 		
 		
 		dto = storeService.readStore(storeCode);
@@ -137,10 +146,18 @@ public class StoreController {
 		
 		List<Store> listStoreFile = null;	
 		listStoreFile = storeService.listStoreFile(storeCode);
-		
+
 		Map<String, Object> map = new HashMap<>();
-		map.put("searchKey", searchKey);
-		map.put("searchValue", searchValue); 
+		map.put("start", start);
+		map.put("end", end);
+		map.put("storeCode", storeCode);
+		List<Ticket> listTicket = storeService.listTicket(map);
+		
+		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");
+		model.addAttribute("listTicket", listTicket);
+		model.addAttribute("ticketCount", ticketCount);
+		model.addAttribute("page", current_page);
+		model.addAttribute("paging", paging);
 		
 		model.addAttribute("dto", dto);
 		model.addAttribute("listStoreFile", listStoreFile);
@@ -163,6 +180,7 @@ public class StoreController {
 			@RequestParam int storeCode,
 			Model model) {
 		
+		model.addAttribute("storeCode", storeCode);
 		model.addAttribute("mode", "created");
 		
 		return "store/storeInfo/ticketInfo/insertTicket";
@@ -171,6 +189,7 @@ public class StoreController {
 	@RequestMapping(value="/store/storeInfo/ticketInfo/insertTicket", method=RequestMethod.POST)
 	public String insertTicketSubmit(
 			Ticket dto,
+			@RequestParam int storeCode,
 			Model model,
 			HttpSession session
 			) throws Exception{
@@ -179,12 +198,78 @@ public class StoreController {
 		String root = session.getServletContext().getRealPath("/");
 		
 		String pathname = root+"uploads"+File.separator+"ticket";
-		
+		dto.setStoreCode(storeCode);
 		dto.setAdminIdx(info.getAdminIdx());
 		
 		storeService.insertTicket(dto, pathname);
 		
+		return "redirect:/store/storeInfo/view?storeCode="+storeCode;
+	}
+
+	@RequestMapping(value="/store/storeInfo/ticketInfo/updateTicket", method=RequestMethod.GET)
+	public String updateTicketForm(
+			@RequestParam int storeCode,
+			@RequestParam int ticketCode,
+			Model model) {
+		
+		Ticket dto = storeService.readTicket(ticketCode);
+		dto.setStoreCode(storeCode);
+		
+		List<Ticket> listFile = storeService.listTicketFile(ticketCode);
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("listFile", listFile);
+		model.addAttribute("mode", "update");
+		
+		return "store/storeInfo/ticketInfo/insertTicket";
+	}
+	
+	@RequestMapping(value="/store/storeInfo/ticketInfo/updateTicket", method=RequestMethod.POST)
+	public String updateTicketSubmit(
+			Ticket dto,
+			HttpSession session) throws Exception {
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root+"uploads"+File.separator+"hotel";
+		
+		storeService.updateTicket(dto, pathname);
+
 		return "redirect:/store/storeInfo/view?storeCode="+dto.getStoreCode();
+	}
+	
+	@RequestMapping(value="/store/storeInfo/ticketInfo/detail", method=RequestMethod.GET)
+	public String listTicketDetail(
+			@RequestParam int ticketCode,
+			@RequestParam int storeCode,
+			Model model) {
+		List<TicketDetail> listTicketDetail = storeService.listTicketDetail(ticketCode);
+		
+		model.addAttribute("listTicketDetail", listTicketDetail);
+		model.addAttribute("ticketCode", ticketCode);
+		model.addAttribute("storeCode", storeCode);
+		return ".store.storeInfo.ticketInfo.detail";
+	}
+	
+	@RequestMapping(value="/store/storeInfo/ticketInfo/insertDetail", method=RequestMethod.GET)
+	public String insertTicketDetailForm(
+			@RequestParam int ticketCode,
+			Model model) {
+		
+		model.addAttribute("mode", "created");
+		model.addAttribute("ticketCode", ticketCode);
+		
+		return "store/storeInfo/ticketInfo/insertTicketDetail";
+	}
+	
+	@RequestMapping(value="/store/storeInfo/ticketInfo/insertDetail", method=RequestMethod.POST)
+	public String insertTicketDetailSubmit(
+			TicketDetail dto,
+			Model model
+			) throws Exception{
+		
+		storeService.insertTicketDetail(dto);
+		
+		return "redirect:/store/storeInfo/ticketInfo/detail?ticketCode="+dto.getTicketCode();
 	}
 
 }
