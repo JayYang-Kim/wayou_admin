@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work">
+	<sql id="where-list">
+		<choose>
+			<when test="condition=='departCode'">
+				INSTR(d.departName, #{word}) &gt; 0
+			</when>
+			<when test="condition=='positionCode'">
+				INSTR(p.positionName, #{word}) &gt; 0
+			</when>
+			<when test="condition=='adminName'">
+				INSTR(a.adminName, #{word}) &gt; 0
+			</when>
+			<when test="condition=='subject'">
+				INSTR(w.subject, #{word}) &gt; 0
+			</when>
+			<when test="condtion=='created'">
+				w.created = #{word}
+			</when>
+		
+		</choose>
+	</sql>
+	
+	
+	<insert id="insertWork" parameterType="com.sp.work.Work">
+		INSERT INTO workdiary (diaryCode, adminIdx, subject, content, memo, dayWork, finishWork)
+		VALUES(diaryCode_seq.NEXTVAL, #{adminIdx}, #{subject}, #{content}, #{memo}, #{dayWork}, #{finishWork}) 
+	</insert>
+	
+	<select id="readAdmin" parameterType="Integer" resultType="com.sp.work.Work">
+		SELECT adminIdx, adminId, adminName, p.positionName, d.departName FROM admin a 
+		JOIN position p ON a.positionCode = p.positionCode
+		JOIN department d ON a.departCode = d.departCode WHERE adminIdx =#{adminIdx}
+	</select>
+	
+	<select id="searchWork" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(subject) FROM question 
+		WHERE TO_CHAR(SYSDATE, 'YYYY-MM-DD') = TO_CHAR(created, 'YYYY-MM-DD') and catcode = #{departCode}
+	</select>
+	
+	<select id="searchDiary" parameterType="Integer" resultType="Integer">
+		SELECT COUNT(subject) FROM workdiary 
+		WHERE TO_CHAR(SYSDATE, 'YYYY-MM-DD') = TO_CHAR(created, 'YYYY-MM-DD') and adminIdx = #{adminIdx}
+	</select>
+	
+	<select id="listWork" parameterType="map" resultType="com.sp.work.Work">
+		SELECT * FROM (
+		SELECT ROWNUM rnum, tb. * FROM (    
+		SELECT w.diaryCode, a.adminName, d.departName, p.positionName, w.subject, TO_CHAR(w.created, 'YYYY-MM-DD hh24:mi') created, w.modifyDate FROM admin a
+		    JOIN department d ON a.departCode = d.departCode
+		    JOIN position p ON a.positionCode = p.positionCode
+		    JOIN workdiary w ON a.adminIdx = w.adminIdx
+		    <where>
+		        	<if test="condition != null and word != ''">
+			     	    <include refid="where-list"/>
+			     	</if>
+			</where>
+				ORDER BY w.diaryCode DESC, created DESC
+			<![CDATA[
+			        ) tb WHERE ROWNUM <= #{end}
+			    ) WHERE rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0) FROM admin a
+			JOIN department d ON a.departCode = d.departCode
+		    JOIN position p ON a.positionCode = p.positionCode
+		    JOIN workdiary w ON a.adminIdx = w.adminIdx
+		    
+		<where>
+			<if test="condition != null and word != ''">
+				<include refid="where-list"></include>
+			</if>
+		</where>
+	</select>
+	
+	<select id="articleWork" parameterType="Integer" resultType="com.sp.work.Work">
+		SELECT w.diaryCode, a.adminIdx, a.adminName, d.departName, p.positionName, w.subject, TO_CHAR(w.created, 'YYYY-MM-DD hh24:mi') created, TO_CHAR(w.modifyDate, 'YYYY-MM-DD hh24:mi') modifyDate, w.memo, w.content, w.dayWork, w.finishWork FROM admin a
+		    JOIN department d ON a.departCode = d.departCode
+		    JOIN position p ON a.positionCode = p.positionCode
+		    JOIN workdiary w ON a.adminIdx = w.adminIdx
+			WHERE w.diaryCode = #{diaryCode}	
+	</select>
+	
+	<select id="nextArticleWork" parameterType="Map" resultType="com.sp.work.Work">
+		SELECT tb. * FROM (    
+		SELECT w.diaryCode, a.adminName, d.departName, p.positionName, w.subject, TO_CHAR(w.created, 'YYYY-MM-DD hh24:mi') created, w.modifyDate FROM admin a
+		    JOIN department d ON a.departCode = d.departCode
+		    JOIN position p ON a.positionCode = p.positionCode
+		    JOIN workdiary w ON a.adminIdx = w.adminIdx
+		    <where>
+		        	<if test="condition != null and word != ''">
+			     	    <include refid="where-list"/>
+			     	</if>
+			     		AND (w.diaryCode &lt; #{diaryCode})
+			</where>
+				ORDER BY w.diaryCode DESC, created DESC
+			        ) tb WHERE ROWNUM = 1
+	</select>
+	
+	<select id="preArticleWork" parameterType="Map" resultType="com.sp.work.Work">
+		SELECT tb. * FROM (    
+		SELECT w.diaryCode, a.adminName, d.departName, p.positionName, w.subject, TO_CHAR(w.created, 'YYYY-MM-DD hh24:mi') created, w.modifyDate FROM admin a
+		    JOIN department d ON a.departCode = d.departCode
+		    JOIN position p ON a.positionCode = p.positionCode
+		    JOIN workdiary w ON a.adminIdx = w.adminIdx
+		    <where>
+		        	<if test="condition != null and word != ''">
+			     	    <include refid="where-list"/>
+			     	</if>
+			     		AND (w.diaryCode &gt; #{diaryCode})
+			</where>
+				ORDER BY w.diaryCode ASC, created ASC
+			        ) tb WHERE ROWNUM = 1
+	</select>
+	
+ 	<update id="updateWork" parameterType="com.sp.work.Work">
+		UPDATE workdiary SET subject=#{subject}, content=#{content, jdbcType = CLOB}, memo=#{memo, jdbcType = CLOB}, dayWork=#{dayWork}, modifyDate=SYSDATE
+			WHERE diaryCode = #{diaryCode}
+	</update>
+	
+	<delete id="deleteWork" parameterType="Integer">
+		DELETE FROM workdiary WHERE diaryCode=#{diaryCode}
+	</delete>
+</mapper>

@@ -4,17 +4,56 @@
 <mapper namespace="ticket">
 
 	<select id="seq" resultType="Integer">
-		SELECT ROOMINFO_SEQ.NEXTVAL FROM dual
+		SELECT TICKET_SEQ.NEXTVAL FROM dual
 	</select>
+
 	
-	<insert id="inserTicket" parameterType="com.sp.store.Ticket">
-		INSERT INTO RoomInfo(ROOMCODE, hotelcode, ROOMTYPECODE, ROOMNUM, HCOUNT, price, information, notice, CANCEL_NOTICE)
-			VALUES(#{roomCode}, #{hotelCode}, #{roomtypeCode}, #{roomNum}, #{hCount}, #{price},
-						#{information, jdbcType=VARCHAR},#{notice, jdbcType=VARCHAR}, #{cancel_notice, jdbcType=VARCHAR})
+	<insert id="insertTicket" parameterType="com.sp.store.Ticket">
+		INSERT INTO ticket(ticketCode, storeCode, ticketName, adminIdx, ticket_info, sales_start, sales_end, use_start, use_end)
+			VALUES(#{ticketCode}, #{storeCode}, #{ticketName}, #{adminIdx},  #{ticket_info, jdbcType=VARCHAR}, #{sales_start}, #{sales_end}, #{use_start}, #{use_end})
 	</insert>
 	
 	<insert id="insertFile" parameterType="com.sp.store.Ticket">
-		INSERT INTO roomfile(fileCode, roomCode, saveFilename, originalFilename)
-			VALUES(ROOMFILE_SEQ.NEXTVAL, #{roomCode}, #{saveFilename}, #{originalFilename})
+		INSERT INTO ticketfile(fileCode, ticketCode, saveFilename, originalFilename)
+			VALUES(TICKETFILE_SEQ.NEXTVAL, #{ticketCode}, #{saveFilename}, #{originalFilename})
 	</insert>
+	
+	<select id="ticketCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(count(*),0)
+		FROM ticket
+		WHERE storeCode=#{storeCode}
+	</select>
+	
+	<select id="listTicket" parameterType="map" resultType="com.sp.store.Ticket">
+		SELECT * FROM (
+    		SELECT ROWNUM rnum, tb.* FROM (
+        		SELECT t.storeCode, ticketCode, ticketName, sales_start, sales_end
+        		FROM ticket t
+        		JOIN store s ON t.storeCode = s.storeCode
+        		where t.storeCode=#{storeCode}
+        		ORDER BY ticketCode DESC
+     <![CDATA[
+    		)tb WHERE rownum <= #{end}
+		) where rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readTicket" parameterType="Integer" resultType="com.sp.store.Ticket">
+		SELECT ticketCode, storeCode, ticketName, adminIdx, ticket_info, sales_start, sales_end, use_start, use_end
+		FROM ticket
+		WHERE ticketCode=#{ticketCode}
+	</select>
+	
+	<select id="listFile" parameterType="Integer" resultType="com.sp.store.Ticket">
+		SELECT fileCode, ticketCode, saveFilename, originalFilename
+		from ticketfile
+		where ticketCode=#{ticketCode}
+	</select>
+	
+	<update id="updateTicket" parameterType="com.sp.store.Ticket">
+		UPDATE ticket
+		SET ticketCode=#{ticketCode}, storeCode=#{storeCode}, ticketName=#{ticketName}, adminIdx=#{adminIdx}, ticket_info=#{ticket_info}, price=#{sales_start},
+			sales_end=#{sales_end},use_start=#{use_start}, use_end=#{use_end}
+		WHERE ticketCode=#{ticketCode}
+	</update>
 </mapper>

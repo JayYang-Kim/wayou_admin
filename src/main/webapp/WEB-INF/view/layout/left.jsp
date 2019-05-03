@@ -18,7 +18,7 @@
                     <li><a href="#">직원관리</a>
 						<div>
 							<ul>
-								<li><a href="#"><span class="blind">직원관리</span> 인사관리</a>
+								<li><a href="<%=cp%>/admin/list"><span class="blind">직원관리</span> 인사관리</a>
 									<div>
 										<ul>
 											<li><a href="<%=cp%>/admin/list">리스트</a></li>
@@ -26,11 +26,11 @@
 										</ul>
 									</div>
 								</li>
-								<li><a href="#"><span class="blind">직원관리</span> 근무관리</a>
+								<li><a href="<%=cp%>/work/list"><span class="blind">직원관리</span> 근무관리</a>
 									<div>
 										<ul>
-											<li><a href="#">출석관리</a></li>
-											<li><a href="#">근무일지</a></li>
+											<li><a href="#">출/퇴근 관리</a></li>
+											<li><a href="<%=cp%>/work/list">근무일지</a></li>
 										</ul>
 									</div>
 								</li>

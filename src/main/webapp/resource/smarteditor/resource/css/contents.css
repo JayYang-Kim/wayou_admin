@@ -1,0 +1,117 @@
+@charset "utf-8";
+
+/* ==========================================================================
+   contents
+   ========================================================================== */
+/*slide*/
+.bx-pager{position:absolute;}
+.bx-pager-item{float:left:margin-right:6px:}
+.bx-pager-item a{display:block:width:11px:height:12px;text-indent:1000px:font-size:0em;background:url(../images/common/slide_pager.png) no-repeat left top;}
+.bx-pager-item a.active{width:24px;background-position:right top:}
+.bx-controls-direction a{display:block;width:26px;height:48px;position:absolute;top:50%;margin-top:-25px;font-size:0px;text-indent:-9999em;background:url(../images/common/slide_prev.png) no-repeat left top;}
+.bx-controls-direction a:hover,
+.bx-controls-direction a:focus,
+.bx-controls-direction a:active{background-position:left bottom;}
+.bx-controls-direction a.disabled{opacity:0.4;cursor:default;}
+.bx-controls-direction .bx-prev{left:30px;}
+.bx-controls-direction .bx-next{right:30px;background-image:url(../images/common/slide_next.png);}
+
+/*스타일 가이드*/
+.guide{}
+.guide > h1{color:#000}
+.guide > h2{margin:50px 0 20px}
+.guide > h2:first-child{margin-top:0;}
+.guide > h3{margin:30px 0 10px}
+.guide > h4{margin:20px 0 10px}
+.guide > p{margin-bottom:10px}
+
+/*list_search*/
+.list_search_wrap{overflow:hidden;margin-top:20px;margin-bottom:10px;}
+.list_search_wrap .search_clean{float:left;}
+.list_search_wrap .list_search{float:right;}
+.list_search_wrap .list_search.f_left{float:left;}
+.list_search_wrap .txt{float:left;padding:4px 0;}
+.list_search_wrap .search_left{float:left;}
+.list_search_wrap .search_left select{max-width:100%}
+	.list_search select{width:auto;}
+	.list_search input{width:186px;}
+	.list_search .hasDatepicker{width:66px;}
+	.list_search .button{}
+	.list_search .radio_box{font-weight:bold;}
+.list_search.add_date > strong{margin-left:16px;}
+
+/* brand */
+.refresh_timer{font-weight:bold;font-size:14px;color:#333;}
+.refresh_timer strong{font-weight:800;font-size:18px;color:#cb1919;}
+
+/*main*/
+.main{position:relative;background:#f1f1f1;}
+.main #footer{padding-left:0;text-align:center;color:#fff;background:#1d1d1d;border-color:#1d1d1d;}
+.main h1{padding:13px 20px;font-size:16px;color:#231f20;background:#ffeb00;border:1px solid #ffeb00;}
+.main .login_box{position:absolute;left:50%;top:50%;width:220px;padding:70px 40px 40px 40px;margin:-200px 0 0 -150px ;background:#ffeb00;border-radius:5px;box-shadow:0 2px 0 #d8d8d8;}
+.main .login_box h2{text-align:center;padding-bottom:40px;color:#333333;}
+.main .login_box .input_box{position:relative;overflow:hidden;}
+.main .login_box .input_box input{width:82%;height:36px;line-height:36px;padding-left:30px;border:2px solid #b4b4b4;margin-bottom:10px;border-radius:5px;}
+.main .login_box .input_box input:active,.main .login_box .input_box input:hover{border:2px solid #333333;}
+.main .login_box .input_box span{position:absolute;top:10px;left:10px;}
+.main .btn_box{padding-top:30px;} 
+.main .btn_box .button{width:36.5%;}
+.main .btn_box .button + .button{margin-left:8px;}
+.main .log_text{padding-left:25px;margin-top:20px;color:#ef4023;background:url(../images/common/icon_01.png) no-repeat 0 center;}
+
+.p_category .w10em{display:inline-block;width:10em}
+.p_category .arr_list li{line-height:26px;background-position:0 10px}
+.p_category .arr_list .w10em{width:12em}
+
+/*table */
+.table .width1{width:200px;}
+.table .width2{width:80px;}
+.table .width3{width:300px;}
+.table .textarea{height:300px;}
+.table .addr_txt{display:inline-block;width:70px;text-align:center;}
+.table .tbl_map{height:300px;border:1px solid #ccc;background:#f4f4f4;}
+.full_search{display:table;table-layout:fixed;width:100%;border:1px solid #d2d2d2;margin-bottom:20px;}
+.full_search > div{display:table-cell;padding:15px;vertical-align:middle;text-align:center;}
+.full_search label strong{display:inline-block;width:5em;}
+.full_search .btn{width:100px;}
+.full_search .btn .button{width:100%;padding-left:0;padding-right:0;}
+
+/* ==========================================================================
+   popup
+   ========================================================================== */
+
+
+
+/* ========================================================================== 
+   ie fix
+   ========================================================================== */
+.lt-ie9 #gnb > ul > li.in_sub > a:after{content:'+';border:none;margin-top:-9px;right:15px;}
+.lt-ie9 #gnb > ul > li.in_sub.on > a:after{margin-top:-9px;}
+.lt-ie9 .checkbox input+.lbl:before, 
+.lt-ie9 .radio input+.lbl:before{display:none;}
+.lt-ie9 .pop_bg{background:url(../images/common/bg_op60.png);}
+
+
+/* ==========================================================================
+   Media Queries for Responsive Design.
+   ========================================================================== */
+
+@media only screen and (max-width:1024px ){
+	
+}
+
+@media only screen and (max-width:740px ){
+	
+}
+
+
+@media only screen and (max-width:480px ){
+	.list_search_wrap .txt{width:45%;}
+	.list_search_wrap .search_left{float:none;margin-bottom:10px;}
+	.list_search_wrap .list_search{float:none !important;}
+	.list_search_wrap .list_search + .list_search{margin-top:5px;}
+	.list_search input{width:120px;}
+	
+	.full_search{display:block;padding:12px 0;}
+	.full_search>div{display:block;padding:3px 10px;width:auto !important;}
+}

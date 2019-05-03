@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ticketDetail">
+
+	<insert id="insertTicketDetail" parameterType="com.sp.store.TicketDetail">
+		INSERT INTO ticketDetail(ticketDetailCode, ticketCode, ticketDetailName, price, count)
+			VALUES(TICKETDETAIL_SEQ.NEXTVAL, #{ticketCode}, #{ticketDetailName}, #{price}, #{count})
+	</insert>
+	
+	<select id="ticketCount" parameterType="Integer" resultType="Integer">
+		SELECT NVL(count(*),0)
+		FROM ticket
+		WHERE storeCode=#{storeCode}
+	</select>
+	
+	<select id="listTicketDetail" parameterType="Integer" resultType="com.sp.store.TicketDetail">
+        		SELECT ticketDetailCode, d.ticketCode, ticketDetailName, price, count
+        		FROM ticketDetail d
+        		JOIN ticket t ON d.ticketCode = t.ticketCode
+        		where d.ticketCode=#{ticketCode}
+        		ORDER BY ticketCode DESC
+	</select>
+	
+	<select id="readTicket" parameterType="Integer" resultType="com.sp.store.TicketDetail">
+		SELECT ticketCode, storeCode, ticketName, adminIdx, ticket_info, sales_start, sales_end, use_start, use_end
+		FROM ticket
+		WHERE ticketCode=#{ticketCode}
+	</select>
+	
+	<update id="updateTicket" parameterType="com.sp.store.TicketDetail">
+		UPDATE ticket
+		SET ticketCode=#{ticketCode}, storeCode=#{storeCode}, ticketName=#{ticketName}, adminIdx=#{adminIdx}, ticket_info=#{ticket_info}, price=#{sales_start},
+			sales_end=#{sales_end},use_start=#{use_start}, use_end=#{use_end}
+		WHERE ticketCode=#{ticketCode}
+	</update>
+</mapper>
