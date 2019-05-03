@@ -18,10 +18,11 @@
 			VALUES(ROOMFILE_SEQ.NEXTVAL, #{roomCode}, #{saveFilename}, #{originalFilename})
 	</insert>
 	
-	<select id="listRoom" parameterType="map" resultType="com.sp.hotel.Room">
-   		SELECT roomName,roomCode, roomNum, hCount, price
+	<select id="listRoom" parameterType="Integer" resultType="com.sp.hotel.Room">
+   		SELECT roomName, roomCode, roomNum, hCount, price
    		FROM roomInfo r
    		JOIN ROOMTYPE t ON r.roomtypecode=t.roomtypecode
+   		WHERE hotelCode = #{hotelCode}
    		ORDER BY roomnum ASC
 	</select>
 	

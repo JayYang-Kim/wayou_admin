@@ -185,7 +185,7 @@ public class StoreServiceImpl implements StoreService {
 	public List<Ticket> listTicketFile(int num) {
 		List<Ticket> listFile = null;
 		try {
-			listFile=dao.selectList("ticekt.listFile", num);
+			listFile=dao.selectList("ticket.listFile", num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

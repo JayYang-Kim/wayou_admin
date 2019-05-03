@@ -90,7 +90,7 @@ function sendRoom(mode) {
 		<h1>${hotel.hname} 객실 등록</h1>
 </div>
 <div>
-<form name="insertTicketForm" method="post" enctype="multipart/form-data">
+<form name="insertRoomForm" method="post" enctype="multipart/form-data">
 	<table class="table left_tbl form_tbl">
 	<colgroup>
 		<col style="width:30%">

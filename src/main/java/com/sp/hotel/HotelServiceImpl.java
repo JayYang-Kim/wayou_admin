@@ -126,10 +126,10 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 	@Override
-	public List<Room> listRoom() {
+	public List<Room> listRoom(int num) {
 		List<Room> list = null;
 		try {
-			list=dao.selectList("room.listRoom");
+			list=dao.selectList("room.listRoom", num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -186,6 +186,28 @@ public class HotelServiceImpl implements HotelService {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	@Override
+	public List<Schedule> listHotelName() {
+		List<Schedule> listHotelName = null;
+		try {
+			listHotelName=dao.selectList("schedule.listHotelName");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listHotelName;
+	}
+
+	@Override
+	public List<Schedule> listRoomNum(int num) {
+		List<Schedule> listRoomNum = null;
+		try {
+			listRoomNum = dao.selectList("schedule.listRoomNum", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listRoomNum;
 	}
 	
 	

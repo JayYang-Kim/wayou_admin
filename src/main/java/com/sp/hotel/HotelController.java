@@ -147,7 +147,7 @@ public class HotelController {
 			@RequestParam int hotelCode,
 			Model model) {
 		Hotel hotel = hotelService.readHotel(hotelCode);
-		List<Room> list = hotelService.listRoom();
+		List<Room> list = hotelService.listRoom(hotelCode);
 		
 		model.addAttribute("list", list);
 		model.addAttribute("hotel", hotel);
