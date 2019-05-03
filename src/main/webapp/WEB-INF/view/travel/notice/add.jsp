@@ -110,12 +110,6 @@
 					<textarea name="content" cols="30" rows="10" placeholder="내용을 입력해주세요.">${dto.content}</textarea>
 				</td>
 			</tr>
-			<tr class="file_img">
-				<th scope="row">이미지</th>
-				<td colspan="3">
-					<input type="file" class="w_100" name="upload" placeholder="파일첨부" title="파일첨부">
-				</td>
-			</tr>
 			<c:if test="${mode == 'update'}">
 				<c:forEach var="dto_boardFile" items="${listBoardFile}">
 					<tr id="f${dto_boardFile.fileCode}" class="file_img">
@@ -127,6 +121,12 @@
 					</tr>
 				</c:forEach>
 			</c:if>
+			<tr class="file_img">
+				<th scope="row">이미지</th>
+				<td colspan="3">
+					<input type="file" class="w_100" name="upload" placeholder="파일첨부" title="파일첨부">
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </form>

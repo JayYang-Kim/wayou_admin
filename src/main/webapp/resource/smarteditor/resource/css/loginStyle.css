@@ -1,0 +1,77 @@
+@charset "utf-8";
+
+/* ==========================================================================
+   Login Style
+   ========================================================================== */
+body{background-color:#f5f6f7;}
+
+.main_wrap{position: absolute;top: 50%;left: 50%;width: 510px;padding: 40px;background: #fff;border-radius: 10px;transform: translate(-50%, -50%);-webkit-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);box-shadow: 0 0 18px rgba(0, 0, 0, 0.2);-webkit-box-shadow: 0 0 18px rgba(0, 0, 0, 0.2);-moz-box-shadow: 0 0 18px rgba(0, 0, 0, 0.2);}
+.main_wrap .inner{
+    position: relative;
+    width: 100%;
+    z-index: 5;
+}
+.main_wrap .inner h3{font-size:22px;}
+.main_wrap .inner .btn_login {
+    display: inline-block;
+    width: 100%;
+    color: #fff!important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)!important;
+    text-align: center;
+    background-image: none!important;
+    background-color: #333333;
+    border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+    box-shadow: none!important;
+    -webkit-transition: all ease .15s;
+    -moz-transition: all ease .15s;
+    -o-transition: all ease .15s;
+    transition: all ease .15s;
+    cursor: pointer;
+    vertical-align: middle;
+    margin: 0;
+    position: relative;
+    line-height: 50px;
+    font-family: NBGBold;
+	font-size: 16px;
+}
+.main_wrap .inner .btn_login:hover,
+.main_wrap .inner .btn_login:focus,
+.main_wrap .inner .btn_login:active{background-color:#4c4c4c;}
+.main_wrap ul{padding:20px 0 0;margin:0;}
+.main_wrap ul li{list-style:none;margin-top:20px;}
+.main_wrap ul li label{font-size:16px;color:#333333;margin-bottom:10px;margin-left:5px;}
+.main_wrap ul li input{width:100%;padding:25px 15px;height: 40px;line-height: 40px;margin-bottom:0;font-size:14px;border-radius:inherit;background-color:#fff;color:#333333;border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;box-sizing:border-box;}
+/* .main_wrap ul li input{width:100%;padding:25px 15px;height: 40px;line-height: 40px;margin-bottom:0;font-size:14px;border-radius:inherit;background-color:#fff;color:#333333;font-weight:bold;text-transform: uppercase;border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;box-sizing:border-box;text-align:center;opacity:0.4;filter: alpha(opacity=40);} */
+.main_wrap .btn.btn-link{padding:0 !important;font-size:16px;}
+.main_wrap .btn-block{width:100%;line-height:59px;font-size:30px;border-radius:5px;}
+
+#login_notice{width: 100%;margin-top:30px;padding:0;border-top:none;text-align: center;}
+#login_notice .icon_notice{margin-right:10px;}
+#login_notice .memo_notice{color: #333333;font-size: 14px;vertical-align:middle;}
+
+.main_wrap .checkbox-wrap{vertical-align:middle;}
+.main_wrap .checkbox-wrap .check-icon{display: inline-block;width: 30px;height: 30px;background: url(../images/common/checkbox.png) left center no-repeat;background-position: right;vertical-align: middle;}
+.main_wrap .checkbox-wrap input[type=checkbox]:checked + .check-icon{background-position:left;}
+
+.login_check label{margin-bottom:6px !important;font-size:14px !important;}
+.login_check input[type=checkbox] {  
+    display: none;  
+}
+
+@media only screen and (max-width: 530px) {
+	.main_wrap{width:100%;min-width:320px;margin:0;padding:0;}
+	.main_wrap h1{text-align:center;}
+	.main_wrap h1 img{width:80%;float:none;margin:0;}
+	.main_wrap h1 > strong{font-size:30px;padding-top:15px;}
+	.main_wrap h1 > span{font-size:18px;}
+    .main_wrap .inner{width:100%;margin-left:0;padding:40px 15px;left:0;background-color:inherit;border-radius:0;box-sizing:border-box;}
+	.main_wrap ul li label{font-size:16px;}
+	.main_wrap .btn.btn-link{font-size:16px;}
+	.main_wrap .btn-block{line-height:35px;font-size:18px;}
+	.main_wrap .inner ul > li input{padding:28px 20px;border-radius:50px;font-weight:500;}
+	.main_wrap .inner .login_check input[type=checkbox] + label{font-weight:500;}
+	.main_wrap .inner .btn_login{line-height:60px;font-size:20px;border-radius:50px;}
+	.main_wrap #login_footer{font-size:0.9em;}
+}

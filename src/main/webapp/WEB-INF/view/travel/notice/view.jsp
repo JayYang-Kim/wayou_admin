@@ -7,6 +7,16 @@
 %>
 
 <script type="text/javascript">
+	/* $("body").on("click", ".btn_chat", function(){
+		var title = $(".pop_wrap").find("h1"); 
+		var content = $(".pop_wrap .pop_cont p:first-child");
+		var link = $(".pop_wrap .pop_cont p.t_center a.btn_blk");
+		
+		title.html("공지사항 수정");
+		content.html("<iframe src='http://211.238.142.187:3001' frameborder='0' width='600' height='300' marginwidth='0' marginheight='0' scrolling='yes'>");
+		link.attr("href", linkUrl);
+	}); */
+
 	$("body").on("click", ".btn_update", function(){
 		var title = $(".pop_wrap").find("h1"); 
 		var content = $(".pop_wrap .pop_cont p:first-child");
@@ -61,7 +71,7 @@
 			<c:forEach var="dto_boardFile" items="${listBoardFile}">
 				<tr>
 					<th scope="row">이미지</th>
-					<td colspan="3">${dto_boardFile.originalFilename}</td>
+					<td colspan="3"><a href="<%=cp%>/travel/admin/board/notice/download?fileCode=${dto_boardFile.fileCode}">${dto_boardFile.originalFilename}</a></td>
 				</tr>
 			</c:forEach>
 		</c:if>
@@ -93,6 +103,7 @@
 	</p>
 	<p class="f_right">
 		<c:if test="${sessionScope.admin.departCode == 4 || sessionScope.admin.departCode == 3}">
+			<%-- <button type="button" class="btn_chat button h30 w70 btn_wht" onclick="layerShow('#popup')">채팅</button> --%>
 			<button type="button" class="btn_update button h30 w70 btn_wht" onclick="layerShow('#popup')">수정</button>
 			<button type="button" class="btn_delete button h30 w70 btn_red" onclick="layerShow('#popup')">삭제</button>
 		</c:if>
