@@ -9,7 +9,9 @@ public class Ticket {
 	private String ticketName;
 	private String ticket_info;
 	private int adminIdx;
-	
+	private String sales_start, sales_end;
+	private String use_start, use_end;
+
 	private int fileCode;
 	private String saveFilename, originalFilename;
 	private List<MultipartFile> upload;
@@ -67,6 +69,31 @@ public class Ticket {
 	}
 	public void setAdminIdx(int adminIdx) {
 		this.adminIdx = adminIdx;
+	}
+	public String getSales_end() {
+		return sales_end;
+	}
+	public void setSales_end(String sales_end) {
+		this.sales_end = sales_end;
+	}
+	public String getSales_start() {
+		return sales_start;
+	}
+	public void setSales_start(String sales_start) {
+		this.sales_start = sales_start;
+	}
+	
+	public String getUse_start() {
+		return use_start;
+	}
+	public void setUse_start(String use_start) {
+		this.use_start = use_start;
+	}
+	public String getUse_end() {
+		return use_end;
+	}
+	public void setUse_end(String use_end) {
+		this.use_end = use_end;
 	}
 	
 }

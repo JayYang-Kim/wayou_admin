@@ -2,19 +2,52 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="store">
-
 	<select id="seq" resultType="Integer">
-		SELECT ROOMINFO_SEQ.NEXTVAL FROM dual
+		SELECT STORE_SEQ.NEXTVAL FROM dual
 	</select>
+
 	
-	<insert id="inserTicket" parameterType="com.sp.store.Store">
-		INSERT INTO RoomInfo(ROOMCODE, hotelcode, ROOMTYPECODE, ROOMNUM, HCOUNT, price, information, notice, CANCEL_NOTICE)
-			VALUES(#{roomCode}, #{hotelCode}, #{roomtypeCode}, #{roomNum}, #{hCount}, #{price},
-						#{information, jdbcType=VARCHAR},#{notice, jdbcType=VARCHAR}, #{cancel_notice, jdbcType=VARCHAR})
+	<insert id="insertStore" parameterType="com.sp.store.Store">
+		INSERT INTO store(storeCode, storeName, adminIdx, address1, address2, information, tel, postCode, notice, name, email, CANCEL_NOTICE, categoryCode, locCode, locTitle)
+			VALUES(#{storeCode}, #{storeName}, #{adminIdx}, #{address1}, #{address2}, #{information}, #{tel}, #{postcode},
+						#{notice}, #{name}, #{email},#{cancel_notice, jdbcType=VARCHAR}, #{categoryCode}, #{locCode}, #{locTitle})
 	</insert>
 	
 	<insert id="insertFile" parameterType="com.sp.store.Store">
-		INSERT INTO roomfile(fileCode, roomCode, saveFilename, originalFilename)
-			VALUES(ROOMFILE_SEQ.NEXTVAL, #{roomCode}, #{saveFilename}, #{originalFilename})
+		INSERT INTO storefile(fileCode, storeCode, saveFilename, originalFilename)
+			VALUES(STOREFILE_SEQ.NEXTVAL, #{storeCode}, #{saveFilename}, #{originalFilename})
 	</insert>
+	
+	<!-- 스토어 목록 수 가져오기 -->
+	<select id="storeCount" parameterType="map" resultType="Integer">
+		SELECT NVL(count(*),0)
+		FROM store
+	</select>
+	
+	<!-- 스토어 리스트 -->
+	<select id="listStore" parameterType="map" resultType="com.sp.store.Store">
+		SELECT * FROM (
+    		SELECT ROWNUM rnum, tb.* FROM (
+        		SELECT storeCode, storeName, locTitle, name
+        		FROM store
+        		ORDER BY storeCode DESC
+     <![CDATA[
+    		)tb WHERE rownum <= #{end}
+		) where rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readStore" parameterType="Integer" resultType="com.sp.store.Store">
+		SELECT storeCode, storeName, address1, address2, information, notice, cancel_notice, tel, email, name, locTitle, postcode, locName, categoryName
+		FROM store s 
+		JOIN ticketlocation l ON l.locCode = s.locCode
+		JOIN ticketCategory c ON c.categoryCode = s.categoryCode
+		WHERE storeCode=#{storeCode}
+	</select>
+	
+	<select id="listFile" parameterType="Integer" resultType="com.sp.store.Store">
+		SELECT fileCode, storeCode, saveFilename, originalFilename
+		from storefile
+		where storeCode=#{storeCode}
+	</select>
 </mapper>

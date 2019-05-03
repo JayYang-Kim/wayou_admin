@@ -6,178 +6,6 @@
 	String cp=request.getContextPath();
 %>
 
-<script type="text/javascript">
-
-
-$(function() {
-
-	$(".btnInsertStore").click(function() {	
-		
-		var isClass = $("#insertForm").hasClass("insertStore");
-		if(isClass) {
-			$("#insertForm").removeClass("insertStore");
-			$("#insertForm").empty();
-			return false;
-		}
-	
-		var url="<%=cp%>/store/storeInfo/insertStore";
-		$.ajax({
-			type:"get",
-			url:url,
-			dataType : "html",
-			success:function(data){
-				$("#insertForm").html(data);
-				$("#insertForm").addClass("insertStore");
-			},
-			beforeSend:function(e) {
-				e.setRequestHeader("AJAX", true);
-			},
-			error:function(e) {
-				if(e.status==403){
-					location.href="<%=cp%>/wadmin/admin/login";
-					return;
-				}
-				console.log(e.responseText);
-			}
-		});
-	});
-	
-	
-});
-
-
-function sendHotel(mode) {
-    var f = document.insertHotelForm;
-		
-	if(! f.hname.value) {
-		alert("호텔명을 입력하세요.");
-		f.hname.focus();
-		return;
-	}
-	
-	if(! f.address1.value) {
-		f.address1.focus();
-		return;
-	}
-	
-	if(! f.address2.value) {
-		f.address2.focus();
-		return;
-	}
-	
-	if(! f.email.value) {
-		f.email.focus();
-		return;
-	}
-	
-	if(! f.tel.value) {
-		f.tel.focus();
-		return;
-	}
- 
-	if(mode=="created") {
-		searchKey="hname";
-		searchValue="";
-		pageNo=1;
-		f.action="<%=cp%>/hotel/hotelInfo/insertHotel";
-	}
-	
-	if(mode=="update") {
-		f.action="<%=cp%>/hotel/hotelInfo/updateHotel";
-	}
- 
-	
-    f.submit();
-
-}
-
-$(function() {
-
-	$(".btnUpdateHotel").click(function() {	
-
-		var isClass = $("#insertForm").hasClass("insertHotel");
-		if(isClass) {
-			$("#insertForm").removeClass("insertHotel");
-			$("#insertForm").empty();
-			return false;
-		}
-	
-		var url="<%=cp%>/hotel/hotelInfo/updateHotel";
-		var query="hotelCode="+$(this).attr("data-hotelCode");
-		
-		$.ajax({
-			type:"get",
-			url:url,
-			data:query,
-			success:function(data){
-				$("#insertForm").html(data);
-				$("#insertForm").addClass("insertHotel");
-			},
-			beforeSend:function(e) {
-				e.setRequestHeader("AJAX", true);
-			},
-			error:function(e) {
-				if(e.status==403){
-					location.href="<%=cp%>/wadmin/admin/login";
-					return;
-				}
-				console.log(e.responseText);
-			}
-		});
-	});
-	
-	
-});
-
-	
-
-
-function store_Postcode() {
-    new daum.Postcode({
-        oncomplete: function(data) {
-            
-            var addr = ''; // 주소 변수
-            var extraAddr = ''; // 참고항목 변수
-
-           
-            if (data.userSelectedType === 'R') { 
-                addr = data.roadAddress;
-            } else { 
-                addr = data.jibunAddress;
-            }
-
-
-            if(data.userSelectedType === 'R'){
-               
-                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                    extraAddr += data.bname;
-                }
-        
-                if(data.buildingName !== '' && data.apartment === 'Y'){
-                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                }
-              
-                if(extraAddr !== ''){
-                    extraAddr = ' (' + extraAddr + ')';
-                }
-           
-                document.getElementById("extraAddress").value = extraAddr;
-            
-            } else {
-                document.getElementById("extraAddress").value = '';
-            }
-
-   
-            document.getElementById('postcode').value = data.zonecode;
-            document.getElementById("address1").value = addr;
-     
-            document.getElementById("address2").focus();
-        }
-    }).open();
-}
-
-
-</script>
 
 <h1 id="page_tit">티켓관리</h1>
 <!-- 현재 페이지 정보 -->
@@ -194,7 +22,7 @@ function store_Postcode() {
 		<div class="list_search">
 			<select name="searchKey" id="searchKey" title="검색조건선택">
 				<option value="storeName">스토어명</option>
-				<option value="location">지역</option>
+				<option value="locTitle">지역</option>
 				<option value="name">대표자명</option>
 			</select>
 			<input type="text" name="searchValue" id="searchValue" title="검색내용입력" />
@@ -210,17 +38,18 @@ function store_Postcode() {
 					<th width="100">스토어명</th>
 					<th width="50">지역</th>
 					<th width="70">대표자명</th>
-					<th width="100" colspan="2">관리</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach var="dto" items="${list}">
 					<tr>
-						<td>${dto.hname}</td>
-						<td>${dto.locName}</td>
+						<td>
+						<a href="<%=cp%>/store/storeInfo/view?storeCode=${dto.storeCode}">
+							<span>${dto.storeName}</span>
+						</a>
+						</td>
+						<td>${dto.locTitle}</td>
 						<td>${dto.name}</td>
-						<td><button type='button' class='button btnUpdateStore' data-hotelCode="${dto.storeCode}">스토어 정보 수정</button></td>
-						<td><button type='button' class='button btnInsertTicket' onclick="location.href='<%=cp%>/store/storeInfo/ticketInfo/list?hotelCode=${dto.hotelCode}';">객실 추가ㆍ수정</button></td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -233,14 +62,10 @@ function store_Postcode() {
 		   </tr>
 		</table>
 	</div>
-	<div>
+
 	<div class="btn_wrap view_btn">
-		<button type='button' class='button btn_blk btnInsertStore'>새로운 스토어 등록</button>
-	</div>
-	<div id="insertForm" class="mt30">
-		
-	</div>
+		<button class="button btn_blk" type="button" onclick="location.href='<%=cp%>/store/storeInfo/insertStore';">새로운 스토어 등록</button>
 	</div>
 
+
 </div>
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
