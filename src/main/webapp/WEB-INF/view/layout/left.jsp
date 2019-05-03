@@ -26,7 +26,7 @@
 										</ul>
 									</div>
 								</li>
-								<li><a href="#"><span class="blind">직원관리</span> 근무관리</a>
+								<li><a href="<%=cp%>/work/list"><span class="blind">직원관리</span> 근무관리</a>
 									<div>
 										<ul>
 											<li><a href="#">출/퇴근 관리</a></li>

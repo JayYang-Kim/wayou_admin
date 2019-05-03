@@ -107,9 +107,15 @@ public class WorkController {
 		AdminSessionInfo info =(AdminSessionInfo)session.getAttribute("admin");
 		int adminIdx=info.getAdminIdx();
 		int departCode=info.getDepartCode();
-		int dayWork=workService.searchWork(departCode);
+		int result=workService.searchDiary(adminIdx);
+		if(result > 0) {
+			return "redirect:/work/list";
+		}
 		di=workService.readAdmin(adminIdx);
+		
+		int dayWork=workService.searchWork(departCode);
 		di.setDayWork(dayWork);
+		
 		
 		model.addAttribute("di",di);
 		model.addAttribute("mode", "created");
@@ -157,9 +163,12 @@ public class WorkController {
 			map.put("condition", condition);
 			map.put("word", word);
 			
-			dto.setContent(myUtil.htmlSymbols(dto.getContent()));
-			dto.setMemo(myUtil.htmlSymbols(dto.getMemo()));
-			
+			Work preDiaryWork = workService.preArticleWork(map);
+			Work nextDiaryWork = workService.nextArticleWork(map);
+		
+			model.addAttribute("preArticleWork",preDiaryWork);
+			model.addAttribute("nextArticleWork",nextDiaryWork);
+			model.addAttribute("query", query);
 			model.addAttribute("dto", dto);
 				
 		} catch (Exception e) {
@@ -167,5 +176,64 @@ public class WorkController {
 		}
 		
 		return ".work.article";
+	}
+	
+	@RequestMapping(value="/work/update",method=RequestMethod.GET)
+	public String updateWorkForm(
+			@RequestParam(defaultValue="1") int page,
+			@RequestParam int num,
+			@RequestParam(defaultValue="departCode") String condition,
+			@RequestParam(defaultValue="")String word,
+			HttpServletRequest req,
+			Model model) throws Exception{
+
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			word=URLDecoder.decode(word, "utf-8");
+		};
+		
+		int diaryCode = num;
+		Work dto = workService.articleWork(diaryCode);
+		String created = dto.getCreated().substring(0, 10);
+		String today=workService.todayDiary();
+		if(!created.equals(today)) {
+			return "redirect:/work/article?num="+diaryCode;
+		}
+		
+		int dayWork=workService.searchWork(dto.getDepartCode());
+		dto.setDayWork(dayWork);
+		model.addAttribute("dto",dto);
+		model.addAttribute("mode","update");
+		
+		return ".work.created";
+	}
+	
+	@RequestMapping(value="/work/update", method=RequestMethod.POST)
+	public String updateSubmit(Work dto,
+			@RequestParam(defaultValue="1") int page) throws Exception{
+		
+		int num = dto.getDiaryCode();
+		int result=workService.updateWork(dto);
+		if(result!=1) {
+			return "redirect:/work/list";
+		}
+		
+		return "redirect:/work/article?page="+page+"&num="+num;
+	}
+	
+	@RequestMapping(value="/work/delete")
+	public String deleteWork(
+			HttpSession session,
+			@RequestParam int num
+			) throws Exception{
+		
+		int diaryCode = num;
+		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
+		info.getAdminIdx();
+		
+		Work dto = workService.articleWork(diaryCode);
+		if(dto.getAdminIdx() == info.getAdminIdx()) {
+			workService.deleteWork(diaryCode);
+		}
+		return "redirect:/work/list";
 	}
 }

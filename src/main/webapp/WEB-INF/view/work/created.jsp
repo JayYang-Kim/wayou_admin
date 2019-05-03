@@ -19,7 +19,8 @@ function insertOk(){
 		return;
 	}
 	
-	oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+	oEditors1.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+	oEditors2.getById["memo"].exec("UPDATE_CONTENTS_FIELD", []);
 	
 	content=f.content.value;
 	if(!content){
@@ -41,7 +42,7 @@ function insertOk(){
 	if(mode == "created") {
 		f.action = "<%=cp%>/work/${mode}";	
 	} else if(mode == "update") {
-		f.action = "<%=cp%>/work/${mode}${query}";
+		f.action = "<%=cp%>/work/${mode}";
 	}
 	
 	f.submit();
@@ -73,36 +74,39 @@ function insertOk(){
 		</td>
 		<th scope="row">부서</th>
 		<td>
+			<c:if test="${mode == 'update'}">
+			<input type="hidden" name="diaryCode" value="${dto.diaryCode}">
+			</c:if>
 			<input type="hidden" name="dapartName" value="${dto.departName}">
-			<input type="hidden" name="adminIdx" value="${di.adminIdx}">
-			${di.departName}
+			<input type="hidden" name="adminIdx" value="${mode == 'created' ? di.adminIdx : dto.adminIdx}">
+			${mode == 'created' ? di.departName : dto.departName}
 		</td>
 	</tr>
 		<tr>
 		<th scope="row">작성자</th>
 		<td>
-			${di.adminName}
+			${mode == 'created' ? di.adminName : dto.adminName}
 		</td>
 		<th scope="row">직책</th>
 		<td>
 			<input type="hidden" name="positionName" value="${dto.positionName}">
-			${di.positionName}
+			${mode == 'created' ? di.positionName : dto.positionName}
 		</td>
 	</tr>
 	<tr>
 		<th>금일 문의 건수</th>
-		<td>${di.dayWork}건
-		<input type="hidden" name="dayWork" value="${di.dayWork}"> </td>
+		<td>${mode == 'created' ? di.dayWork : dto.dayWork}건
+		<input type="hidden" name="dayWork" value="${mode == 'created' ? di.dayWork : dto.dayWork}"> </td>
 		<th>금일 답변 건수</th>
-		<td>${di.finishWork}건
-		<input type="hidden" name="dayWork" value="${di.finishWork}"></td>
+		<td>${mode == 'created' ? di.finishWork : dto.finishWork}건
+		<input type="hidden" name="dayWork" value="${mode == 'created' ? di.finishWork : dto.finishWork}"></td>
 	</tr>
 	<tr>
 		<th colspan="4" style="text-align:center">일지 내용</th>
 	</tr>
 	<tr>
 		<td colspan="4">
-	<textarea name="content" id="content" rows="10" cols="100">${dto.content}</textarea>
+	<textarea name="content" id="content" rows="10" cols="100" style="width:95%;">${dto.content}</textarea>
 		</td>
 	</tr>
 	<tr>
@@ -110,23 +114,31 @@ function insertOk(){
 	</tr>
 	<tr>
 		<td colspan="4">
-		<textarea  rows="10" cols="10" name="memo">${dto.memo}</textarea>
+		<textarea name="memo" id="memo" rows="10" cols="10" style="width:95%;">${dto.memo}</textarea>
 		</td>
 	</tr>
 	</tbody>
 </table>
 </form>
 <div style="text-align:center; margin-top:10px">
-<button type="button" class="button h30 w70 btn_wht">돌아가기</button>
-<button type="button" class="button h30 w70 btn_wht" onclick="insertOk()">등록</button>
+<a href="<%=cp%>/work/list${query}" class="button h30 w70 btn_wht">돌아가기</a>
+<button type="button" class="button h30 w70 btn_wht" onclick="insertOk()">${mode == 'created' ? '등록' : '수정'}</button>
 </div>
 
 
 <script type="text/javascript">
-var oEditors = [];
+var oEditors1 = [];
 nhn.husky.EZCreator.createInIFrame({
- oAppRef: oEditors,
+ oAppRef: oEditors1,
  elPlaceHolder: "content",
+ sSkinURI: "<%=cp %>/resource/smarteditor/SmartEditor2Skin.html",
+ fCreator: "createSEditor2"
+});
+
+var oEditors2 = [];
+nhn.husky.EZCreator.createInIFrame({
+ oAppRef: oEditors2,
+ elPlaceHolder: "memo",
  sSkinURI: "<%=cp %>/resource/smarteditor/SmartEditor2Skin.html",
  fCreator: "createSEditor2"
 });

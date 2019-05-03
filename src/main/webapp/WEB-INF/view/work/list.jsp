@@ -60,11 +60,11 @@ function searchList() {
 		<c:forEach var="dto" items="${list}">
 		<tr>
 			<td><a href="${articleUrl}&num=${dto.diaryCode}">${dto.listNum}</a></td>
-			<td>${dto.departName}</td>
-			<td>${dto.positionName}</td>
-			<td>${dto.adminName}</td>
-			<td>${dto.subject}</td>
-			<td>${dto.created}</td>
+			<td><a href="${articleUrl}&num=${dto.diaryCode}">${dto.departName}</a></td>
+			<td><a href="${articleUrl}&num=${dto.diaryCode}">${dto.positionName}</a></td>
+			<td><a href="${articleUrl}&num=${dto.diaryCode}">${dto.adminName}</a></td>
+			<td><a href="${articleUrl}&num=${dto.diaryCode}">${dto.subject}</a></td>
+			<td><a href="${articleUrl}&num=${dto.diaryCode}">${dto.created}</a></td>
 		</tr>
 		</c:forEach>
 		<c:if test="${empty list}">
