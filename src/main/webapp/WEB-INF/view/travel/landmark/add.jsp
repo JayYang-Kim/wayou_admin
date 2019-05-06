@@ -241,7 +241,7 @@
 						<th scope="row">이미지</th>
 						<td colspan="3">
 							${dto_landmarkFile.saveFilename}
-							| <a href="javascript:deleteFile('${dto_landmarkFile.fileCode}');">삭제</a>
+							| <a href="javascript:deleteFile('${dto_landmarkFile.fileCode}');" class="button btn_blk w70">삭제</a>
 						</td>
 					</tr>
 				</c:forEach>
