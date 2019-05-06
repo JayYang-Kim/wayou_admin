@@ -29,7 +29,7 @@
 								<li><a href="<%=cp%>/work/list"><span class="blind">직원관리</span> 근무관리</a>
 									<div>
 										<ul>
-											<li><a href="#">출/퇴근 관리</a></li>
+											<li><a href="<%=cp%>/attendance/list">출/퇴근 관리</a></li>
 											<li><a href="<%=cp%>/work/list">근무일지</a></li>
 										</ul>
 									</div>
