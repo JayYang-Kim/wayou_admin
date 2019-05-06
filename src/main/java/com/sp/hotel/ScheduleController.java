@@ -1,16 +1,22 @@
 package com.sp.hotel;
 
 import java.util.Calendar;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller("hotel.scheduleController")
 public class ScheduleController {
 	
-	@RequestMapping(value= "/hotel/reserve/list2")
+	@Autowired
+	private HotelService hotelService;
+	
+	@RequestMapping(value= "/hotel/reserve/reserveSchedule", method=RequestMethod.GET)
 	public String schedule(
 			@RequestParam(name="year", defaultValue="0") int year,
 			@RequestParam(name="month", defaultValue="0") int month,
@@ -61,6 +67,17 @@ public class ScheduleController {
 			
 			
 		}
+		int hotelCode = 0;
+		
+		List<Schedule> listHotelName = hotelService.listHotelName();
+		for(int i=0; i<=listHotelName.size(); i++) {
+			hotelCode=listHotelName.get(i).getHotelCode();
+		}
+		
+		List<Schedule> listRoomNum = hotelService.listRoomNum(hotelCode);
+		
+		model.addAttribute("listHotelName", listHotelName);
+		model.addAttribute("listRoomNum", listRoomNum);
 		model.addAttribute("year", year);
 		model.addAttribute("month", month);
 		model.addAttribute("todayDate", todayDate);
@@ -68,8 +85,9 @@ public class ScheduleController {
 		model.addAttribute("todayYear", todayYear);
 		model.addAttribute("weeks", weeks);
 		model.addAttribute("days", days);
-		return ".hotel.reserve.list2";
+		return ".hotel.reserve.reserveSchedule";
 
 	}
+
 	
 }

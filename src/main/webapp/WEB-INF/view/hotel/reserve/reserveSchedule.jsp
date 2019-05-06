@@ -49,24 +49,27 @@ function changeDate(year, month) {
 			</th>
 		</c:forEach>
 	</tr>
-	<tr>
+	
+		<c:forEach var='dto' items="${listHotelName}">
+		<tr>
+			<td rowspan="${dto.count}">
+				${dto.hName}
+			</td>
+		  <c:forEach var="r_dto" items="${dto.count}">
+			<td>
+				d
+			</td>
+		  </c:forEach>
 		
-		<td rowspan="2">와유호텔</td>
-		<td>102호</td>
-		<c:forEach var='d' items="${days}">
-			<th>
+			<c:forEach var='d' items="${days}">
+			<td>
 				&nbsp;
-			</th>
+			</td>
+			</c:forEach>
+		<tr>
 		</c:forEach>
-	</tr>
-	<tr>
-	<td>103호</td>
-	<c:forEach var='d' items="${days}">
-			<th>
-				&nbsp;
-			</th>
-		</c:forEach>
-	</tr>
+		
 
+	
 </table>
 </div>

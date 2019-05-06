@@ -147,12 +147,12 @@ var cloudp;
 		<th>직책</th>
 		<th>성명</th>
 		<th>출근 상태</th>
-		<th>날짜</th>
 		<c:if test="${departCode == 4 || idnCode ==2 }">
-		<th>출근시간</th>
-		<th>퇴근시간</th>
-		<th>업무시간</th>
+		<th>출근 시간</th>
+		<th>퇴근 시간</th>
+		<th>업무 시간</th>
 		</c:if>
+		<th>날짜</th>
 	</tr>
 	<c:forEach var="dto" items="${listAtt}">
 	<tr>
@@ -169,8 +169,8 @@ var cloudp;
 		<th>${dto.startTime }</th>
 		<th>${dto.endTime }</th>
 		<th>${dto.dayTotal/60 } 시간</th>
-		<td>${dto.created }</td>
 		</c:if>
+		<td>${dto.created }</td>
 	</tr>
 	</c:forEach>
 </table>

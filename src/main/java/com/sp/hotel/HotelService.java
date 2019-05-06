@@ -11,10 +11,13 @@ public interface HotelService {
 	public int updateHotel(Hotel dto, String pathname);
 	
 	public int insertRoom(Room dto, String pathname);
-	public List<Room> listRoom();
+	public List<Room> listRoom(int num);
 	public Room readRoom(int num);
 	public int updateRoom(Room dto, String pathname);
 	
 	public int insertFile(Room dto);
 	public List<Room> listFile(int num);
+	
+	public List<Schedule> listHotelName();
+	public List<Schedule> listRoomNum(int num);
 }

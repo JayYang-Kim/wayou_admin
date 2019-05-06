@@ -211,7 +211,7 @@ function store_Postcode() {
 	 	<c:if test="${mode=='update'}">
 		   <c:forEach var="vo" items="${listFile}">
 				  <tr id="f${vo.fileCode}"> 
-				      <th>등록된 객실 이미지</th>
+				      <th>등록된 스토어 이미지</th>
 				      <td> 
 							${vo.originalFilename}
 							| <a href="javascript:deleteFile('${vo.fileCode}');">삭제</a>	        

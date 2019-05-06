@@ -57,7 +57,7 @@
 							<ul>
 								<li><a href="<%=cp%>/hotel/main"><span class="blind">숙박관리</span> 숙박관리</a></li>
                                 <li><a href="<%=cp%>/hotel/hotelInfo/list"><span class="blind">숙박관리</span> 호텔 등록ㆍ관리</a></li>
-                                <li><a href="<%=cp%>/hotel/reserve/list2"><span class="blind">숙박관리</span> 예약관리</a></li>
+                                <li><a href="<%=cp%>/hotel/reserve/reserveSchedule"><span class="blind">숙박관리</span> 예약관리</a></li>
                                 <li><a href="<%=cp%>/hotel/notice/list"><span class="blind">숙박관리</span> 공지사항</a></li>
                                 <li><a href="#"><span class="blind">숙박관리</span> 문의사항</a></li>
                                 <li><a href="<%=cp%>/hotel/event/listEvent"><span class="blind">숙박관리</span> 이벤트</a></li>
