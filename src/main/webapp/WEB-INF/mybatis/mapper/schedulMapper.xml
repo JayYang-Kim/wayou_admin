@@ -4,7 +4,7 @@
 <mapper namespace="schedule">
 	
 	<select id="listHotelName" resultType="com.sp.hotel.Schedule">
-   		select h.hName, h.hotelCode, count(*) count
+   		select h.hName, h.hotelCode, count(*) count, min(roomNum) roomNum
 		from roomInfo r
 		JOIN hotelInfo h ON r.hotelCode = h.hotelCode
 		group by h.hotelCode, h.hname
@@ -12,9 +12,17 @@
 	</select>
 	
 	<select id="listRoomNum" parameterType="Integer" resultType="com.sp.hotel.Schedule">
-		select roomNum
+		select min(roomNum), hotelCode
 		from roomInfo
-		where hotelCode=#{hotelCode}
+		group by hotelCode
+		order by hotelCode
+	</select>
+	
+	<select id="firstRoomNum" resultType="com.sp.hotel.Schedule">
+		select min(roomNum) roomNum, hotelCode
+		from roomInfo
+		group by hotelCode
+		order by hotelCode
 	</select>
 
 </mapper>

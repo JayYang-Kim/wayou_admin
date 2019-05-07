@@ -55,19 +55,35 @@ function changeDate(year, month) {
 			<td rowspan="${dto.count}">
 				${dto.hName}
 			</td>
-		  <c:forEach var="r_dto" items="${dto.count}">
+		  
 			<td>
-				d
+				${dto.roomNum}
 			</td>
-		  </c:forEach>
-		
+		 	
 			<c:forEach var='d' items="${days}">
 			<td>
 				&nbsp;
 			</td>
-			</c:forEach>
-		<tr>
+			 </c:forEach>
+		  
+		</tr>
+		
+			  <c:forEach var="i" begin="2" end="${dto.count}">
+				  <tr>
+					<td>
+						${dto.count}
+					</td>
+				 	
+					<c:forEach var='d' items="${days}">
+					<td>
+						&nbsp;
+					</td>
+				  </c:forEach>
+				  </tr>
+		  </c:forEach>
+		  
 		</c:forEach>
+		 
 		
 
 	

@@ -36,7 +36,7 @@ public class HotelController {
 	}
 	
 	@RequestMapping(value="/hotel/hotelInfo/list")
-	public String reserveList(
+	public String hotelList(
 			@RequestParam(value="pageNo", defaultValue="1") int current_page,
 			@RequestParam(defaultValue="hname") String searchKey,
 			@RequestParam(defaultValue="") String searchValue,
@@ -81,11 +81,6 @@ public class HotelController {
 		return ".hotel.hotelInfo.list";
 	}
 	
-	
-	@RequestMapping(value="/hotel/customer/reserveList")
-	public String customerList() {
-		return ".hotel.customer.reserveList";
-	}
 	
 	@RequestMapping(value="/hotel/hotelInfo/insertHotel", method=RequestMethod.GET)
 	public String insertHotelForm(Model model) {
@@ -217,6 +212,52 @@ public class HotelController {
 		hotelService.updateRoom(dto, pathname);
 
 		return "redirect:/hotel/hotelInfo/roomInfo/list?hotelCode="+dto.getHotelCode();
+	}
+	
+	@RequestMapping(value="/hotel/customer/reserveList")
+	public String reserveList(
+			@RequestParam(value="pageNo", defaultValue="1") int current_page,
+			@RequestParam(defaultValue="hname") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			HttpServletRequest req,
+			Model model) throws Exception {
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			searchValue=URLDecoder.decode(searchValue, "UTF-8");
+		}
+		int rows=10;
+		int total_page=0;
+		int customerCount=0;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchKey", searchKey);
+		map.put("searchValue", searchValue);
+		
+		customerCount = hotelService.customerCount(map);
+		if(customerCount!=0) {
+			total_page=myUtil.pageCount(rows, customerCount);
+		}
+		
+		if(current_page>total_page) {
+			current_page=total_page;
+		}
+		
+		int start = (current_page-1)*rows+1;
+		int end = current_page*rows;
+		
+		map.put("start", start);
+		map.put("end", end);
+		List<Customer> list = hotelService.listCustomer(map);
+		
+		String paging = myUtil.pagingMethod(current_page, total_page, "listPage");
+		model.addAttribute("list", list);
+		model.addAttribute("customerCount", customerCount);
+		model.addAttribute("page", current_page);
+		model.addAttribute("paging", paging);
+		model.addAttribute("searchKey", searchKey);
+		model.addAttribute("searchValue",searchValue);
+		
+		return ".hotel.customer.reserveList";
 	}
 
 }

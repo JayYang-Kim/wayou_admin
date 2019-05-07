@@ -21,10 +21,19 @@
 					<th width="100">번호</th>
 					<th width="50">제목</th>
 					<th width="70">작성자</th>
-					<th width="100" colspan="2">날짜</th>
+					<th width="100">날짜</th>
 				</tr>
 			</thead>
 			<tbody>
+				<c:forEach var="dto" items="${list}">
+					<tr>
+						<td>${dto.noticeNum}</td>
+						<td>${dto.subject}</td>
+						<td>${dto.adminIdx}</td>
+						<td>${dto.created}</td>
+					</tr>
+				</c:forEach>
+			
 			</tbody>
 		</table>
 		<div class="btn_wrap view_btn">

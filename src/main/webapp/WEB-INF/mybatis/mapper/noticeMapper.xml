@@ -7,4 +7,50 @@
 			VALUES(${tname}notice_seq.NEXTVAL, #{subject}, #{content, jdbcType=VARCHAR}, #{adminIdx})
 	</insert>
 
+
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'subject'">
+				INSTR(subject, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'content'">
+				INSTR(content, #{searchValue}) &gt; 0
+			</when>
+		</choose>
+	</sql>
+	
+
+	<select id="noticeCount" parameterType="map" resultType="Integer">
+		SELECT NVL(count(*),0)
+		FROM ${tname}notice
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				<include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+	
+
+	<select id="listNotice" parameterType="map" resultType="com.sp.board.Notice">
+		SELECT * FROM (
+    		SELECT ROWNUM rnum, tb.* FROM (
+        		SELECT noticeNum, subject, content, adminIdx, TO_CHAR(created, 'YYYY-MM-DD') created
+        		FROM ${tname}notice
+        		<where>
+        			<if test="searchValue!=null and searchValue!=''">
+						<include refid="where-list"/>
+					</if> 
+        		</where>
+        		ORDER BY noticeNum DESC
+     <![CDATA[
+    		)tb WHERE rownum <= #{end}
+		) where rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readNotice" parameterType="Integer" resultType="com.sp.board.Notice">
+		SELECT hotelCode, hname,address1, address2, information, tel, email, name, savefilename, loccode, postcode
+		FROM hotelInfo
+		WHERE hotelCode=#{hotelCode}
+	</select>
 </mapper>

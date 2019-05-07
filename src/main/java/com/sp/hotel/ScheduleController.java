@@ -67,17 +67,15 @@ public class ScheduleController {
 			
 			
 		}
-		int hotelCode = 0;
+
 		
 		List<Schedule> listHotelName = hotelService.listHotelName();
-		for(int i=0; i<=listHotelName.size(); i++) {
-			hotelCode=listHotelName.get(i).getHotelCode();
-		}
-		
-		List<Schedule> listRoomNum = hotelService.listRoomNum(hotelCode);
+		List<Schedule> listFirstRoomNum = hotelService.listFirstRoomNum();
+
 		
 		model.addAttribute("listHotelName", listHotelName);
-		model.addAttribute("listRoomNum", listRoomNum);
+		model.addAttribute("listFirstRoomNum", listFirstRoomNum);
+		
 		model.addAttribute("year", year);
 		model.addAttribute("month", month);
 		model.addAttribute("todayDate", todayDate);
