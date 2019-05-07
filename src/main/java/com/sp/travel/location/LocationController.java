@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.admin.AdminSessionInfo;
 import com.sp.common.FileManager;
@@ -140,6 +141,8 @@ public class LocationController {
 		
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + File.separator + "uploads" + File.separator + "location";
+		
+		System.out.println(pathname);
 		
 		try {
 			locationService.insertLocation(dto, pathname);
@@ -319,5 +322,34 @@ public class LocationController {
 		return "travel/location/listLog";
 	}
 	
-	
+	@RequestMapping(value="/travel/admin/location/deleteImg", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteImg(@RequestParam int locCode,
+			HttpSession session) throws Exception{
+		
+		Map<String, Object> model = new HashMap<>();
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "location";
+		
+		Location dto = locationService.readLocation(locCode);
+		
+		String msg = "true";
+		
+		if(dto == null) {
+			msg = "false";
+			
+			model.put("msg", msg);
+			return model;
+		}
+		
+		if(dto.getSaveFilename() != null) {
+			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+			dto.setSaveFilename("");
+			locationService.updateLocation(dto, pathname);
+		}
+		
+		model.put("msg", msg);
+		return model;
+	}
 }
