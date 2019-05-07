@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="customer">
+	
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'hname'">
+				INSTR(hname, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'location'">
+				INSTR(locName, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'hname'">
+				INSTR(name, #{searchValue}) &gt; 0
+			</when>
+		</choose>
+	</sql>
+
+	<select id="customerCount" parameterType="map" resultType="Integer">
+		SELECT NVL(count(*),0)
+		FROM roomreserinfo
+		<where>
+			<if test="searchValue!=null and searchValue!=''">
+				<include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+
+	<select id="listCustomer" parameterType="map" resultType="com.sp.hotel.Customer">
+		select reserveCode, userName, hName, roomNum, TO_CHAR(checkIn, 'YYYY-MM-DD') checkIn, TO_CHAR(checkOut, 'YYYY-MM-DD') checkOut, TO_CHAR(reservation, 'YYYY-MM-DD') reservation
+		from roomreserinfo re
+		JOIN tb_user u ON u.userIdx = re.userIdx
+		JOIN roomInfo r ON r.roomCode = re.roomCode
+		JOIN hotelInfo h ON r.hotelCode = h.hotelCode
+		<where>
+     		<if test="searchValue!=null and searchValue!=''">
+				<include refid="where-list"/>
+			</if> 
+     	</where>
+		order by checkIn
+
+	</select>
+
+</mapper>

@@ -5,8 +5,10 @@ public class Schedule {
 	private String hName;
 	private int count;
 	private int hotelCode;
+
 	private int roomNum;
 	private int day;
+
 	
 	
 	public int getRoomNum() {
@@ -39,6 +41,7 @@ public class Schedule {
 	public void sethName(String hName) {
 		this.hName = hName;
 	}
+
 		
 	
 

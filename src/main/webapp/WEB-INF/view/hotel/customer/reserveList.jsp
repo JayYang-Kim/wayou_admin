@@ -5,6 +5,16 @@
 <%
 	String cp=request.getContextPath();
 %>
+<script type="text/javascript">
+
+$(function(){
+
+    $("#start").datepicker();
+    $("#end").datepicker();
+
+});
+
+</script>
 
 <div class="body" style="height: 800px;">
 	<div style="height: 50px;">
@@ -12,15 +22,23 @@
 	</div>
 	<div class="list_search_wrap">
 		<div class="list_search">
-			<select title="검색조건선택">
+			검색날짜&nbsp;
+			<span><input type="text" name="start" id="start" value="${dto.use_start}"></span>
+			~
+			<span><input type="text" name="end" id="end" value="${dto.use_start}"></span>
+
+		</div>
+	</div>
+	<div class="list_search_wrap">
+		<div class="list_search">
+			<select name="searchKey" id="searchKey" title="검색조건선택">
 				<option value="전체">전체</option>
 				<option value="호텔명">호텔명</option>
 				<option value="예약번호">예약번호</option>
 				<option value="예약자명">예약자명</option>
 				<option value="예약일자">예약일자</option>
-
 			</select>
-			<input type="text" title="검색내용입력" />
+			<input type="text" name="searchValue" id="searchValue" title="검색내용입력" />
 			<span class="btn">
 				<a href="#" class="button" style="border: none;">검색</a>
 			</span>
@@ -32,20 +50,20 @@
 					<th width="50">예약번호</th>
 					<th width="50">예약자명</th>
 					<th width="50">호텔명</th>
-					<th width="50">객실타입</th>
+					<th width="50">객실호수</th>
 					<th width="70">숙박일자</th>
 					<th width="50">예약일자</th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="i" begin="1" end="10" step="1">
+				<c:forEach var="dto" items="${list}">
 					<tr>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
+						<td>${dto.reserveCode}</td>
+						<td>${dto.userName}</td>
+						<td>${dto.hName}</td>
+						<td>${dto.roomNum}</td>
+						<td>${dto.checkIn}-${dto.checkOut}</td>
+						<td>${dto.reservation}</td>
 					</tr>
 				</c:forEach>
 			</tbody>

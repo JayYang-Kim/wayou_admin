@@ -209,6 +209,41 @@ public class HotelServiceImpl implements HotelService {
 		}
 		return listRoomNum;
 	}
+
+	@Override
+	public List<Schedule> listFirstRoomNum() {
+		List<Schedule> listFirstRoomNum = null;
+		try {
+			listFirstRoomNum=dao.selectList("schedule.firstRoomNum");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listFirstRoomNum;
+	}
+
+	@Override
+	public List<Customer> listCustomer(Map<String, Object> map) {
+		List<Customer> list = null;
+		
+		try {
+			list = dao.selectList("customer.listCustomer",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int customerCount(Map<String, Object> map) {
+		int result=0;
+		try {
+			result=dao.selectOne("customer.customerCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
 	
 }
