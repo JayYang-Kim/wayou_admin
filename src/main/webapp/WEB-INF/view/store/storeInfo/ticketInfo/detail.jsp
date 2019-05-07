@@ -175,7 +175,7 @@ $(function() {
 	
 	<div>
 		<div class="btn_wrap view_btn">
-			<button class="button btn_blk" type="button" onclick="location.href='<%=cp%>/store/storeInfo/view?storeCode='${storeCode};">스토어 상세보기로</button>
+			<button class="button btn_blk" type="button" onclick="location.href='<%=cp%>/store/storeInfo/view?storeCode=${storeCode}';">스토어 상세보기로</button>
 			<button type='button' class='button btn_blk btnInsertTicketDetail' data-ticketCode="${ticketCode}">상세 티켓 등록</button>
 		</div>
 		<div id="insertForm" class="mt30">

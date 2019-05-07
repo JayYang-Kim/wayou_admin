@@ -48,7 +48,6 @@
 		<col style="width:5%" />
 		<col style="width:10%" />
 		<col style="width:7%" span="2" />
-		<col style="width:7%" />
 		<col style="width:4%" />
 		<col style="width:8%" />
 		<col style="width:7%" />
@@ -60,7 +59,6 @@
 			<th scope="col">지역명</th>
 			<th scope="col">위도</th>
 			<th scope="col">경도</th>
-			<th scope="col">메모</th>
 			<th scope="col">활성여부</th>
 			<th scope="col">작성자</th>
 			<th scope="col">작성일</th>
@@ -78,7 +76,6 @@
 				</td>
 				<td>${dto.lat}</td>
 				<td>${dto.lng}</td>
-				<td>${dto.memo}</td>
 				<td>${dto.enable == 1 ? "활성화" : "비활성"}</td>
 				<td>${dto.adminId}<br/>(${dto.adminName})</td>
 				<td>${dto.created}</td>

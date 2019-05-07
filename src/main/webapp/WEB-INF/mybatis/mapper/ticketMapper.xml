@@ -27,7 +27,7 @@
 	<select id="listTicket" parameterType="map" resultType="com.sp.store.Ticket">
 		SELECT * FROM (
     		SELECT ROWNUM rnum, tb.* FROM (
-        		SELECT t.storeCode, ticketCode, ticketName, sales_start, sales_end
+        		SELECT t.storeCode, ticketCode, ticketName, TO_CHAR(sales_start, 'YYYY-MM-DD') sales_start, TO_CHAR(sales_end, 'YYYY-MM-DD') sales_end
         		FROM ticket t
         		JOIN store s ON t.storeCode = s.storeCode
         		where t.storeCode=#{storeCode}
@@ -39,7 +39,7 @@
 	</select>
 	
 	<select id="readTicket" parameterType="Integer" resultType="com.sp.store.Ticket">
-		SELECT ticketCode, storeCode, ticketName, adminIdx, ticket_info, sales_start, sales_end, use_start, use_end
+		SELECT ticketCode, storeCode, ticketName, adminIdx, ticket_info, TO_CHAR(sales_start, 'YYYY-MM-DD') sales_start, TO_CHAR(sales_end, 'YYYY-MM-DD') sales_end, TO_CHAR(use_start, 'YYYY-MM-DD') use_start, TO_CHAR(use_end, 'YYYY-MM-DD') use_end
 		FROM ticket
 		WHERE ticketCode=#{ticketCode}
 	</select>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="schedule">
+	
+	<select id="listHotelName" resultType="com.sp.hotel.Schedule">
+   		select h.hName, h.hotelCode, count(*) count
+		from roomInfo r
+		JOIN hotelInfo h ON r.hotelCode = h.hotelCode
+		group by h.hotelCode, h.hname
+		order by h.hotelCode
+	</select>
+	
+	<select id="listRoomNum" parameterType="Integer" resultType="com.sp.hotel.Schedule">
+		select roomNum
+		from roomInfo
+		where hotelCode=#{hotelCode}
+	</select>
+
+</mapper>
