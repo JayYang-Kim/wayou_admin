@@ -40,11 +40,11 @@ function sendNotice(mode) {
 	}
   */
 	if(mode=="created") {
-		f.action="<%=cp%>/hotel/notice/insertNotice";
+		f.action="<%=cp%>/store/notice/insertNotice";
 	}
 	
 	if(mode=="update") {
-		f.action="<%=cp%>/hotel/hotelInfo/roomInfo/updateRoom";
+		f.action="<%=cp%>/store/hotelInfo/roomInfo/updateRoom";
 	}
  
 	
@@ -54,10 +54,10 @@ function sendNotice(mode) {
 
 </script>
 
-<h1 id="page_tit">숙박관리</h1>
+<h1 id="page_tit">티켓관리</h1>
 <!-- 현재 페이지 정보 -->
 <div class="page_info">
-	<h2>숙박관리</h2>
+	<h2>티켓관리</h2>
 	<p><strong>공지사항 등록</strong></p>
 </div>
 <div>
@@ -81,8 +81,8 @@ function sendNotice(mode) {
 	 </table>
 	 <div class="btn_wrap view_btn">
 		
-		<button type='button' class='button btn_blk insertHotelSubmit' onclick="sendNotice('${mode}');">${mode=='update'?'수정완료':'등록완료'}</button>
-		<button type='button' class='button btn_blk insertHotelCancel' onclick="location.href='<%=cp%>/hotel/notice/list';">${mode=='update'?'수정취소':'등록취소'}</button>
+		<button type='button' class='button btn_blk insertTicketSubmit' onclick="sendNotice('${mode}');">${mode=='update'?'수정완료':'등록완료'}</button>
+		<button type='button' class='button btn_blk insertTicketCancel' onclick="location.href='<%=cp%>/store/notice/list';">${mode=='update'?'수정취소':'등록취소'}</button>
 	 	
 	 </div>
 	 

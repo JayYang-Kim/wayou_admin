@@ -200,8 +200,8 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 	@Override
-	public List<Schedule> listRoomNum(int num) {
-		List<Schedule> listRoomNum = null;
+	public List<Integer> listRoomNum(int num) {
+		List<Integer> listRoomNum = null;
 		try {
 			listRoomNum = dao.selectList("schedule.listRoomNum", num);
 		} catch (Exception e) {
@@ -209,6 +209,44 @@ public class HotelServiceImpl implements HotelService {
 		}
 		return listRoomNum;
 	}
+
+	@Override
+	public List<String> listCheckIn(int num) {
+		List<String> listCheckIn = null;
+		try {
+			listCheckIn = dao.selectList("schedule2.listCheckIn", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listCheckIn;
+	}
+	
+	@Override
+	public List<Customer> listCustomer(Map<String, Object> map) {
+		List<Customer> list = null;
+		
+		try {
+			list = dao.selectList("customer.listCustomer",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int customerCount(Map<String, Object> map) {
+		int result=0;
+		try {
+			result=dao.selectOne("customer.customerCount", map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+
+	
 	
 	
 }

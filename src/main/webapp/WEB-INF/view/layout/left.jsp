@@ -29,7 +29,7 @@
 								<li><a href="<%=cp%>/work/list"><span class="blind">직원관리</span> 근무관리</a>
 									<div>
 										<ul>
-											<li><a href="#">출/퇴근 관리</a></li>
+											<li><a href="<%=cp%>/attendance/list">출/퇴근 관리</a></li>
 											<li><a href="<%=cp%>/work/list">근무일지</a></li>
 										</ul>
 									</div>
@@ -73,6 +73,7 @@
 							<ul>
 								<li><a href="<%=cp%>/store/main"><span class="blind">쇼핑관리</span> 티켓관리</a></li>
                                 <li><a href="<%=cp%>/store/storeInfo/list"><span class="blind">티켓관리</span> 티켓 등록ㆍ관리</a></li>
+                                <li><a href="<%=cp%>/store/notice/list"><span class="blind">티켓관리</span> 공지사항</a></li>
                                 <li><a href="#"><span class="blind">티켓관리</span> 문의사항</a></li>
                                 <li><a href="#"><span class="blind">티켓관리</span> 이벤트</a></li>
                                 <li><a href="#"><span class="blind">티켓관리</span> 고객관리</a></li>

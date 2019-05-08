@@ -2,8 +2,86 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="attendance">
-	<insert id="insertAtt">
-		INSERT INTO attendance(attendanceCode, adminIdx, startTime, endTime, created, dayTotal)
-			VALUES(attendance_seq.NEXTVAL, #{adminIdx}, #{startTime}, #{endTime}, #{created}, #{dayTotal})
+	<sql id="where-list">
+		<choose>
+			<when test="condition=='departCode'">
+				INSTR(d.departName, #{word}) &gt; 0
+			</when>
+			<when test="condition=='positionCode'">
+				INSTR(p.positionName, #{word}) &gt; 0
+			</when>
+			<when test="condition=='adminName'">
+				INSTR(adminName, #{word}) &gt; 1
+			</when>
+			<when test="condition=='created'">
+				att.created = #{word}
+			</when>
+		</choose>
+	</sql>
+
+
+	<insert id="inAtt">
+		INSERT INTO attendance(attCode, adminIdx, startTime)
+			VALUES(attCode_seq.NEXTVAL, #{adminIdx}, SYSDATE)
 	</insert>
+	
+	<select id="checkIn" parameterType="Integer" resultType="String">
+		SELECT TO_CHAR(startTime, 'YYYY-MM-DD hh24:mi') startTime FROM attendance WHERE adminIdx=#{adminIdx}
+	</select>
+
+	<select id="searchAtt" parameterType="com.sp.attendance.Attendance" resultType="com.sp.attendance.Attendance">
+		SELECT TO_CHAR(startTime, 'YYYY-MM-DD hh24:mi') startTime, attCode, created FROM attendance WHERE adminIdx=#{adminIdx} and TO_CHAR(created, 'YYYY-MM-DD') = #{today}
+	</select>
+	
+	<select id="check1" parameterType="com.sp.attendance.Attendance" resultType="Integer">
+		SELECT COUNT(startTime) FROM attendance WHERE adminIdx=#{adminIdx} and TO_CHAR(created, 'YYYY-MM-DD') = #{today}
+	</select>
+	
+	<select id="check2" parameterType="com.sp.attendance.Attendance" resultType="Integer">
+		SELECT COUNT(endTime) FROM attendance WHERE adminIdx=#{adminIdx} and TO_CHAR(created, 'YYYY-MM-DD') = #{today}
+	</select>
+	
+	<update id="outAtt" parameterType="com.sp.attendance.Attendance">
+		UPDATE attendance SET endTime=SYSDATE WHERE adminIdx=#{adminIdx} and TO_CHAR(created, 'YYYY-MM-DD') = #{today}
+	</update>
+	
+	<update id="outAtt2" parameterType="com.sp.attendance.Attendance">
+		UPDATE attendance SET dayTotal = TO_CHAR(endTime-startTime)*(24*60) WHERE attCode=#{attCode}
+	</update>
+	
+	<select id="check3" parameterType="com.sp.attendance.Attendance" resultType="com.sp.attendance.Attendance">
+		SELECT attCode FROM attendance WHERE adminIdx=#{adminIdx} and TO_CHAR(created, 'YYYY-MM-DD') = #{today}
+	</select>
+	
+	<select id="check4" parameterType="com.sp.attendance.Attendance" resultType="com.sp.attendance.Attendance">
+		SELECT dayTotal, TO_CHAR(startTime, 'YYYY-MM-DD hh24:mi') startTime, TO_CHAR(endTime, 'YYYY-MM-DD hh24:mi') endTime  FROM attendance WHERE attCode=#{attCode}
+	</select>
+	
+	<select id="check5" parameterType="com.sp.attendance.Attendance" resultType="com.sp.attendance.Attendance">
+		SELECT dayTotal, TO_CHAR(startTime, 'YYYY-MM-DD hh24:mi') startTime, TO_CHAR(endTime, 'YYYY-MM-DD hh24:mi') endTime  FROM attendance WHERE adminIdx=#{adminIdx} and TO_CHAR(created, 'YYYY-MM-DD') = #{today}
+	</select>
+
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*),0) FROM admin a
+			JOIN attendance att ON att.adminIdx = a.adminIdx
+			JOIN department d ON d.departCode = a.departCode
+			JOIN position p ON p.positionCode = a.positionCode
+			<where>
+				<if test="word != null and word != '' ">
+					<include refid="where-list"/>
+				</if>
+			</where>
+	</select>
+	
+	<select id="listAtt" parameterType="map" resultType="com.sp.attendance.Attendance">
+		SELECT a.adminName, d.departName, p.positionName, att.startTime, att.endTime, att.dayTotal, TO_CHAR(att.created, 'YYYY-MM-DD') created FROM admin a
+			JOIN attendance att ON att.adminIdx = a.adminIdx
+			JOIN department d ON d.departCode = a.departCode
+			JOIN position p ON p.positionCode = a.positionCode
+			<where>
+				<if test="word != null and word != '' ">
+					<include refid="where-list"/>
+				</if>
+			</where>
+	</select>
 </mapper>

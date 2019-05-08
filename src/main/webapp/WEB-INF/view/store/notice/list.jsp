@@ -7,10 +7,10 @@
 %>
 
 
-<h1 id="page_tit">숙박관리</h1>
+<h1 id="page_tit">티켓관리</h1>
 <!-- 현재 페이지 정보 -->
 <div class="page_info">
-	<h2>숙박관리</h2>
+	<h2>티켓관리</h2>
 	<p><strong>공지사항</strong></p>
 </div>
 
@@ -38,6 +38,6 @@
 		</table>
 		<div class="btn_wrap view_btn">
 				<button class="button btn" type="button" 
-					onclick="location.href='<%=cp%>/hotel/notice/insertNotice';">공지사항 등록</button>
+					onclick="location.href='<%=cp%>/store/notice/insertNotice';">공지사항 등록</button>
 			</div>
 	</div>

@@ -37,7 +37,24 @@ $(function(){
 	      $("#tb").append($tr);
 	  });
 });
+
+
+
+$(function(){
+
+    $("#date1").datepicker();
+    $("#date2").datepicker();
+    $("#date3").datepicker();
+    $("#date4").datepicker();
+
+});
+
 </script>
+
+
+
+
+
 
 
 
@@ -59,19 +76,19 @@ $(function(){
 	 	</tr>
 	 	<tr>
 	 		<th>판매시작날짜</th>
-	 		<td><input type="text" name="sales_start" value="${dto.sales_start}"></td>
+	 		<td><input type="text" name="sales_start" id="date1" value="${dto.sales_start}"></td>
 	 	</tr>
 	 	<tr>
 	 		<th>판매마감날짜</th>
-	 		<td><input type="text" name="sales_end" value="${dto.sales_end}"></td>
+	 		<td><input type="text" name="sales_end" id="date2" value="${dto.sales_end}"></td>
 	 	</tr>
 	 	<tr>
 	 		<th>사용시작날짜</th>
-	 		<td><input type="text" name="use_start" value="${dto.use_start}"></td>
+	 		<td><input type="text" name="use_start" id="date3" value="${dto.use_start}"></td>
 	 	</tr>
 	 	<tr>
 	 		<th>사용마감날짜</th>
-	 		<td><input type="text" name="use_end" value="${dto.use_end}"></td>
+	 		<td><input type="text" name="use_end" id="date4" value="${dto.use_end}"></td>
 	 	</tr>
       	<tr>
 	 		<th>티켓 이미지 등록</th>
@@ -79,6 +96,8 @@ $(function(){
 				<input type="file" name="upload" class="boxTF" size="53" accept="image/*" >
 			</td>
 	 	</tr>
+	 	<tr>
+
 	 	</tbody> 
 	 	
 	 	<c:if test="${mode=='update'}">

@@ -1,20 +1,16 @@
 package com.sp.hotel;
 
+import java.util.List;
 
 public class Schedule {
 	private String hName;
 	private int count;
 	private int hotelCode;
-	private int roomNum;
 	private int day;
 	
+	private List<Integer> roomNum;
 	
-	public int getRoomNum() {
-		return roomNum;
-	}
-	public void setRoomNum(int roomNum) {
-		this.roomNum = roomNum;
-	}
+
 	public int getDay() {
 		return day;
 	}
@@ -39,6 +35,13 @@ public class Schedule {
 	public void sethName(String hName) {
 		this.hName = hName;
 	}
+	public List<Integer> getRoomNum() {
+		return roomNum;
+	}
+	public void setRoomNum(List<Integer> roomNum) {
+		this.roomNum = roomNum;
+	}
+
 		
 	
 

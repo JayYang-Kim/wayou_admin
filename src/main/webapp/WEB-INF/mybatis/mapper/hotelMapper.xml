@@ -11,13 +11,13 @@
 	<sql id="where-list">
 		<choose>
 			<when test="searchKey == 'hname'">
-				INSTR(hname, #{keyword}) &gt; 0
+				INSTR(hname, #{searchValue}) &gt; 0
 			</when>
 			<when test="searchKey == 'location'">
-				INSTR(locName, #{keyword}) &gt; 0
+				INSTR(locName, #{searchValue}) &gt; 0
 			</when>
 			<when test="searchKey == 'hname'">
-				INSTR(name, #{keyword}) &gt; 0
+				INSTR(name, #{searchValue}) &gt; 0
 			</when>
 		</choose>
 	</sql>
@@ -28,7 +28,7 @@
 		FROM hotelInfo h
 		JOIN locationCode3 l ON h.loccode=l.loccode
 		<where>
-			<if test="keyword!=null and keyword!=''">
+			<if test="searchValue!=null and searchValue!=''">
 				<include refid="where-list"/>
 			</if>
 		</where>
@@ -42,7 +42,7 @@
         		FROM hotelInfo h
         		JOIN locationCode3 l ON h.loccode=l.loccode
         		<where>
-        			<if test="keyword!=null and keyword!=''">
+        			<if test="searchValue!=null and searchValue!=''">
 						<include refid="where-list"/>
 					</if> 
         		</where>
