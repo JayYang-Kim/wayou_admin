@@ -34,7 +34,7 @@
 	<select id="listNotice" parameterType="map" resultType="com.sp.board.Notice">
 		SELECT * FROM (
     		SELECT ROWNUM rnum, tb.* FROM (
-        		SELECT noticeNum, subject, content, adminIdx, TO_CHAR(created, 'YYYY-MM-DD') created
+        		SELECT noticeNum, subject, adminIdx, TO_CHAR(created, 'YYYY-MM-DD') created
         		FROM ${tname}notice
         		<where>
         			<if test="searchValue!=null and searchValue!=''">
@@ -49,8 +49,9 @@
 	</select>
 	
 	<select id="readNotice" parameterType="Integer" resultType="com.sp.board.Notice">
-		SELECT hotelCode, hname,address1, address2, information, tel, email, name, savefilename, loccode, postcode
-		FROM hotelInfo
-		WHERE hotelCode=#{hotelCode}
+		SELECT noticeNum, subject, content, a.adminIdx, a.adminName, a.adminId, e.created
+		FROM ${tname}notice e
+		JOIN admin a ON a.adminIdx=e.adminIdx
+		WHERE noticeNum=#{noticeNum}
 	</select>
 </mapper>

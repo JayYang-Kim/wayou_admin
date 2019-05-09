@@ -13,9 +13,17 @@ function changeDate(year, month) {
 }
 
 </script>
-<div style="text-align: center;">
 
-<h1 style="color:tomato;">TODAY</h1><h1>${todayMonth}월&nbsp;${todayDate}일</h1></div>
+<h1 id="page_tit">숙박관리</h1>
+<!-- 현재 페이지 정보 -->
+<div class="page_info">
+	<h2>숙박관리</h2>
+	<p><strong>예약관리</strong></p>
+</div>
+
+<div style="text-align: center;">
+	<h1 style="color:tomato;">TODAY</h1><h1>${todayMonth}월&nbsp;${todayDate}일</h1>
+</div>
 
 <table >
 	<tr height="60">

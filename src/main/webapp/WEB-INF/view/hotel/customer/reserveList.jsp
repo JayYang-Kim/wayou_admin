@@ -16,10 +16,15 @@ $(function(){
 
 </script>
 
+<h1 id="page_tit">숙박관리</h1>
+<!-- 현재 페이지 정보 -->
+<div class="page_info">
+	<h2>숙박관리</h2>
+	<p><strong>고객관리</strong></p>
+</div>
+
 <div class="body" style="height: 800px;">
-	<div style="height: 50px;">
-		<h1>예약고객List</h1>
-	</div>
+	
 	<div class="list_search_wrap">
 		<div class="list_search">
 			검색날짜&nbsp;

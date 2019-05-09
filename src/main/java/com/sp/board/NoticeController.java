@@ -1,6 +1,7 @@
 package com.sp.board;
 
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,8 @@ public class NoticeController {
 			HttpServletRequest req,
 			Model model) throws Exception {
 
+		String cp = req.getContextPath();
+		
 		if(req.getMethod().equalsIgnoreCase("GET")) {
 			searchValue=URLDecoder.decode(searchValue, "UTF-8");
 		}
@@ -66,8 +69,23 @@ public class NoticeController {
 		map.put("tname", tname);
 		List<Notice> list = noticeService.listNotice(map);
 
-		String paging = myUtil.paging(current_page, total_page);
+		String query = "";
+        String listUrl = cp+"/"+tname+"/notice/list";
+        String articleUrl = cp+"/"+tname+"/notice/article?page=" + current_page;
+        if(searchValue.length()!=0) {
+        	query = "searchKey=" +searchKey + 
+        	         "&keyword=" + URLEncoder.encode(searchValue, "utf-8");	
+        }
+        
+        if(query.length()!=0) {
+        	listUrl = cp+"/"+tname+"/notice/list?" + query;
+        	articleUrl = cp+"/"+tname+"/notice/article?page=" + current_page + "&"+ query;
+        }
+		
+        String paging = myUtil.paging(current_page, total_page, listUrl);
+		
 		model.addAttribute("list", list);
+		model.addAttribute("articleUrl", articleUrl);
 		model.addAttribute("noticeCount", noticeCount);
 		model.addAttribute("page", current_page);
 		model.addAttribute("paging", paging);
@@ -101,5 +119,49 @@ public class NoticeController {
 		noticeService.insertNotice(dto);
 		
 		return "redirect:/"+tname+"/notice/list";
+	}
+	
+	@RequestMapping(value="/{tname}/notice/article")
+	public String article(
+			@PathVariable String tname,
+			@RequestParam int noticeNum,
+			@RequestParam String page,
+			@RequestParam(defaultValue="subject") String searchKey,
+			@RequestParam(defaultValue="") String searchValue,
+			Model model) throws Exception {
+		
+		searchValue = URLDecoder.decode(searchValue, "utf-8");
+		
+		String query="page="+page;
+		if(searchValue.length()!=0) {
+			query+="&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "UTF-8");
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+	
+		map.put("noticeNum", noticeNum);
+		map.put("tname", tname);
+		// 해당 레코드 가져 오기
+		Notice dto = noticeService.readNotice(map);
+		if(dto==null)
+			return "redirect:/"+tname+"/notice/listNotice?"+query;
+        
+		// 이전 글, 다음 글
+		
+		map.put("searchKey", searchKey);
+		map.put("searchValue", searchValue);
+		map.put("noticeNum", noticeNum);
+		map.put("tname", tname);
+
+		//Event preReadDto = service.preReadBoard(map);
+		//Event nextReadDto = service.nextReadBoard(map);
+        
+		model.addAttribute("dto", dto);
+		//model.addAttribute("preReadDto", preReadDto);
+		//model.addAttribute("nextReadDto", nextReadDto);
+
+		model.addAttribute("page", page);
+		model.addAttribute("query", query);
+
+        return "."+tname+".notice.article";
 	}
 }

@@ -7,6 +7,6 @@ public interface NoticeService {
 	public int insertNotice(Notice dto);
 	public List<Notice> listNotice(Map<String , Object> map);
 	public int dataCount(Map<String, Object> map);
-	public Notice readNotice(int num);
+	public Notice readNotice(Map<String, Object> map);
 	public int updateHitCount(int num);
 }

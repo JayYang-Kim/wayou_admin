@@ -53,10 +53,19 @@ public class NoticeServiceImpl implements NoticeService {
 		return result;
 	}
 
+
 	@Override
-	public Notice readNotice(int num) {
-		// TODO Auto-generated method stub
-		return null;
+	public Notice readNotice(Map<String, Object> map) {
+		Notice dto=null;
+		
+		try{
+			// 게시물 가져오기
+			dto=dao.selectOne("notice.readNotice", map);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
 	}
 
 	@Override
