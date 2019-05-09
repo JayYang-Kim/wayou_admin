@@ -1,6 +1,8 @@
 package com.sp.hotel;
 
+
 import java.util.Calendar;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,11 +72,35 @@ public class ScheduleController {
 
 		
 		List<Schedule> listHotelName = hotelService.listHotelName();
-		List<Schedule> listFirstRoomNum = hotelService.listFirstRoomNum();
+		for( Schedule s : listHotelName ) {
+			s.setRoomNum(hotelService.listRoomNum(s.getHotelCode()));
+		}
+			
+		// List<Schedule2> listReserve = hotelService.listReserve();
+		/*
+		for(Schedule2 s2 : listReserve) {
+			//int month = cal.get ( cal.MONTH ) + 1 
 
+			
+
+
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	       // Date beginDate = formatter.parse(s2.getCheckIn());
+	       //  Date endDate = formatter.parse(s2.getCheckOut());
+	         
+	        // 시간차이를 시간,분,초를 곱한 값으로 나누면 하루 단위
+	        //long diff = endDate.getTime() - beginDate.getTime();
+	        //long diffDays = diff / (24 * 60 * 60 * 1000);
+	       	       
+
+
+	
+		}
+	*/
+		
 		
 		model.addAttribute("listHotelName", listHotelName);
-		model.addAttribute("listFirstRoomNum", listFirstRoomNum);
+
 		
 		model.addAttribute("year", year);
 		model.addAttribute("month", month);

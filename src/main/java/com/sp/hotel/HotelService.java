@@ -19,8 +19,12 @@ public interface HotelService {
 	public List<Room> listFile(int num);
 	
 	public List<Schedule> listHotelName();
-	public List<Schedule> listRoomNum(int num);
-	public List<Schedule> listFirstRoomNum();
+	public List<Integer> listRoomNum(int num);
+	
+	public List<String> listCheckIn(int num);
+
+	
+	
 	
 	public List<Customer> listCustomer(Map<String, Object> map);
 	public int customerCount(Map<String, Object> map);

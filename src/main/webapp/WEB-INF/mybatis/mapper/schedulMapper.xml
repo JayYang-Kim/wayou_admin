@@ -11,18 +11,16 @@
 		order by h.hotelCode
 	</select>
 	
-	<select id="listRoomNum" parameterType="Integer" resultType="com.sp.hotel.Schedule">
-		select min(roomNum), hotelCode
+	<select id="listRoomNum" parameterType="Integer" resultType="Integer">
+		select roomNum
 		from roomInfo
-		group by hotelCode
-		order by hotelCode
+		where hotelCode=#{hotelCode}
+		order by roomNum
 	</select>
 	
-	<select id="firstRoomNum" resultType="com.sp.hotel.Schedule">
-		select min(roomNum) roomNum, hotelCode
-		from roomInfo
-		group by hotelCode
-		order by hotelCode
-	</select>
+
+	
+	
+	
 
 </mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="schedule2">
+
+
+	<select id="listReserve" resultType="com.sp.hotel.Schedule2">
+		select checkin, checkout, roomNum, userIdx, r.hotelCode
+		from roomreserinfo re
+		JOIN roomInfo r ON re.roomCode = r.roomCode
+		JOIN hotelInfo h ON h.hotelCode = r.hotelCode
+		order by r.hotelCode, re.roomCode
+	</select>
+		
+	
+	<select id="listCheckIn" parameterType="Integer" resultType="String">
+		select checkIn, checkOut, roomCode, userIdx
+		from roomreserinfo
+		where roomCode=#{roomCode}
+		order by checkIn
+	</select>
+	
+	
+	
+	
+
+</mapper>
