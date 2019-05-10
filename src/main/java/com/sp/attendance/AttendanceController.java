@@ -113,7 +113,13 @@ public class AttendanceController {
 		int adminIdx=info.getAdminIdx();
 		String startTime=null;
 		try {
-			startTime=att.inAtt(adminIdx);
+			Attendance dto = new Attendance();
+			String today=att.today();
+			
+			dto.setAdminIdx(adminIdx);
+			dto.setToday(today);
+			
+			startTime=att.inAtt(dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -132,10 +138,11 @@ public class AttendanceController {
 		
 		try {
 			String today=att.today();
-			dto.setToday(today);
 			dto.setAdminIdx(adminIdx);
+			dto.setToday(today);
 			
 			int result=att.checkAtt(dto);
+			
 			if(result==0) {//출근 없음
 				
 			}
