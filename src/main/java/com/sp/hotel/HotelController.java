@@ -105,11 +105,6 @@ public class HotelController {
 		return "redirect:/hotel/hotelInfo/list";
 	}
 	
-	@RequestMapping(value="/hotel/event/listEvent")
-	public String listEvent() {
-		return ".hotel.event.listEvent";
-	}
-	
 	@RequestMapping(value="/hotel/hotelInfo/updateHotel", method=RequestMethod.GET)
 	public String updateHotelForm(
 			@RequestParam int hotelCode,

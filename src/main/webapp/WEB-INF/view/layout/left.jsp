@@ -48,7 +48,7 @@
                                 <li><a href="<%=cp%>/travel/admin/chart"><span class="blind">여행관리</span> 통계 데이터</a></li>
                                 <li><a href="<%=cp%>/travel/admin/party/list"><span class="blind">여행관리</span> 여행동료 관리</a></li>
                                 <li><a href="<%=cp%>/travel/admin/board/notice/list"><span class="blind">여행관리</span> 공지사항</a></li>
-                                <li><a href="<%=cp%>/travel/admin/board/qna/list"><span class="blind">여행관리</span> 문의사항</a></li>
+                                <li><a href="<%=cp%>/travel/admin/qna/list"><span class="blind">여행관리</span> 문의사항</a></li>
                                 <li><a href="<%=cp%>/travel/admin/board/event/list"><span class="blind">여행관리</span> 이벤트</a></li>
 							</ul>
 						</div>
