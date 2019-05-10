@@ -14,7 +14,7 @@ public class Answer {
 		this.answerCode = answerCode;
 	}
 	public int getQnaCode() {
-		return qnaCode;
+		return qnaCode; 
 	}
 	public void setQnaCode(int qnaCode) {
 		this.qnaCode = qnaCode;
