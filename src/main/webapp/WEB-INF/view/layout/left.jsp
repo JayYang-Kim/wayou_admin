@@ -59,10 +59,10 @@
                                 <li><a href="<%=cp%>/hotel/hotelInfo/list"><span class="blind">숙박관리</span> 호텔 등록ㆍ관리</a></li>
                                 <li><a href="<%=cp%>/hotel/reserve/reserveSchedule"><span class="blind">숙박관리</span> 예약관리</a></li>
                                 <li><a href="<%=cp%>/hotel/notice/list"><span class="blind">숙박관리</span> 공지사항</a></li>
-                                <li><a href="#"><span class="blind">숙박관리</span> 문의사항</a></li>
+                                <li><a href="<%=cp%>/hotel/qna/list?catCode=2"><span class="blind">숙박관리</span> 문의사항</a></li>
                                 <li><a href="<%=cp%>/hotel/event/listEvent"><span class="blind">숙박관리</span> 이벤트</a></li>
                                 <li><a href="<%=cp%>/hotel/customer/reserveList"><span class="blind">숙박관리</span> 고객관리</a></li>
-                                <li><a href="#"><span class="blind">숙박관리</span> 자주하는 질문</a></li>
+                                <li><a href="<%=cp%>/hotel/faq/list"><span class="blind">숙박관리</span> 자주하는 질문</a></li>
                                 <li><a href="#"><span class="blind">숙박관리</span> 매출내역</a></li>
                                 <li><a href="#"><span class="blind">숙박관리</span> 후기관리</a></li>
 							</ul>
@@ -74,8 +74,8 @@
 								<li><a href="<%=cp%>/store/main"><span class="blind">쇼핑관리</span> 티켓관리</a></li>
                                 <li><a href="<%=cp%>/store/storeInfo/list"><span class="blind">티켓관리</span> 티켓 등록ㆍ관리</a></li>
                                 <li><a href="<%=cp%>/store/notice/list"><span class="blind">티켓관리</span> 공지사항</a></li>
-                                <li><a href="#"><span class="blind">티켓관리</span> 문의사항</a></li>
-                                <li><a href="#"><span class="blind">티켓관리</span> 이벤트</a></li>
+                                <li><a href="<%=cp%>/store/qna/list?catCode=1"><span class="blind">티켓관리</span> 문의사항</a></li>
+                                <li><a href="<%=cp%>/store/event/listEvent"><span class="blind">티켓관리</span> 이벤트</a></li>
                                 <li><a href="#"><span class="blind">티켓관리</span> 고객관리</a></li>
                                 <li><a href="#"><span class="blind">티켓관리</span> 자주하는 질문</a></li>
                                 <li><a href="#"><span class="blind">티켓관리</span> 매출내역</a></li>

@@ -45,7 +45,7 @@ public class EventController {
 			Model model) throws Exception {
 		
    	    String cp = req.getContextPath();
-   	    System.out.println(tname);
+   	    
 		int rows = 10; // 한 화면에 보여주는 게시물 수
 		int total_page = 0;
 		int eventCount = 0;
