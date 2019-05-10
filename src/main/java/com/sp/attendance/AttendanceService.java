@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface AttendanceService {
-	public String inAtt(int adminIdx) throws Exception;
+	public String inAtt(Attendance dto) throws Exception;
 	public String today() throws Exception;
 	public int checkAtt(Attendance dto) throws Exception;
 	public int outAtt(Attendance dto) throws Exception;

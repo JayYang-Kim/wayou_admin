@@ -15,20 +15,21 @@ public class AttendanceServiceImpl implements AttendanceService {
 	private CommonDAO dao;
 	
 	@Override
-	public String inAtt(int adminIdx) throws Exception {
-		String result=null;
-		
+	public String inAtt(Attendance dto) throws Exception {
+		int result=0;
+		String startTime=null;
 		try {
-			result=dao.selectOne("attendance.checkIn", adminIdx);
-			if(result!=null) {
-				return result;
+			result=dao.selectOne("attendance.checkIn", dto);
+			if(result !=0) {
+				startTime=dao.selectOne("attendance.indate", dto);
+			} else {
+			dao.insertData("attendance.inAtt", dto);
+			startTime=dao.selectOne("attendance.indate", dto);
 			}
-			dao.insertData("attendance.inAtt", adminIdx);
-			result=dao.selectOne("attendance.checkIn", adminIdx);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return startTime;
 	}
 
 	@Override
@@ -62,11 +63,11 @@ public class AttendanceServiceImpl implements AttendanceService {
 		int result=0;
 			try {
 				result=dao.selectOne("attendance.check1", dto);
-				if(result==0) {
-					return result;
+				if(result==0) {  //출근
+					return result=0;
 				}
 				result=dao.selectOne("attendance.check2", dto);
-				if(result==0) {
+				if(result==0) {  //퇴근
 					return result=1;
 				}
 			} catch (Exception e) {
