@@ -1,9 +1,5 @@
 package com.sp.board;
 
-/**
- * @author sist
- *
- */
 public class Qna {
 	private int listNum; //리스트번호
 	private int qnaCode; //문의코드
@@ -16,6 +12,9 @@ public class Qna {
 	private String userName; //작성자
 	private int hitCount; // 조회수
 	private int answerCount; // 답변 카운트 (0 : 대기, 1이상 : 답변 완료)
+	private int adminIdx;
+	private String adminId;
+	private String adminName;
 	private String answerCreated; //답변 작성일
 	private String answerContent; //답변 내용
 	
@@ -98,5 +97,23 @@ public class Qna {
 	}
 	public void setAnswerContent(String answerContent) {
 		this.answerContent = answerContent;
+	}
+	public String getAdminId() {
+		return adminId;
+	}
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
+	}
+	public String getAdminName() {
+		return adminName;
+	}
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+	public int getAdminIdx() {
+		return adminIdx;
+	}
+	public void setAdminIdx(int adminIdx) {
+		this.adminIdx = adminIdx;
 	}
 }

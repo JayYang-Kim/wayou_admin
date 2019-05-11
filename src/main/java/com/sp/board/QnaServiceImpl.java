@@ -13,10 +13,10 @@ public class QnaServiceImpl implements QnaService{
 	@Autowired
 	private CommonDAO dao;
 	@Override
-	public int insertBoard(Qna dto) {
+	public int insertAnswer(Qna dto) {
 		int result=0;
 		try {
-			result=dao.insertData("tqna.insertBoard", dto);
+			result=dao.insertData("qna.insertAnswer", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -28,7 +28,7 @@ public class QnaServiceImpl implements QnaService{
 		List<Qna> list = null;
 		
 		try {
-			list=dao.selectList("tqna.listBoard", map);
+			list=dao.selectList("qna.listBoard", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -40,7 +40,7 @@ public class QnaServiceImpl implements QnaService{
 		int result=0;
 		
 		try {
-			result=dao.selectOne("tqna.dataCount", map);
+			result=dao.selectOne("qna.dataCount", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,7 +52,7 @@ public class QnaServiceImpl implements QnaService{
 		Qna dto = null;
 		
 		try {
-			dto=dao.selectOne("tqna.readBoard", num);
+			dto=dao.selectOne("qna.readBoard", num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -64,7 +64,7 @@ public class QnaServiceImpl implements QnaService{
 		int result=0;
 		
 		try {
-			result=dao.updateData("tqna.updateHitCount", num);
+			result=dao.updateData("qna.updateHitCount", num);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,7 +77,7 @@ public class QnaServiceImpl implements QnaService{
 		int result=0;
 		
 		try {
-			result=dao.updateData("tqna.updateBoard", dto);
+			result=dao.updateData("qna.updateBoard", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,7 +90,7 @@ public class QnaServiceImpl implements QnaService{
 		int result=0;
 		
 		try {
-			result=dao.deleteData("tqna.deleteBoard", num);
+			result=dao.deleteData("qna.deleteBoard", num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -102,7 +102,7 @@ public class QnaServiceImpl implements QnaService{
 		int result=0;
 		
 		try {
-			result=dao.selectOne("tqna.readHitCount", num);
+			result=dao.selectOne("qna.readHitCount", num);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

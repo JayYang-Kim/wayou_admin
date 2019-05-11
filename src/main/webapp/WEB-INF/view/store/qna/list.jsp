@@ -16,7 +16,7 @@ $(function(){
 		var $this = $(this).closest("tr");
 		if(isHidden) {
 			var qnaCode=$(this).attr("data-Num");
-			var url = "<%=cp%>/hotel/qna/hitCount";
+			var url = "<%=cp%>/store/qna/hitCount";
 			var query="qnaCode="+qnaCode;
 			$.ajax({
 				type:"post"
@@ -47,13 +47,6 @@ $(function(){
 		}
 	});
 	
-	//글수정
-	$("body").on("click", ".btn_update", function(){
-		var qnaCode = $(this).attr("data-qnaCode");
-		
-		var url="<%=cp%>/hotel/qna/update?qnaCode=" + qnaCode + "&page=${page}";
-		location.href=url;
-	});
 	
 	//글삭제
 	$("body").on("click", ".btn_delete", function(){
@@ -77,10 +70,10 @@ function searchList() {
 
       
  
-<h1 id="page_tit">숙박관리</h1>
+<h1 id="page_tit">티켓관리</h1>
 <!-- 현재 페이지 정보 -->
 <div class="page_info">
-	<h2>숙박관리</h2>
+	<h2>티켓관리</h2>
 	<p><strong>문의사항</strong></p>
 </div>
 
@@ -137,11 +130,11 @@ function searchList() {
 					</div>
 					<div align="right" style="margin-right: 30px;">
 					<c:if  test="${dto.answerCount == 0 && (sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1')}">
-						<button type="button" class="btn_classic btn_answer" style="border-radius: 3px;" onclick="javascript:location.href='<%=cp%>/hotel/qna/insertAnswer?qnaCode=${dto.qnaCode}&page=${page}&catCode=${dto.catCode}';">답변 등록하기</button>
+						<button type="button" class="btn_classic btn_answer" style="border-radius: 3px;" onclick="javascript:location.href='<%=cp%>/store/qna/insertAnswer?qnaCode=${dto.qnaCode}&page=${page}&catCode=${dto.catCode}';">답변 등록하기</button>
 					</c:if>
 				
-					<!-- 삭제 - admin 권한추가해야함 -->
-				<c:if test="">
+					
+				<c:if test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1'}">
 					<button type="button" class="btn_classic btn_delete" style="border-radius: 3px;" data-qnaCode='${dto.qnaCode}'>삭제</button>
 				</c:if>
 					</div>
@@ -168,7 +161,7 @@ function searchList() {
 		<table style="width: 100%; margin: 30px auto; border-spacing: 0px;">
 		   <tr height="40">
 		      <td align="left" width="100">
-		          <button type="button" class="btn_classic" style="font-size: 15px; height: 30px; border-radius: 5px;" onclick="javascript:location.href='<%=cp%>/hotel/qna/list?catCode=2';">새로고침</button>
+		          <button type="button" class="btn_classic" style="font-size: 15px; height: 30px; border-radius: 5px;" onclick="javascript:location.href='<%=cp%>/store/qna/list?catCode=2';">새로고침</button>
 		      </td>
       		<td align="center">
 	          <form name="searchForm" action="<%=cp%>/ticket/qna/list" method="post">

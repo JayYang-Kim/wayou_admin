@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface QnaService {
-	public int insertBoard(Qna dto);
+	public int insertAnswer(Qna dto);
 	public List<Qna> listBoard(Map<String, Object> map);
 	public int dataCount(Map<String, Object> map);
 	public Qna readBoard(int num);
