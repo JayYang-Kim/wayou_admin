@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="faq">
 
-	<insert id="insertAnswer" parameterType="com.sp.board.Faq">
+	<insert id="insertFaq" parameterType="com.sp.board.Faq">
 		INSERT INTO ${tname}faq(faqNum, subject, content, adminIdx)
 		VALUES (${tname}faq_seq.NEXTVAL, #{subject}, #{content,  jdbcType=CLOB}, #{adminIdx})
 	</insert>
@@ -44,7 +44,7 @@
 	</select>
 	
 	<!-- 글리스트 -->
-	<select id="listBoard" parameterType="map" resultType="com.sp.board.Faq">
+	<select id="listFaq" parameterType="map" resultType="com.sp.board.Faq">
 		SELECT * FROM (
 	    	SELECT ROWNUM rnum, tb.* FROM (
 	        	SELECT faqNum, subject, content,  a.adminIdx, a.adminId, a.adminName

@@ -64,7 +64,7 @@ public class FaqController {
 		map.put("start", start);
 		map.put("end", end);
 		map.put("tname", tname);
-		List<Faq> list = faqService.listBoard(map);
+		List<Faq> list = faqService.listFaq(map);
 		
 		int listNum, n=0;
 		for(Faq dto : list) {
@@ -99,45 +99,34 @@ public class FaqController {
 		return "."+tname+".faq.list";
 	}
 	
-	@RequestMapping(value="/{tname}/faq/insertAnswer", method=RequestMethod.GET)
+	
+	@RequestMapping(value="/{tname}/faq/insertFaq", method=RequestMethod.GET)
 	public String insertAnswerForm(
 			@PathVariable String tname,
 			@RequestParam String page,
-			@RequestParam int faqCode,
 			Model model) throws Exception {
 
-		Faq dto = faqService.readBoard(faqCode);
-		
-		if(dto==null) {
-			return "redirect:/"+tname+"/faq/list?page="+page;
-		}
-
-		model.addAttribute("dto", dto);
 		model.addAttribute("page", page);
-		model.addAttribute("faqCode", faqCode);
 		
-		return "."+tname+".faq.answer";
+		return "."+tname+".faq.insertFaq";
 	}
 
 
-	@RequestMapping(value="/{tname}/faq/insertAnswer", method=RequestMethod.POST)
+	@RequestMapping(value="/{tname}/faq/insertFaq", method=RequestMethod.POST)
 	public String insertAnswerSubmit(
 			@PathVariable String tname,
 			@RequestParam String page,
-			@RequestParam int faqCode,
 			HttpSession session,
 			Faq dto) {
-		
-		
 		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		
 		dto.setAdminIdx(info.getAdminIdx());
 		dto.setTname(tname);
 		
-		faqService.insertAnswer(dto);
+		faqService.insertFaq(dto);
 		
-		return "redirect:/"+tname+"/faq/list??page="+page;
+		return "redirect:/"+tname+"/faq/list?page="+page;
 	}
 	
 }

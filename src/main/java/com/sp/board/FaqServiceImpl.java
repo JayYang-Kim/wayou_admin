@@ -8,17 +8,17 @@ import org.springframework.stereotype.Service;
 
 import com.sp.common.dao.CommonDAO;
 
-@Service("board.faqBoardService")
-public class FaqBoardServiceImpl implements FaqService{
+@Service("board.faqService")
+public class FaqServiceImpl implements FaqService{
 	@Autowired
 	private CommonDAO dao;
 
 	@Override
-	public List<Faq> listBoard(Map<String, Object> map) {
+	public List<Faq> listFaq(Map<String, Object> map) {
 		List<Faq> list = null;
 		
 		try {
-			list=dao.selectList("faq.listBoard", map);
+			list=dao.selectList("faq.listFaq", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,10 +50,10 @@ public class FaqBoardServiceImpl implements FaqService{
 	}
 
 	@Override
-	public int insertAnswer(Faq dto) {
+	public int insertFaq(Faq dto) {
 		int result=0;
 		try {
-			result=dao.insertData("faq.insertBoard", dto);
+			result=dao.insertData("faq.insertFaq", dto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
