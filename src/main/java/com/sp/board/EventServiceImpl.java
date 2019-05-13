@@ -246,7 +246,6 @@ public class EventServiceImpl implements EventService{
 		Event dto=null;
 		
 		try{
-			// 게시물 가져오기
 			dto=dao.selectOne("event.readEvent", num);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -261,7 +260,6 @@ public class EventServiceImpl implements EventService{
 		Event dto=null;
 		
 		try{
-			// 게시물 가져오기
 			dto=dao.selectOne("event.readEvent", num);
 		} catch(Exception e) {
 			e.printStackTrace();
