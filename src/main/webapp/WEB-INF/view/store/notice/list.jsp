@@ -15,7 +15,14 @@
 </div>
 
 <div class="hotel-body" style="width: 100%;">
-		<table class="table td_bor_no" style="width: 100%;">
+		<table class="table tbl_hover td_bor_no" style="width: 100%;">
+			<colgroup>
+			<col style="width:10%" />
+			<col style="width:50%" />
+			<col style="width:20%" />
+			<col style="width:20%" />
+
+		</colgroup>
 			<thead>
 				<tr>
 					<th width="100">번호</th>
@@ -28,7 +35,9 @@
 				<c:forEach var="dto" items="${list}">
 					<tr>
 						<td>${dto.noticeNum}</td>
-						<td>${dto.subject}</td>
+						<td>
+							<a href="${articleUrl}&noticeNum=${dto.noticeNum}">${dto.subject}</a>
+						</td>
 						<td>${dto.adminIdx}</td>
 						<td>${dto.created}</td>
 					</tr>

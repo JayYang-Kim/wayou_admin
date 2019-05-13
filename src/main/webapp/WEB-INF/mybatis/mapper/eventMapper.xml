@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="event">
+	<insert id="insertEvent" parameterType="com.sp.board.Event">
+		INSERT INTO ${tname}event(eventNum, subject, content, adminIdx, saveFilename, originalFilename)
+			VALUES(${tname}event_seq.NEXTVAL, #{subject}, #{content, jdbcType=VARCHAR}, #{adminIdx}, #{saveFilename, jdbcType=VARCHAR}, 
+	           #{originalFilename, jdbcType=VARCHAR})
+	</insert>
+
+
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'all' ">
+			   (INSTR(subject, #{searchValue}) &gt; 0
+		          OR DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0)
+			</when>
+			<when test="searchKey == 'subject'">
+				INSTR(subject, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'content'">
+				INSTR(content, #{searchValue}) &gt; 0
+			</when>
+		</choose>
+	</sql>
+	
+
+	<select id="eventCount" parameterType="map" resultType="Integer">
+		SELECT NVL(count(*),0)
+		FROM ${tname}event
+		<where>
+			<if test="searchValue!=null and searchValue!=''">
+				<include refid="where-list"/>
+			</if>
+		</where>
+	</select>
+	
+
+	<select id="listEvent" parameterType="map" resultType="com.sp.board.Event">
+		SELECT * FROM (
+    		SELECT ROWNUM rnum, tb.* FROM (
+        		SELECT e.eventNum, subject, e.adminIdx, adminId, adminName, TO_CHAR(e.created, 'YYYY-MM-DD') created,
+        				hitCount, NVL(replyCount, 0) replyCount
+        		FROM ${tname}event e
+        		JOIN admin a ON a.adminIdx=e.adminIdx
+        		LEFT OUTER JOIN (
+					    SELECT eventNum, COUNT(*) replyCount 
+					    FROM ${tname}eventReply
+					    GROUP BY eventNum
+					) r ON e.eventNum = r.eventNum
+        		<where>
+        			<if test="searchValue!=null and searchValue!=''">
+						<include refid="where-list"/>
+					</if> 
+        		</where>
+        		ORDER BY eventNum DESC
+     <![CDATA[
+    		)tb WHERE rownum <= #{end}
+		) where rnum >= #{start}
+	]]>
+	</select>
+	
+	<select id="readEvent" parameterType="map" resultType="com.sp.board.Event">
+		SELECT e.eventNum, e.adminIdx, adminId, adminName, subject, content, hitCount, TO_CHAR(e.created, 'YYYY-MM-DD') created,
+				NVL(boardLikeCount, 0) boardLikeCount
+		FROM ${tname}event e
+		JOIN admin a ON a.adminIdx=e.adminIdx
+		LEFT OUTER JOIN (
+			SELECT eventNum, COUNT(*) boardLikeCount FROM ${tname}eventLike
+			GROUP BY eventNum
+		) ec ON e.eventNum = ec.eventNum
+		WHERE e.eventNum = #{eventNum}
+	</select>
+	
+	<select id="replyCount" parameterType="map" resultType="Integer">
+	 		SELECT NVL(COUNT(*), 0) FROM ${tname}Eventreply
+	 		WHERE eventNum=#{eventNum}
+	 </select>
+	
+	<select id="listReply" parameterType="map" resultType="com.sp.board.EventReply">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, tb.* FROM (
+				SELECT r.replyNum, r.userIdx, userName, eventNum, content, r.created
+				FROM ${tname}Eventreply r
+				JOIN tb_user u ON r.userIdx = u.userIdx
+				WHERE eventNum=#{eventNum}
+				ORDER BY r.replyNum DESC
+
+<![CDATA[				
+			) tb WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+]]>		
+	</select>
+	
+	
+	
+	
+</mapper>

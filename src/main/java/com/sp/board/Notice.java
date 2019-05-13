@@ -4,6 +4,8 @@ public class Notice {
 	private String tname;
 	private int noticeNum;
 	private int adminIdx;
+	private String adminName;
+	private String adminId;
 	private String subject, content,created;
 	private int hitCount;
 	public int getNoticeNum() {
@@ -47,6 +49,18 @@ public class Notice {
 	}
 	public void setTname(String tname) {
 		this.tname = tname;
+	}
+	public String getAdminName() {
+		return adminName;
+	}
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+	public String getAdminId() {
+		return adminId;
+	}
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
 	}
 
 

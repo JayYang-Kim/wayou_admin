@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="faq">
+
+	<insert id="insertFaq" parameterType="com.sp.board.Faq">
+		INSERT INTO ${tname}faq(faqNum, subject, content, adminIdx)
+		VALUES (${tname}faq_seq.NEXTVAL, #{subject}, #{content,  jdbcType=CLOB}, #{adminIdx})
+	</insert>
+
+	
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'all' ">
+			(INSTR(subject, #{searchValue}) &gt; 0
+				OR DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0)	
+			</when>
+			<when test="searchKey == 'subject' ">
+			INSTR(subject, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'content' ">
+			DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'created' ">
+			(TO_CHAR(created, 'YYYYMMDD') = #{searchValue}
+				OR TO_CHAR(created, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<otherwise>
+				INSTR(${searchKey}, #{searchValue}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM ${tname}faq
+		<where>
+			<if test="searchValue !=null and searchValue !='' ">
+				<include refid="where-list"/>
+			</if>
+		</where>
+		
+	</select>
+	
+	<!-- 글리스트 -->
+	<select id="listFaq" parameterType="map" resultType="com.sp.board.Faq">
+		SELECT * FROM (
+	    	SELECT ROWNUM rnum, tb.* FROM (
+	        	SELECT faqNum, subject, content,  a.adminIdx, a.adminId, a.adminName
+	        	FROM ${tname}faq f
+                JOIN admin a ON a.adminIdx = f.adminIdx
+	            <where>
+					<if test="searchValue !=null and searchValue !='' ">
+					<include refid="where-list"/>
+					</if>
+				</where>
+	        	ORDER BY faqNum DESC  	
+		<![CDATA[
+	    	) tb WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+]]>
+	</select>
+
+</mapper>

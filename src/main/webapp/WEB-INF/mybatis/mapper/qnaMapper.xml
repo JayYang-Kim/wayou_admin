@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qna">
+
+	<insert id="insertAnswer" parameterType="com.sp.board.Qna">
+		INSERT INTO answer(answerCode, qnaCode, answerContent, adminIdx)
+		VALUES (answerCode_seq.NEXTVAL, #{qnaCode}, #{answerContent,  jdbcType=CLOB}, #{adminIdx})
+	</insert>
+
+	
+	<sql id="where-list">
+		<choose>
+			<when test="searchKey == 'all' ">
+			(INSTR(subject, #{searchValue}) &gt; 0
+				OR DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0)	
+			</when>
+			<when test="searchKey == 'subject' ">
+			INSTR(subject, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'content' ">
+			DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0
+			</when>
+			<when test="searchKey == 'created' ">
+			(TO_CHAR(created, 'YYYYMMDD') = #{searchValue}
+				OR TO_CHAR(created, 'YYYY-MM-DD') = #{searchValue})
+			</when>
+			<otherwise>
+				INSTR(${searchKey}, #{searchValue}) &gt; 0
+			</otherwise>
+		</choose>
+	</sql>
+	
+	
+	<select id="dataCount" parameterType="map" resultType="Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM question q 
+		JOIN tb_user u ON q.userIdx=u.userIdx
+		<where>
+			<if test="searchValue !=null and searchValue !='' ">
+				<include refid="where-list"/>
+			</if>
+		</where>
+		AND CATCODE = #{catCode} 
+	</select>
+	
+	<!-- 글리스트 -->
+	<select id="listBoard" parameterType="map" resultType="com.sp.board.Qna">
+		SELECT * FROM (
+	    	SELECT ROWNUM rnum, tb.* FROM (
+	        	SELECT q.QNACODE, q.CATCODE, subject, content, TO_CHAR(q.created, 'YYYY-MM-DD') created, q.userIdx,
+	                userName, a.adminIdx, ad.adminName, hitCount, answercode, answerCreated, answerContent, 
+	                NVL(answerCount, 0) answerCount
+	        	FROM question q
+	        	LEFT OUTER JOIN answer a ON q.qnacode = a.qnacode
+	        	JOIN tb_user u ON q.userIdx = u.userIdx
+                LEFT OUTER JOIN admin ad ON ad.adminIdx = a.adminIdx
+	            LEFT OUTER JOIN (
+	                SELECT qe.qnaCode, COUNT(*) answerCount
+	                FROM question qe
+	                JOIN answer an
+	                ON qe.qnaCode = an.qnaCode
+	                GROUP BY qe.qnaCode
+	            ) qe ON qe.qnaCode = q.qnaCode
+	            <where>
+					<if test="searchValue !=null and searchValue !='' ">
+					<include refid="where-list"/>
+					</if>
+					AND CATCODE = #{catCode}
+				</where>
+	        	ORDER BY created DESC  	
+		<![CDATA[
+	    	) tb WHERE ROWNUM <= #{end}
+		) WHERE rnum >= #{start}
+		]]>
+	</select>
+ 
+	<!-- 글보기 -->
+	<select id="readBoard" parameterType="Integer" resultType="com.sp.board.Qna">
+		SELECT q.qnaCode, catCode, subject, content, answerCreated, answerContent, u.userIdx, u.userName
+		FROM question q
+		JOIN tb_user u ON q.userIdx = u.userIdx
+		LEFT OUTER JOIN answer a ON q.qnacode = a.qnacode
+		WHERE q.qnaCode = #{qnaCode}
+	</select>
+
+	 
+	<!-- 조회수 증가 -->
+	<update id="updateHitCount" parameterType="Integer">
+		UPDATE question SET hitCount=hitCount+1 WHERE qnaCode = #{qnaCode}
+	</update>
+	
+	<!-- 조회수 읽어오기 -->
+	<select id="readHitCount" parameterType="Integer" resultType="Integer">
+		SELECT hitCount FROM question WHERE qnaCode=#{qnaCode}
+	</select>
+	
+	<!-- 글수정 -->
+	<update id="updateBoard" parameterType="com.sp.board.Qna">
+		UPDATE question SET qnaCode=#{qnaCode}, subject=#{subject}, content=#{content, jdbcType=CLOB}
+    		WHERE qnaCode=#{qnaCode}
+	</update>
+	
+	<!-- 글삭제 -->
+	<delete id="deleteBoard" parameterType="Integer">
+		DELETE FROM question WHERE qnaCode=#{qnaCode}
+	</delete>
+	
+</mapper>
