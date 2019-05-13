@@ -128,7 +128,6 @@
 			<col style=""/>
 			<col style=""/>
 			<col style=""/>
-			<col style=""/>
 		</colgroup>
 		<thead>
 			<tr>
@@ -139,7 +138,6 @@
 				<th scope="col">상세주소</th>
 				<th scope="col">위도</th>
 				<th scope="col">경도</th>
-				<th scope="col">메모</th>
 				<th scope="col">작성자</th>
 				<th scope="col">작성일</th>
 			</tr>
@@ -155,7 +153,6 @@
 						<td>${dto2.address2}</td>
 						<td>${dto2.lat}</td>
 						<td>${dto2.lng}</td>
-						<td>${dto2.memo}</td>
 						<td>${dto2.adminId}<br/>(${dto2.adminName})</td>						
 						<td>${dto2.created}</td>
 					</tr>
