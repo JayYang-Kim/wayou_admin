@@ -38,11 +38,11 @@ public class FaqServiceImpl implements FaqService{
 	}
 
 	@Override
-	public Faq readBoard(int num) {
+	public Faq readBoard(Map<String, Object> map) {
 		Faq dto = null;
 		
 		try {
-			dto=dao.selectOne("faq.readBoard", num);
+			dto=dao.selectOne("faq.readBoard", map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,9 +61,16 @@ public class FaqServiceImpl implements FaqService{
 	}
 
 	@Override
-	public int updateBoard(Faq dto) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updatefaq(Faq dto) {
+		int result=0;
+		
+		try{
+			result=dao.selectOne("faq.updateFaq", dto);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	@Override

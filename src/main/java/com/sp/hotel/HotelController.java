@@ -2,11 +2,13 @@ package com.sp.hotel;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sp.admin.AdminSessionInfo;
+import com.sp.common.FileManager;
 import com.sp.common.MyUtil;
 
 @Controller("hotel.hotelController")
@@ -28,7 +32,8 @@ public class HotelController {
 	@Autowired
 	private MyUtil myUtil;
 	
-	
+	@Autowired
+	private FileManager fileManager;
 	
 	@RequestMapping(value= {"/hotel/main"}, method=RequestMethod.GET)
 	public String method() {
@@ -209,11 +214,32 @@ public class HotelController {
 		return "redirect:/hotel/hotelInfo/roomInfo/list?hotelCode="+dto.getHotelCode();
 	}
 	
+	@RequestMapping(value="/hotel/hotelInfo/roomInfo/deleteRoom")
+	public String delete(
+			@RequestParam int roomCode,
+			@RequestParam int hotelCode,
+			HttpSession session) throws Exception {
+
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "landmark";			
+		
+		try {
+			hotelService.deleteRoom(roomCode, pathname);
+		} catch (Exception e) {
+			return "redirect:/hotel/hotelInfo/roomInfo/list?hotelCode="+hotelCode;
+		}
+		
+		return "redirect:/hotel/hotelInfo/roomInfo/list?hotelCode="+hotelCode;
+	}
+	
 	@RequestMapping(value="/hotel/customer/reserveList")
 	public String reserveList(
 			@RequestParam(value="pageNo", defaultValue="1") int current_page,
 			@RequestParam(defaultValue="hname") String searchKey,
 			@RequestParam(defaultValue="") String searchValue,
+			@RequestParam(defaultValue="") String use_start,
+			@RequestParam(defaultValue="") String use_end,
 			HttpServletRequest req,
 			Model model) throws Exception {
 		
@@ -227,6 +253,8 @@ public class HotelController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
+		map.put("use_start", use_start);
+		map.put("use_end", use_end);
 		
 		customerCount = hotelService.customerCount(map);
 		if(customerCount!=0) {
@@ -251,8 +279,41 @@ public class HotelController {
 		model.addAttribute("paging", paging);
 		model.addAttribute("searchKey", searchKey);
 		model.addAttribute("searchValue",searchValue);
+		model.addAttribute("use_start", use_start);
+		model.addAttribute("use_end", use_end);
 		
 		return ".hotel.customer.reserveList";
+	}
+	
+	@RequestMapping(value="/hotel/hotelInfo/roomInfo/deleteFile", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> deleteFile(
+			@RequestParam int fileCode,
+			HttpServletResponse resp,
+			HttpSession session) throws Exception {
+		
+		String root = session.getServletContext().getRealPath("/");
+		String pathname = root + File.separator + "uploads" + File.separator + "hotel";	
+		
+		Map<String, Object> model = new HashMap<>(); 
+		
+		String msg = "true";
+		
+		Room dto = hotelService.readFile(fileCode);
+		
+		if(dto!=null) {
+			fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+		}
+		
+		try {
+			hotelService.deleteFile(fileCode);
+		} catch (Exception e) {
+			msg = "false";
+		}
+		
+		model.put("msg", msg);
+		
+		return model;
 	}
 
 }

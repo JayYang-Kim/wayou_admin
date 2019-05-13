@@ -21,10 +21,6 @@
 			<when test="searchKey == 'content' ">
 			DBMS_LOB.INSTR(content, #{searchValue}) &gt; 0
 			</when>
-			<when test="searchKey == 'created' ">
-			(TO_CHAR(created, 'YYYYMMDD') = #{searchValue}
-				OR TO_CHAR(created, 'YYYY-MM-DD') = #{searchValue})
-			</when>
 			<otherwise>
 				INSTR(${searchKey}, #{searchValue}) &gt; 0
 			</otherwise>
@@ -61,5 +57,18 @@
 		) WHERE rnum >= #{start}
 ]]>
 	</select>
+	
+	<select id="readBoard" parameterType="map" resultType="com.sp.board.Faq">
+		SELECT faqNum, subject, content, a.adminIdx, a.adminId, a.adminName
+		FROM ${tname}faq f
+		JOIN admin a ON a.adminIdx = f.adminIdx
+		WHERE faqNum = #{faqNum}
+	</select>
+	
+	<update id="updateFaq" parameterType="com.sp.board.Faq">
+		UPDATE ${tname}faq
+		SET faqNum=#{faqNum}, subject=#{subject}, content=#{content, jdbcType=VARCHAR}, adminIdx=#{adminIdx}
+		WHERE faqNum=#{faqNum}
+	</update>
 
 </mapper>

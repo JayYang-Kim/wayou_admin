@@ -107,6 +107,7 @@ public class FaqController {
 			Model model) throws Exception {
 
 		model.addAttribute("page", page);
+		model.addAttribute("mode", "created");
 		
 		return "."+tname+".faq.insertFaq";
 	}
@@ -117,7 +118,8 @@ public class FaqController {
 			@PathVariable String tname,
 			@RequestParam String page,
 			HttpSession session,
-			Faq dto) {
+			Faq dto,
+			Model model) {
 		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		
@@ -125,6 +127,50 @@ public class FaqController {
 		dto.setTname(tname);
 		
 		faqService.insertFaq(dto);
+		
+		return "redirect:/"+tname+"/faq/list?page="+page;
+	}
+	
+	@RequestMapping(value="/{tname}/faq/update", method=RequestMethod.GET)
+	public String updateAnswerForm(
+			@PathVariable String tname,
+			@RequestParam int faqNum,
+			@RequestParam String page,
+			Model model) throws Exception {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("tname", tname);
+		map.put("faqNum", faqNum);
+		
+		Faq dto = faqService.readBoard(map);
+		
+		if(dto==null) {
+			return "redirect:/"+tname+"/faq/list?page="+page;
+		}
+
+		model.addAttribute("dto", dto);
+		model.addAttribute("page", page);
+		model.addAttribute("mode", "update");
+		
+		return "."+tname+".faq.insertFaq";
+	}
+
+
+	@RequestMapping(value="/{tname}/faq/update", method=RequestMethod.POST)
+	public String insertAnswerSubmit(
+			@PathVariable String tname,
+			@RequestParam String page,
+			@RequestParam int faqNum,
+			HttpSession session,
+			Faq dto) {
+		
+		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
+		
+		dto.setAdminIdx(info.getAdminIdx());
+		dto.setTname(tname);
+		dto.setFaqNum(faqNum);
+		
+		faqService.updatefaq(dto);
 		
 		return "redirect:/"+tname+"/faq/list?page="+page;
 	}
