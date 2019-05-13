@@ -7,18 +7,32 @@
 
 <script type="text/javascript">
 
-function sendOk() {
+function sendOk(mode) {
 	var f=document.FaqInsertForm;
 
 
-	var str = f.content.value;
+	var str = f.subject.value;
     if(!str) {
-        alert("내용을 입력하세요. ");
-        f.answerContent.focus();
+        alert("질문을 입력하세요. ");
+        f.subject.focus();
+        return;
+    }
+    
+    var str = f.content.value;
+    if(!str) {
+        alert("답변을 입력하세요. ");
+        f.content.focus();
         return;
     }
 	
-	f.action="<%=cp%>/hotel/faq/insertFaq";
+	
+	if(mode=="created") {
+		f.action="<%=cp%>/hotel/faq/insertFaq";
+	}
+	
+	if(mode=="update") {
+		f.action="<%=cp%>/hotel/faq/update";
+	}
 	
 	f.submit();
 }
@@ -50,7 +64,7 @@ function sendOk() {
 			
 			  <tr> 
 			      <th>문의 내용</th>
-			      <td> 
+			      <td>
 			      	<input type="text" name="subject" value="${dto.subject}">
 			      </td>
 			  </tr>
@@ -67,10 +81,10 @@ function sendOk() {
 			  <table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 			     <tr height="45"> 
 			      <td align="center" >
-			        <button type='button' class="btn" onclick="sendOk();">답변 등록하기</button>
+			        <button type='button' class="btn" onclick="sendOk('${mode}');">${mode=='update'?'수정완료':'등록완료'}</button>
 			        <button type="reset" class="btn">다시입력</button>
 					<c:if test="${mode=='update'}">
-			         	 <input type="hidden" name="qnaCode" value="${dto.faqCode}">
+			         	 <input type="hidden" name="faqNum" value="${dto.faqNum}">
 			         	 
 			         </c:if>
 			        	 <input type="hidden" name="page" value="${page}">

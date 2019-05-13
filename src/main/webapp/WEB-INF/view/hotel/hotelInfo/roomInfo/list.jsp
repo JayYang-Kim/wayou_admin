@@ -5,8 +5,16 @@
 <%
 	String cp=request.getContextPath();
 %>
-
-
+<script type="text/javascript">
+function deleteRoom(roomCode) {
+	
+	if(confirm("객실을 삭제하시겠습니까?")){
+		var url="<%=cp%>/hotel/hotelInfo/roomInfo/deleteRoom?hotelCode=${hotel.hotelCode}&roomCode="+roomCode;
+		location.href=url;
+	}
+	
+}
+</script>
 
 <div class="body">
 	<div style="height: 50px; margin-left: 20px;">
@@ -33,7 +41,7 @@
 						<td>${dto.hCount}</td>
 						<td>${dto.price}</td>
 						<td><button type='button' class='button btnUpdateHotel' onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/updateRoom?hotelCode=${hotel.hotelCode}&roomCode=${dto.roomCode}';">방 수정</button></td>
-						<td><button type='button' class='button btnInsertRoom' onclick="location.href='';">삭제</button></td>
+						<td><button type='button' class='button btnInsertRoom' onclick="">삭제</button></td>
 					</tr>
 				</c:forEach>
 			
@@ -41,7 +49,9 @@
 			
 		</table>
 		<div class="btn_wrap view_btn">
+		<c:if test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1'}">
 				<button class="button btn" type="button" onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/insertRoom?hotelCode=${hotel.hotelCode}';">객실 추가하기</button>
+		</c:if>		
 				<button class="button btn" type="button" onclick="location.href='<%=cp%>/hotel/hotelInfo/list';">호텔 목록으로</button>
 		</div>
 	</div>

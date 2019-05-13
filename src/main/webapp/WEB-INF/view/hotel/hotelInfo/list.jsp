@@ -20,6 +20,12 @@ $(function() {
 			return false;
 		}
 	
+		if(${sessionScope.admin.idnCode != '2' || sessionScope.admin.adminId != 'sug1'}) {
+			alert("접근 가능한 기능이 아닙니다.");
+			location.href="<%=cp%>/hotel/hotelInfo/list";
+			return;
+		}
+		
 		var url="<%=cp%>/hotel/hotelInfo/insertHotel";
 		$.ajax({
 			type:"get",
@@ -56,21 +62,25 @@ function sendHotel(mode) {
 	}
 	
 	if(! f.address1.value) {
+		alert("호텔 주소를 입력하세요.");
 		f.address1.focus();
 		return;
 	}
 	
 	if(! f.address2.value) {
+		alert("호텔 상세 주소를 입력하세요.");
 		f.address2.focus();
 		return;
 	}
 	
 	if(! f.email.value) {
+		alert("호텔 대표 이메일을 입력하세요.");
 		f.email.focus();
 		return;
 	}
 	
 	if(! f.tel.value) {
+		alert("호텔 대표 전화번호를 입력하세요.");
 		f.tel.focus();
 		return;
 	}
@@ -91,6 +101,11 @@ function sendHotel(mode) {
 
 }
 
+function searchHotel() {
+	var f=document.searchHotelForm;
+	f.submit();
+}
+
 $(function() {
 
 	$(".btnUpdateHotel").click(function() {	
@@ -102,6 +117,11 @@ $(function() {
 			return false;
 		}
 	
+		if(${sessionScope.admin.idnCode != '2' || sessionScope.admin.adminId != 'sug1'}) {
+			alert("접근 가능한 기능이 아닙니다.");
+			location.href="<%=cp%>/hotel/hotelInfo/list";
+			return;
+		}
 		var url="<%=cp%>/hotel/hotelInfo/updateHotel";
 		var query="hotelCode="+$(this).attr("data-hotelCode");
 		
@@ -188,6 +208,7 @@ function hotel_Postcode() {
 </div>
 
 <div>
+<form name="searchHotelForm" action="<%=cp%>/hotel/hotelInfo/list" method="post">
 	<div class="list_search_wrap">
 		<div class="list_search">
 			<select name="searchKey" id="searchKey" title="검색조건선택">
@@ -197,10 +218,11 @@ function hotel_Postcode() {
 			</select>
 			<input type="text" name="searchValue" id="searchValue" title="검색내용입력" />
 			<span class="btn">
-				<a class="button" onclick="searchList();" style="border: none;">검색</a>
+				<a class="button" onclick="searchHotel();" style="border: none;">검색</a>
 			</span>
 		</div>
 	</div>
+</form>
 	<div class="hotel-body" style="width: 100%;">
 		<table class="table td_bor_no" style="width: 100%;">
 			<thead>
@@ -218,7 +240,7 @@ function hotel_Postcode() {
 						<td>${dto.locName}</td>
 						<td>${dto.name}</td>
 						<td><button type='button' class='button btnUpdateHotel' data-hotelCode="${dto.hotelCode}">호텔 정보 수정</button></td>
-						<td><button type='button' class='button btnInsertRoom' onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/list?hotelCode=${dto.hotelCode}';">객실 추가ㆍ수정</button></td>
+						<td><button type='button' class='button btnInsertRoom' onclick="location.href='<%=cp%>/hotel/hotelInfo/roomInfo/list?hotelCode=${dto.hotelCode}';">객실 관리</button></td>
 					</tr>
 				</c:forEach>
 			</tbody>

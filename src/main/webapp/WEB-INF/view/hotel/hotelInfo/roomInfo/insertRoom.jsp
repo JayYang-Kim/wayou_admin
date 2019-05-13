@@ -41,36 +41,63 @@ $(function(){
 	  });
 });
 
+function deleteFile(fileCode) {
+	
+	if(confirm("이미지를 삭제하시겠습니까?")){
+		var url="<%=cp%>/hotel/hotelInfo/roomInfo/deleteFile";
+		$.post(url, {fileCode : fileCode}, function(data) {
+			$("#f"+fileCode).remove();
+		}, "json");
+	}
+	
+}
+
 
 function sendRoom(mode) {
     var f = document.insertRoomForm;
-	/* 	
-	if(! f.hname.value) {
-		alert("호텔명을 입력하세요.");
-		f.hname.focus();
+	
+	if(! f.roomNum.value) {
+		alert("룸 호수를 입력하세요.");
+		f.roomNum.focus();
 		return;
 	}
 	
-	if(! f.address1.value) {
-		f.address1.focus();
+	if(! f.roomtypeCode.value) {
+		alert("룹 타입을 선택하세요.");
+		f.roomtypeCode.focus();
 		return;
 	}
 	
-	if(! f.address2.value) {
-		f.address2.focus();
+	if(! f.hCount.value) {
+		alert("최대 인원을 입력하세요.");
+		f.hCount.focus();
 		return;
 	}
 	
-	if(! f.email.value) {
-		f.email.focus();
+	if(! f.price.value) {
+		alert("가격을 입력하세요.");
+		f.price.focus();
 		return;
 	}
 	
-	if(! f.tel.value) {
-		f.tel.focus();
+	if(! f.information.value) {
+		alert("기본정보를 입력하세요.");
+		f.information.focus();
 		return;
 	}
-  */
+	
+	if(! f.notice.value) {
+		alert("공지사항을 입력하세요.");
+		f.notice.focus();
+		return;
+	}
+	
+	if(! f.cancel_notice.value) {
+		alert("취소규정을 입력하세요.");
+		f.cancel_notice.focus();
+		return;
+	}
+
 	if(mode=="created") {
 		f.action="<%=cp%>/hotel/hotelInfo/roomInfo/insertRoom";
 	}

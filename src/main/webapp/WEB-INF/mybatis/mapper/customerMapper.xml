@@ -5,14 +5,17 @@
 	
 	<sql id="where-list">
 		<choose>
+			<when test="searchKey == 'all'">
+				INSTR(hname, #{searchValue}) &gt; 0
+			</when>
 			<when test="searchKey == 'hname'">
 				INSTR(hname, #{searchValue}) &gt; 0
 			</when>
-			<when test="searchKey == 'location'">
-				INSTR(locName, #{searchValue}) &gt; 0
+			<when test="searchKey == 'reserveCode'">
+				INSTR(reserveCode, #{searchValue}) &gt; 0
 			</when>
-			<when test="searchKey == 'hname'">
-				INSTR(name, #{searchValue}) &gt; 0
+			<when test="searchKey == 'userName'">
+				INSTR(userName, #{searchValue}) &gt; 0
 			</when>
 		</choose>
 	</sql>
@@ -37,7 +40,11 @@
      		<if test="searchValue!=null and searchValue!=''">
 				<include refid="where-list"/>
 			</if> 
+			<if test="start!=null and end=!=null">
+				checkIn &gt;  #{use_start} and checkOut &lt; #{use_end}
+			</if>
      	</where>
+     	
 		order by checkIn
 
 	</select>

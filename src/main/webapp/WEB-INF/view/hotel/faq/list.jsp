@@ -28,7 +28,7 @@ $(function(){
 	
 	//글수정
 	$("body").on("click", ".btn_update", function(){
-		var qnaCode = $(this).attr("data-faqNum");
+		var faqNum = $(this).attr("data-faqNum");
 		
 		var url="<%=cp%>/hotel/faq/update?faqNum=" + faqNum + "&page=${page}";
 		location.href=url;
@@ -97,7 +97,7 @@ function searchList() {
 					</div>
 					<div align="right" style="margin-right: 30px;">
 					<c:if  test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1'}">
-						<button type="button" class="btn_classic btn_update" style="border-radius: 3px;" onclick="javascript:location.href='';">수정</button>
+						<button type="button" class="btn_classic btn_update" data-faqNum='${dto.faqNum}' style="border-radius: 3px;" >수정</button>
 					</c:if>
 				
 					
@@ -125,8 +125,10 @@ function searchList() {
 		</table>
 		
 		<div class="btn_wrap view_btn">
+			<c:if test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1'}">
 				<button class="button btn" type="button" 
 					onclick="location.href='<%=cp%>/hotel/faq/insertFaq?page=${page}';">글 등록</button>
+			</c:if>
 			</div>
     </div>
 

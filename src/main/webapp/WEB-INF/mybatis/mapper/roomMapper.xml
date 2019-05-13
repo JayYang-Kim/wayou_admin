@@ -44,4 +44,23 @@
 			information=#{information, jdbcType=VARCHAR},notice=#{notice, jdbcType=VARCHAR}, cancel_notice=#{cancel_notice, jdbcType=VARCHAR}
 		WHERE roomCode=#{roomCode}
 	</update>
+	
+	<delete id="deleteRoom" parameterType="Integer">
+		DELETE FROM roomInfo 
+		WHERE roomCode=#{roomCode}
+	</delete>
+	
+	<select id="readRoomFile" parameterType="Integer" resultType="com.sp.hotel.Room">
+		SELECT fileCode, roomCode, saveFilename
+		FROM roomFile
+		WHERE fileCode = #{fileCode}
+	</select>
+	
+	<delete id="deleteRoomFile" parameterType="Integer">
+		DELETE FROM roomFile WHERE fileCode = #{fileCode}
+	</delete>
+	
+	<delete id="deleteAllRoomFile" parameterType="Integer">
+		DELETE FROM roomFile WHERE roomCode = #{roomCode}
+	</delete>
 </mapper>
