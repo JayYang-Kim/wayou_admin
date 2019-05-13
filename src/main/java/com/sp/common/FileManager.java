@@ -56,7 +56,44 @@ public class FileManager {
 
 		return saveFilename;
 	}
+	
+	public String doFileUpload2(MultipartFile partFile, String sort) throws Exception {
+		String saveFilename = null;
+		if(partFile == null || partFile.isEmpty())
+			return null;
+		
+		// 클라이언트가 업로드한 파일의 이름
+		String originalFilename=partFile.getOriginalFilename();
+		if(originalFilename==null||originalFilename.length()==0)
+			return null;
+		
+		// 확장자
+		String fileExt = originalFilename.substring(originalFilename.lastIndexOf("."));
+		if(fileExt == null || fileExt.equals(""))
+			return null;
+		
+		// 서버에 저장할 새로운 파일명을 만든다.
+		System.nanoTime();
+		saveFilename = String.format("%1$tY%1$tm%1$td%1$tH%1$tM%1$tS", 
+				         Calendar.getInstance());
+		saveFilename += System.nanoTime();
+		saveFilename += fileExt;
+		
+		String fullpathname;
+		if(sort.equals("location")) {
+			fullpathname = "C:"+File.separator+"Users"+File.separator+"임상근"+File.separator+"git"+File.separator+"wayou_user"+File.separator+"src"+File.separator+"main"+File.separator+"webapp"+File.separator+"uploads"+File.separator+"location"+File.separator+saveFilename;
+		}else {
+			fullpathname = "C:"+File.separator+"Users"+File.separator+"임상근"+File.separator+"git"+File.separator+"wayou_user"+File.separator+"src"+File.separator+"main"+File.separator+"webapp"+File.separator+"uploads"+File.separator+"landmark"+File.separator+saveFilename;
+		}
+		// 업로드할 경로가 존재하지 않는 경우 폴더를 생성 한다.
+		File f = new File(fullpathname);
+		if(!f.getParentFile().exists())//그냥 MKDIR하면 파일까지 폴더경로로 인식함
+			f.getParentFile().mkdirs();
 
+		partFile.transferTo(f); //파일 객체에 데이터를 넘겨줌
+
+		return saveFilename;
+	}
 	/**
 	 * 파일을 업로드 하기 위한 메소드
 	 * @param bytes					업로드할 파일정보를 가지고 있는byte 배열

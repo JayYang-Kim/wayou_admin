@@ -62,7 +62,7 @@ public class LandMarkServiceImpl implements LandMarkService{
 						continue;
 					}
 					
-					String saveFilename = fileManager.doFileUpload(mf, pathname);
+					String saveFilename = fileManager.doFileUpload2(mf,"landmark");
 					if(saveFilename != null) {
 						dto.setSaveFilename(saveFilename);
 						

@@ -35,7 +35,7 @@ public class LocationServiceImpl implements LocationService{
 		int result = 0;
 		
 		try {
-			String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathname);
+			String saveFilename = fileManager.doFileUpload2(dto.getUpload(), "location");
 			if(saveFilename != null) {
 				dto.setSaveFilename(saveFilename);
 				dto.setOriginalFilename(dto.getUpload().getOriginalFilename());
