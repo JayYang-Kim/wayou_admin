@@ -94,7 +94,7 @@ public class FileManager {
 
 		return saveFilename;
 	}
-	/**
+	/** 
 	 * 파일을 업로드 하기 위한 메소드
 	 * @param bytes					업로드할 파일정보를 가지고 있는byte 배열
 	 * @param originalFilename	클라이언트가 업로드한 파일명
@@ -269,7 +269,6 @@ public class FileManager {
 			File f=new File(pathname);
 			if (! f.exists())
 				return;
-			
 			if(f.isDirectory())
 				removeSubDirectory(pathname);
 			
