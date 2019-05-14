@@ -43,13 +43,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 		if(mon <10) {
 			month="0"+String.valueOf(mon);
 		}
-		
+		else month=String.valueOf(mon);
 		int d = cal.get(Calendar.DAY_OF_MONTH);
 		
 		String day=null;
 		if(d <10) {
 			day="0"+String.valueOf(d);
 		}
+		else day=String.valueOf(d);
 		try {
 			today=year+"-"+month+"-"+day;
 		} catch (Exception e) {

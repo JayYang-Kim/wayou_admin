@@ -120,6 +120,7 @@ public class AttendanceController {
 			dto.setToday(today);
 			
 			startTime=att.inAtt(dto);
+			System.out.println(startTime+"000000000000000000000000000000000000000000000000");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
