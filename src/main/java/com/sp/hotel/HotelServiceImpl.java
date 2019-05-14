@@ -1,5 +1,6 @@
 package com.sp.hotel;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -136,6 +137,32 @@ public class HotelServiceImpl implements HotelService {
 		
 		return list;
 	}
+	
+	@Override
+	public int deleteRoom(int roomCode, String pathname) {
+		int result=0;
+		try {
+			List<Room> listFile = listFile(roomCode);
+			if(listFile!=null) {
+				Iterator<Room> it = listFile.iterator();
+				while(it.hasNext()) {
+					Room dto = it.next();
+					fileManager.doFileDelete(dto.getSaveFilename(), pathname);
+				}
+			}
+			
+			deleteAllFile(roomCode);
+
+			dao.deleteData("room.deleteRoom", roomCode);
+			
+			result = 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
 
 	@Override
 	public Room readRoom(int num) {
@@ -185,6 +212,46 @@ public class HotelServiceImpl implements HotelService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+
+	@Override
+	public Room readFile(int fileCode) {
+		Room dto = null;
+		
+		try {
+			dto = dao.selectOne("room.readRoomFile", fileCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	@Override
+	public int deleteFile(int fileCode) {
+		int result = 0;
+		
+		try {
+			result = dao.deleteData("room.deleteRoomFile", fileCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public int deleteAllFile(int roomCode) {
+		int result = 0;
+		
+		try {
+			result = dao.deleteData("room.deleteAllRoomFile", roomCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 	
@@ -244,6 +311,19 @@ public class HotelServiceImpl implements HotelService {
 		
 		return result;
 	}
+
+	@Override
+	public int deleteReserve(int roomCode) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+
+
+	
+
 
 
 	

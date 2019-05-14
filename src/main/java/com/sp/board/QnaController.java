@@ -59,8 +59,6 @@ public class QnaController {
 			HttpSession session,
 			Qna dto) {
 		
-		
-		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		
 		dto.setAdminIdx(info.getAdminIdx());

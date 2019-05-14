@@ -64,7 +64,7 @@ public class FaqController {
 		map.put("start", start);
 		map.put("end", end);
 		map.put("tname", tname);
-		List<Faq> list = faqService.listBoard(map);
+		List<Faq> list = faqService.listFaq(map);
 		
 		int listNum, n=0;
 		for(Faq dto : list) {
@@ -99,14 +99,50 @@ public class FaqController {
 		return "."+tname+".faq.list";
 	}
 	
-	@RequestMapping(value="/{tname}/faq/insertAnswer", method=RequestMethod.GET)
+	
+	@RequestMapping(value="/{tname}/faq/insertFaq", method=RequestMethod.GET)
 	public String insertAnswerForm(
 			@PathVariable String tname,
 			@RequestParam String page,
-			@RequestParam int faqCode,
 			Model model) throws Exception {
 
-		Faq dto = faqService.readBoard(faqCode);
+		model.addAttribute("page", page);
+		model.addAttribute("mode", "created");
+		
+		return "."+tname+".faq.insertFaq";
+	}
+
+
+	@RequestMapping(value="/{tname}/faq/insertFaq", method=RequestMethod.POST)
+	public String insertAnswerSubmit(
+			@PathVariable String tname,
+			@RequestParam String page,
+			HttpSession session,
+			Faq dto,
+			Model model) {
+		
+		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
+		
+		dto.setAdminIdx(info.getAdminIdx());
+		dto.setTname(tname);
+		
+		faqService.insertFaq(dto);
+		
+		return "redirect:/"+tname+"/faq/list?page="+page;
+	}
+	
+	@RequestMapping(value="/{tname}/faq/update", method=RequestMethod.GET)
+	public String updateAnswerForm(
+			@PathVariable String tname,
+			@RequestParam int faqNum,
+			@RequestParam String page,
+			Model model) throws Exception {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("tname", tname);
+		map.put("faqNum", faqNum);
+		
+		Faq dto = faqService.readBoard(map);
 		
 		if(dto==null) {
 			return "redirect:/"+tname+"/faq/list?page="+page;
@@ -114,30 +150,29 @@ public class FaqController {
 
 		model.addAttribute("dto", dto);
 		model.addAttribute("page", page);
-		model.addAttribute("faqCode", faqCode);
+		model.addAttribute("mode", "update");
 		
-		return "."+tname+".faq.answer";
+		return "."+tname+".faq.insertFaq";
 	}
 
 
-	@RequestMapping(value="/{tname}/faq/insertAnswer", method=RequestMethod.POST)
+	@RequestMapping(value="/{tname}/faq/update", method=RequestMethod.POST)
 	public String insertAnswerSubmit(
 			@PathVariable String tname,
 			@RequestParam String page,
-			@RequestParam int faqCode,
+			@RequestParam int faqNum,
 			HttpSession session,
 			Faq dto) {
-		
-		
 		
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		
 		dto.setAdminIdx(info.getAdminIdx());
 		dto.setTname(tname);
+		dto.setFaqNum(faqNum);
 		
-		faqService.insertAnswer(dto);
+		faqService.updatefaq(dto);
 		
-		return "redirect:/"+tname+"/faq/list??page="+page;
+		return "redirect:/"+tname+"/faq/list?page="+page;
 	}
 	
 }

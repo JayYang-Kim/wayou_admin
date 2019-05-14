@@ -7,18 +7,32 @@
 
 <script type="text/javascript">
 
-function sendOk() {
-	var f=document.QnaAnswerForm;
+function sendOk(mode) {
+	var f=document.FaqInsertForm;
 
 
-	var str = f.answerContent.value;
+	var str = f.subject.value;
     if(!str) {
-        alert("내용을 입력하세요. ");
-        f.answerContent.focus();
+        alert("질문을 입력하세요. ");
+        f.subject.focus();
+        return;
+    }
+    
+    var str = f.content.value;
+    if(!str) {
+        alert("답변을 입력하세요. ");
+        f.content.focus();
         return;
     }
 	
-	f.action="<%=cp%>/hotel/qna/insertAnswer";
+	
+	if(mode=="created") {
+		f.action="<%=cp%>/hotel/faq/insertFaq";
+	}
+	
+	if(mode=="update") {
+		f.action="<%=cp%>/hotel/faq/update";
+	}
 	
 	f.submit();
 }
@@ -28,7 +42,7 @@ function sendOk() {
 </script>
     
     <div>
-			<form name="QnaAnswerForm" method="post">
+			<form name="FaqInsertForm" method="post">
 			  <table class="table tbl_view">
 			  <colgroup>
 				<col style="width:15%"/>
@@ -37,21 +51,21 @@ function sendOk() {
 			</colgroup>
 			  <tr > 
 			      <th colspan="2" >
-			        ${dto.subject}
+			        &nbsp;
 				  </th>
 			  </tr>
 			
 			  <tr> 
 			      <th>작성자</th>
 			      <td style="padding-left:10px;"> 
-			           ${dto.userName}
+			           ${sessionScope.admin.adminId}
 			      </td>
 			  </tr>
 			
 			  <tr> 
 			      <th>문의 내용</th>
-			      <td> 
-			        ${dto.content}
+			      <td>
+			      	<input type="text" name="subject" value="${dto.subject}">
 			      </td>
 			  </tr>
 			  <tr>
@@ -59,7 +73,7 @@ function sendOk() {
 			  		답변
 			  	</th>
 			  	<td>
-			  		<textarea name="answerContent" class="boxTA" style="width: 95%;">${dto.answerContent}</textarea>
+			  		<textarea name="content" class="boxTA" style="width: 95%;">${dto.content}</textarea>
 			  	</td>
 			  </tr>
 			  </table>
@@ -67,14 +81,13 @@ function sendOk() {
 			  <table style="width: 100%; margin: 0px auto; border-spacing: 0px;">
 			     <tr height="45"> 
 			      <td align="center" >
-			        <button type="button" class="btn" onclick="sendOk();">답변 등록하기</button>
+			        <button type='button' class="btn" onclick="sendOk('${mode}');">${mode=='update'?'수정완료':'등록완료'}</button>
 			        <button type="reset" class="btn">다시입력</button>
-			        
-	
-			         	 <input type="hidden" name="qnaCode" value="${dto.qnaCode}">
+					<c:if test="${mode=='update'}">
+			         	 <input type="hidden" name="faqNum" value="${dto.faqNum}">
+			         	 
+			         </c:if>
 			        	 <input type="hidden" name="page" value="${page}">
-			        	 <input type="hidden" name="catCode" value="${catCode}">
-
 			      </td>
 			    </tr>
 			  </table>

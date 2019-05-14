@@ -28,19 +28,19 @@ $(function(){
 	
 	//글수정
 	$("body").on("click", ".btn_update", function(){
-		var qnaCode = $(this).attr("data-faqCode");
+		var faqNum = $(this).attr("data-faqNum");
 		
-		var url="<%=cp%>/hotel/faq/update?faqCode=" + faqCode + "&page=${page}";
+		var url="<%=cp%>/hotel/faq/update?faqNum=" + faqNum + "&page=${page}";
 		location.href=url;
 	});
 	
 	//글삭제
 	$("body").on("click", ".btn_delete", function(){
-		var qnaCode = $(this).attr("data-faqCode");
+		var qnaCode = $(this).attr("data-faqNum");
 		
 		if(confirm("게시물을 삭제하시겠습니까?")){
 		
-		var url="<%=cp%>/hotel/faq/delete?faqCode="+faqCode+"&page=${page}";
+		var url="<%=cp%>/hotel/faq/delete?faqNum="+faqNum+"&page=${page}";
 		location.href=url;
 		}
 	});
@@ -80,36 +80,34 @@ function searchList() {
 		  <tr align="center" bgcolor="#eeeeee" height="40" style="border-top: 1px solid #cccccc; border-bottom: 1px solid #cccccc;"> 
 		      <th width="60" style="color: #787878;">번호</th>
 		      <th style="color: #787878;">제목</th>
-		      <th width="100" style="color: #787878;">작성자</th>
-		      <th width="120" style="color: #787878;">작성일</th>
+		      <th width="200" style="color: #787878;">작성자</th>
 		  </tr>
 <c:forEach var="dto" items="${list}">		 
 		  <tr align="center" bgcolor="#ffffff" height="40" style="border-bottom: 1px solid #cccccc;"> 
 		      <td>${dto.listNum}</td>
-		      <td class="faqSubject" data-Num='${dto.faqCode}' style="cursor:pointer;">${dto.subject}</td>
+		      <td class="faqSubject" data-Num='${dto.faqNum}' style="cursor:pointer;">${dto.subject}</td>
 		      <td>${dto.adminId}(${dto.adminName})</td>
-		      <td>${dto.created}</td>
+		      
 		  </tr>
-		  <tr class="fnaArticle" style="background-color: #F6F6F6">
-		  	<td colspan="6" style="text-align: left !important;">
+		  <tr class="faqArticle" style="background-color: #F6F6F6">
+		  	<td colspan="3" style="text-align: left !important;">
 			  	<div style="margin:30px 10px 25px 40px;">
 					<div style="margin-bottom: 30px;">
-					<span style="display:inline-block; font-weight: bold;">Q.&nbsp;&nbsp;</span>${dto.content}
+					<span style="display:inline-block; font-weight: bold;">Q.&nbsp;&nbsp;</span>${dto.subject}
 					</div>
 					<div align="right" style="margin-right: 30px;">
 					<c:if  test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1'}">
-						<button type="button" class="btn_classic btn_update" style="border-radius: 3px;" onclick="javascript:location.href='<%=cp%>/hotel/faq/create?qnaCode=${dto.qnaCode}&page=${page}&catCode=${dto.catCode}';">수정</button>
+						<button type="button" class="btn_classic btn_update" data-faqNum='${dto.faqNum}' style="border-radius: 3px;" >수정</button>
 					</c:if>
 				
 					
 				<c:if test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1'}">
-					<button type="button" class="btn_classic btn_delete" style="border-radius: 3px;" data-faqCode='${dto.faqCode}'>삭제</button>
+					<button type="button" class="btn_classic btn_delete" style="border-radius: 3px;" data-faqNum='${dto.faqNum}'>삭제</button>
 				</c:if>
 					</div>
-					<c:if test="${dto.answerCount != 0}">
+					<c:if test="${dto.content != 0}">
 					<div>
-					<span style="display:inline-block; font-weight: bold; color: #1cc3b2;">A.&nbsp;&nbsp;</span>${dto.answerContent}
-					<p style="color: #1cc3b2; font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${dto.answerCreated}</p>
+					<span style="display:inline-block; font-weight: bold; color: #1cc3b2;">A.&nbsp;&nbsp;</span>${dto.content}
 					</div>
 					</c:if>
 				</div>
@@ -127,8 +125,10 @@ function searchList() {
 		</table>
 		
 		<div class="btn_wrap view_btn">
+			<c:if test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1'}">
 				<button class="button btn" type="button" 
-					onclick="location.href='<%=cp%>/hotel/faq/insertFaq';">글 등록</button>
+					onclick="location.href='<%=cp%>/hotel/faq/insertFaq?page=${page}';">글 등록</button>
+			</c:if>
 			</div>
     </div>
 

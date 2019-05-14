@@ -14,6 +14,21 @@ $(function(){
 
 });
 
+
+function searchList1() {
+	
+	var d=document.searchDate;
+	d.submit();
+	
+}
+
+function searchList2() {
+	var f=document.searchForm;
+	f.submit();
+	
+}
+
+
 </script>
 
 <h1 id="page_tit">숙박관리</h1>
@@ -24,31 +39,35 @@ $(function(){
 </div>
 
 <div class="body" style="height: 800px;">
-	
+	<form name="searchDate" action="<%=cp%>/hotel/customer/reserveList" method="post">
 	<div class="list_search_wrap">
 		<div class="list_search">
-			검색날짜&nbsp;
+			날짜검색&nbsp;
 			<span><input type="text" name="start" id="start" value="${dto.use_start}"></span>
 			~
-			<span><input type="text" name="end" id="end" value="${dto.use_start}"></span>
-
-		</div>
-	</div>
-	<div class="list_search_wrap">
-		<div class="list_search">
-			<select name="searchKey" id="searchKey" title="검색조건선택">
-				<option value="전체">전체</option>
-				<option value="호텔명">호텔명</option>
-				<option value="예약번호">예약번호</option>
-				<option value="예약자명">예약자명</option>
-				<option value="예약일자">예약일자</option>
-			</select>
-			<input type="text" name="searchValue" id="searchValue" title="검색내용입력" />
+			<span><input type="text" name="end" id="end" value="${dto.use_end}"></span>
 			<span class="btn">
-				<a href="#" class="button" style="border: none;">검색</a>
+				<a href="#" class="button" style="border: none;" onclick="searchList1()">검색</a>
 			</span>
 		</div>
 	</div>
+	</form>
+	<form name="searchForm" action="<%=cp%>/hotel/customer/reserveList" method="post">
+	<div class="list_search_wrap">
+		<div class="list_search">
+			<select name="searchKey" id="searchKey" title="검색조건선택">
+				<option value="all">전체</option>
+				<option value="hname">호텔명</option>
+				<option value="reserveCode">예약번호</option>
+				<option value="userName">예약자명</option>
+			</select>
+			<input type="text" name="searchValue" id="searchValue" title="검색내용입력" />
+			<span class="btn">
+				<a href="#" class="button" style="border: none;" onclick="searchList2()">검색</a>
+			</span>
+		</div>
+	</div>
+	</form>
 		<table class="table td_bor_no">
 			<thead>
 				<tr>
