@@ -79,7 +79,7 @@
 	</select>
 	
 	<update id="updateAdmin" parameterType="com.sp.admin.Admin">
-		UPDATE admin SET adminName=#{adminName}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, idnCode=#{idnCode}, positionCode=#{positionCode}, departCode=#{departCode}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
+		UPDATE admin SET adminName=#{adminName}, adminPwd=#{adminPwd}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, idnCode=#{idnCode}, positionCode=#{positionCode}, departCode=#{departCode}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
     		WHERE adminIdx=#{adminIdx}
 	</update>
 	

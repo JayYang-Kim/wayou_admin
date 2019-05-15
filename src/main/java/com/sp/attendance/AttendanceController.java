@@ -69,6 +69,7 @@ public class AttendanceController {
 		int n=0;
 		
 		List<Attendance> listAtt = att.listAtt(map);
+		
 		for(Attendance dto : listAtt) {
 			listNum = dataCount - (start+n-1);
 			dto.setListNum(listNum);
@@ -120,7 +121,6 @@ public class AttendanceController {
 			dto.setToday(today);
 			
 			startTime=att.inAtt(dto);
-			System.out.println(startTime+"000000000000000000000000000000000000000000000000");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,9 +165,10 @@ public class AttendanceController {
 		
 		String endTime=dto.getEndTime();
 		int dayTotal=dto.getDayTotal();
-		
+				
 		model.put("endTime", endTime);
 		model.put("dayTotal", dayTotal);
+		
 		return model;
 	} 
 
