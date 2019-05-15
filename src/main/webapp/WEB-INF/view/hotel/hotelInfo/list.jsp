@@ -117,7 +117,7 @@ $(function() {
 			return false;
 		}
 	
-		if(${sessionScope.admin.idnCode != '2' || sessionScope.admin.adminId != 'sug1'}) {
+		if(${sessionScope.admin.idnCode != '2' && sessionScope.admin.departCode != '2'}) {
 			alert("접근 가능한 기능이 아닙니다.");
 			location.href="<%=cp%>/hotel/hotelInfo/list";
 			return;
