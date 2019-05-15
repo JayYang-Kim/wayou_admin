@@ -7,7 +7,6 @@ public class AdminSessionInfo {
 	private int idnCode;
 	private int departCode;
 
-	
 	public int getAdminIdx() {
 		return adminIdx;
 	}
