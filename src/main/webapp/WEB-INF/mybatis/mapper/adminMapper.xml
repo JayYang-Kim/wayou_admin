@@ -15,8 +15,8 @@
 	</select>
 	
 	<insert id="insertAdmin" parameterType="com.sp.admin.Admin">
-		INSERT INTO admin (adminIdx, adminId, adminPwd, adminBirth, adminName, tel, email, idnCode, positionCode, departCode, saveFilename)
-    		VALUES (adminIdx_seq.NEXTVAL, #{adminId}, #{adminPwd}, #{adminBirth},  #{adminName}, #{tel}, #{email}, #{idnCode}, #{positionCode}, #{departCode}, #{saveFilename})
+		INSERT INTO admin (adminIdx, adminId, adminPwd, adminBirth, adminName, tel, email, idnCode, positionCode, departCode, saveFilename, enabled)
+    		VALUES (adminIdx_seq.NEXTVAL, #{adminId}, #{adminPwd}, #{adminBirth},  #{adminName}, #{tel}, #{email}, #{idnCode}, #{positionCode}, #{departCode}, #{saveFilename}, 1)
 	</insert>
 	
 	
