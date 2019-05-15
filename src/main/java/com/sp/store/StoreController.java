@@ -100,7 +100,7 @@ public class StoreController {
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		String root = session.getServletContext().getRealPath("/");
 		
-		String pathname = root+"uploads"+File.separator+"hotel";
+		String pathname = root + File.separator + "uploads" + File.separator + "store";
 		
 		dto.setAdminIdx(info.getAdminIdx());
 		
@@ -197,7 +197,7 @@ public class StoreController {
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		String root = session.getServletContext().getRealPath("/");
 		
-		String pathname = root+"uploads"+File.separator+"ticket";
+		String pathname = root + File.separator + "uploads" + File.separator + "ticket";
 		dto.setStoreCode(storeCode);
 		dto.setAdminIdx(info.getAdminIdx());
 		
@@ -230,7 +230,7 @@ public class StoreController {
 			HttpSession session) throws Exception {
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root+"uploads"+File.separator+"hotel";
+		String pathname = root + File.separator + "uploads" + File.separator + "ticket";
 		
 		storeService.updateTicket(dto, pathname);
 

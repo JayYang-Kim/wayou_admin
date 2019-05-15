@@ -56,10 +56,10 @@ function searchList() {
 
       
  
-<h1 id="page_tit">숙박관리</h1>
+<h1 id="page_tit">티켓관리</h1>
 <!-- 현재 페이지 정보 -->
 <div class="page_info">
-	<h2>숙박관리</h2>
+	<h2>티켓관리</h2>
 	<p><strong>자주하는질문</strong></p>
 </div>
 
@@ -125,7 +125,7 @@ function searchList() {
 		<div class="btn_wrap view_btn">
 			<c:if test="${sessionScope.admin.idnCode == '2' || sessionScope.admin.adminId == 'sug1'}">
 				<button class="button btn" type="button" 
-					onclick="location.href='<%=cp%>/hotel/faq/insertFaq?page=${page}';">글 등록</button>
+					onclick="location.href='<%=cp%>/store/faq/insertFaq?page=${page}';">글 등록</button>
 			</c:if>
 			</div>
     </div>

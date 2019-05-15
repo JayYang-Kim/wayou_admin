@@ -40,6 +40,13 @@ function sendOk(mode) {
 
 
 </script>
+
+<h1 id="page_tit">티켓관리</h1>
+<!-- 현재 페이지 정보 -->
+<div class="page_info">
+	<h2>티켓관리</h2>
+	<p><strong>자주하는질문</strong></p>
+</div>
     
     <div>
 			<form name="FaqInsertForm" method="post">
