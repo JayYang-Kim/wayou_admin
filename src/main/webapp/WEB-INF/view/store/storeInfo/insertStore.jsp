@@ -149,6 +149,20 @@ function store_Postcode() {
 	 				<option value="1" ${dto.locCode=="1"?"selected='selected'":""}>서울</option>
     				<option value="2" ${dto.locCode=="2"?"selected='selected'":""}>부산</option>
     				<option value="3" ${dto.locCode=="3"?"selected='selected'":""}>제주도</option>
+    				<option value="4" ${dto.locCode=="4"?"selected='selected'":""}>인천</option>
+    				<option value="5" ${dto.locCode=="5"?"selected='selected'":""}>대전</option>
+    				<option value="6" ${dto.locCode=="6"?"selected='selected'":""}>대구</option>
+    				<option value="7" ${dto.locCode=="7"?"selected='selected'":""}>광주</option>
+    				<option value="8" ${dto.locCode=="8"?"selected='selected'":""}>울산</option>
+    				<option value="9" ${dto.locCode=="9"?"selected='selected'":""}>세종시</option>
+    				<option value="10" ${dto.locCode=="10"?"selected='selected'":""}>경기도</option>
+    				<option value="11" ${dto.locCode=="11"?"selected='selected'":""}>강원도</option>
+    				<option value="12" ${dto.locCode=="12"?"selected='selected'":""}>충청북도</option>
+    				<option value="13" ${dto.locCode=="13"?"selected='selected'":""}>충청남도</option>
+    				<option value="14" ${dto.locCode=="14"?"selected='selected'":""}>경상북도</option>
+    				<option value="15" ${dto.locCode=="15"?"selected='selected'":""}>경상남도</option>
+    				<option value="16" ${dto.locCode=="16"?"selected='selected'":""}>전라북도</option>
+    				<option value="17" ${dto.locCode=="17"?"selected='selected'":""}>전라남도</option>		
 	 			</select>
 	 		</td>
 	 	</tr>
@@ -163,6 +177,10 @@ function store_Postcode() {
 	 				<option value="1" ${dto.categoryCode=="1"?"selected='selected'":""}>테마파크</option>
     				<option value="2" ${dto.categoryCode=="2"?"selected='selected'":""}>워터파크</option>
     				<option value="3" ${dto.categoryCode=="3"?"selected='selected'":""}>익스트림</option>
+    				<option value="4" ${dto.categoryCode=="4"?"selected='selected'":""}>공연/전시</option>
+    				<option value="5" ${dto.categoryCode=="5"?"selected='selected'":""}>키즈</option>
+    				<option value="6" ${dto.categoryCode=="6"?"selected='selected'":""}>축제/캠핑</option>
+    				<option value="7" ${dto.categoryCode=="7"?"selected='selected'":""}>투어/교통</option>
 	 			</select>
 	 		</td>
 	 	</tr>

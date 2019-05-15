@@ -9,19 +9,12 @@ public class Faq {
 	private String adminId;
 	private String adminName;
 	private String tname;
-
 	
-	public String getAdminId() {
-		return adminId;
+	public int getListNum() {
+		return listNum;
 	}
-	public void setAdminId(String adminId) {
-		this.adminId = adminId;
-	}
-	public String getAdminName() {
-		return adminName;
-	}
-	public void setAdminName(String adminName) {
-		this.adminName = adminName;
+	public void setListNum(int listNum) {
+		this.listNum = listNum;
 	}
 	public int getFaqNum() {
 		return faqNum;
@@ -47,11 +40,17 @@ public class Faq {
 	public void setAdminIdx(int adminIdx) {
 		this.adminIdx = adminIdx;
 	}
-	public int getListNum() {
-		return listNum;
+	public String getAdminId() {
+		return adminId;
 	}
-	public void setListNum(int listNum) {
-		this.listNum = listNum;
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
+	}
+	public String getAdminName() {
+		return adminName;
+	}
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
 	}
 	public String getTname() {
 		return tname;
@@ -59,6 +58,4 @@ public class Faq {
 	public void setTname(String tname) {
 		this.tname = tname;
 	}
-	
-	
 }
