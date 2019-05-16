@@ -64,17 +64,17 @@ function sendNotice(mode) {
 <form name="insertNoticeForm" method="post">
 	<table class="table left_tbl form_tbl">
 	<colgroup>
-		<col style="width:30%">
+		<col style="width:15%">
 		<col>
 	</colgroup>
 	<tbody id="tb">
 		<tr>
-			<th>제목</th>
-			<td><input type="text" name="subject" value="${dto.subject}"></td>
+			<th><b class="t_red">*</b>제목</th>
+			<td><input type="text" name="subject" class="boxTF" style="width: 95%;" value="${dto.subject}"></td>
 		</tr>
 		<tr>
-	 		<th>내용</th>
-	 		<td><textarea name="content">${dto.content}</textarea></td>
+	 		<th><b class="t_red">*</b>내용</th>
+	 		<td><textarea name="content" style="width: 95%; height: 400px;">${dto.content}</textarea></td>
 	 	</tr>
 	 	</tbody> 
 

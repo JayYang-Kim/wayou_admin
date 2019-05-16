@@ -137,16 +137,17 @@ public class NoticeController {
 			query+="&searchKey="+searchKey+"&searchValue="+URLEncoder.encode(searchValue, "UTF-8");
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
-	
+		
 		map.put("noticeNum", noticeNum);
 		map.put("tname", tname);
 		// 해당 레코드 가져 오기
 		Notice dto = noticeService.readNotice(map);
+		
 		if(dto==null)
 			return "redirect:/"+tname+"/notice/listNotice?"+query;
         
 		// 이전 글, 다음 글
-		
+		dto.setContent(myUtil.htmlSymbols(dto.getContent()));
 		map.put("searchKey", searchKey);
 		map.put("searchValue", searchValue);
 		map.put("noticeNum", noticeNum);

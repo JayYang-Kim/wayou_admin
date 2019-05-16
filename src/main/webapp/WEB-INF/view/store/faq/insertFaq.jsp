@@ -27,11 +27,11 @@ function sendOk(mode) {
 	
 	
 	if(mode=="created") {
-		f.action="<%=cp%>/hotel/faq/insertFaq";
+		f.action="<%=cp%>/store/faq/insertFaq";
 	}
 	
 	if(mode=="update") {
-		f.action="<%=cp%>/hotel/faq/update";
+		f.action="<%=cp%>/store/faq/update";
 	}
 	
 	f.submit();
@@ -72,7 +72,7 @@ function sendOk(mode) {
 			  <tr> 
 			      <th>문의 내용</th>
 			      <td>
-			      	<input type="text" name="subject" value="${dto.subject}">
+			      	<input type="text" name="subject" class="boxTF" style="width: 95%;" value="${dto.subject}">
 			      </td>
 			  </tr>
 			  <tr>
