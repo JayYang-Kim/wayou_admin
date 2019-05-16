@@ -145,7 +145,10 @@ public class AdminController {
 			Model model){
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + "uploads" + File.separator + "admin";
-
+		
+		String pwd = bcryptEncoder.encode(dto.getAdminPwd());
+		dto.setAdminPwd(pwd);;
+		
 		int result= adminService.insertAdmin(dto, pathname);
 
 		if(result==0) {
@@ -328,6 +331,10 @@ public class AdminController {
 		int result=0;
 		String root = session.getServletContext().getRealPath("/");
 		String pathname = root + "uploads" + File.separator + "admin";
+		
+		String pwd = bcryptEncoder.encode(dto.getAdminPwd());
+		dto.setAdminPwd(pwd);
+		
 		result=adminService.updateAdmin(dto, pathname);
 		if(result==0) {
 			ra.addFlashAttribute("state","(수정 실패) 다시 시도해주세요");

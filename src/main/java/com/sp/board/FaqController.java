@@ -64,6 +64,7 @@ public class FaqController {
 		map.put("start", start);
 		map.put("end", end);
 		map.put("tname", tname);
+		
 		List<Faq> list = faqService.listFaq(map);
 		
 		int listNum, n=0;

@@ -15,8 +15,8 @@
 	</select>
 	
 	<insert id="insertAdmin" parameterType="com.sp.admin.Admin">
-		INSERT INTO admin (adminIdx, adminId, adminPwd, adminBirth, adminName, tel, email, idnCode, positionCode, departCode, saveFilename)
-    		VALUES (adminIdx_seq.NEXTVAL, #{adminId}, #{adminPwd}, #{adminBirth},  #{adminName}, #{tel}, #{email}, #{idnCode}, #{positionCode}, #{departCode}, #{saveFilename})
+		INSERT INTO admin (adminIdx, adminId, adminPwd, adminBirth, adminName, tel, email, idnCode, positionCode, departCode, saveFilename, enabled)
+    		VALUES (adminIdx_seq.NEXTVAL, #{adminId}, #{adminPwd}, #{adminBirth},  #{adminName}, #{tel}, #{email}, #{idnCode}, #{positionCode}, #{departCode}, #{saveFilename}, 1)
 	</insert>
 	
 	
@@ -79,7 +79,7 @@
 	</select>
 	
 	<update id="updateAdmin" parameterType="com.sp.admin.Admin">
-		UPDATE admin SET adminName=#{adminName}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, idnCode=#{idnCode}, positionCode=#{positionCode}, departCode=#{departCode}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
+		UPDATE admin SET adminName=#{adminName}, adminPwd=#{adminPwd}, adminBirth=#{adminBirth}, email=#{email}, tel=#{tel}, idnCode=#{idnCode}, positionCode=#{positionCode}, departCode=#{departCode}, saveFilename=#{saveFilename, jdbcType=VARCHAR}
     		WHERE adminIdx=#{adminIdx}
 	</update>
 	

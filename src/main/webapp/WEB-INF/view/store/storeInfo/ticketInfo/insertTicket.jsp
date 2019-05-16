@@ -41,12 +41,18 @@ $(function(){
 
 
 $(function(){
-
-    $("#date1").datepicker();
-    $("#date2").datepicker();
-    $("#date3").datepicker();
-    $("#date4").datepicker();
-
+    $("#date1").datepicker({
+    	dateFormat: 'yy-mm-dd'
+    });
+    $("#date2").datepicker({
+    	dateFormat: 'yy-mm-dd'
+    });
+    $("#date3").datepicker({
+    	dateFormat: 'yy-mm-dd'
+    });
+    $("#date4").datepicker({
+    	dateFormat: 'yy-mm-dd'
+    });
 });
 
 </script>

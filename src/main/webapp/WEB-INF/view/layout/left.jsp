@@ -10,8 +10,8 @@
                     <li><a href="#">회원관리</a>
 						<div>
 							<ul>
-								<li><a href="#"><span class="blind">회원관리</span> 고객리스트</a></li>
-								<li><a href="#"><span class="blind">회원관리</span> 블랙리스트</a></li>
+								<li><a href="<%=cp%>/member/user/list"><span class="blind">회원관리</span> 고객리스트</a></li>
+								<li><a href="<%=cp%>/member/black/list"><span class="blind">회원관리</span> 블랙리스트</a></li>
 							</ul>
 						</div>
                     </li>

@@ -195,7 +195,7 @@ function sendTicket(mode) {
 		<tr>
 			<th scope="row">기본정보</th>
 			<td colspan="3">
-				<div style="height: 70px;">
+				<div>
 					${dto.information}
 				</div>
 			</td>
@@ -203,7 +203,7 @@ function sendTicket(mode) {
 		<tr>
 			<th scope="row">공지사항</th>
 			<td colspan="3">
-				<div style="height: 70px;">
+				<div>
 					${dto.notice}
 				</div>
 			</td>
@@ -211,7 +211,7 @@ function sendTicket(mode) {
 		<tr>
 			<th scope="row">취소규정</th>
 			<td colspan="3">
-				<div style="height: 70px;">
+				<div>
 					${dto.cancel_notice}
 				</div>
 			</td>

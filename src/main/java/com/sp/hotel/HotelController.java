@@ -2,7 +2,6 @@ package com.sp.hotel;
 
 import java.io.File;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +100,7 @@ public class HotelController {
 		AdminSessionInfo info = (AdminSessionInfo)session.getAttribute("admin");
 		String root = session.getServletContext().getRealPath("/");
 		
-		String pathname=root+"uploads"+File.separator+"hotel";
+		String pathname = root + File.separator + "uploads" + File.separator + "hotel";
 	
 		dto.setAdminIdx(info.getAdminIdx());
 		
@@ -129,7 +128,7 @@ public class HotelController {
 			HttpSession session) throws Exception {
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root+"uploads"+File.separator+"hotel";
+		String pathname = root + File.separator + "uploads" + File.separator + "hotel";
 		
 
 		hotelService.updateHotel(dto, pathname);
@@ -173,7 +172,7 @@ public class HotelController {
 			) throws Exception{
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root+"uploads"+File.separator+"hotel";
+		String pathname = root + File.separator + "uploads" + File.separator + "hotel";
 		
 		hotelService.insertRoom(dto, pathname);
 		
@@ -206,7 +205,7 @@ public class HotelController {
 			HttpSession session) throws Exception {
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root+"uploads"+File.separator+"hotel";
+		String pathname = root + File.separator + "uploads" + File.separator + "hotel";
 		
 
 		hotelService.updateRoom(dto, pathname);
@@ -222,7 +221,7 @@ public class HotelController {
 
 		
 		String root = session.getServletContext().getRealPath("/");
-		String pathname = root + File.separator + "uploads" + File.separator + "landmark";			
+		String pathname = root + File.separator + "uploads" + File.separator + "hotel";			
 		
 		try {
 			hotelService.deleteRoom(roomCode, pathname);
