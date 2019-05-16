@@ -24,8 +24,13 @@
 	 		<td>
 	 			<select id="locCode" name="locCode">
 	 				<option value="1" ${dto.locCode=="1"?"selected='selected'":""}>서울</option>
-    				<option value="2" ${dto.locCode=="2"?"selected='selected'":""}>인천</option>
-    				<option value="3" ${dto.locCode=="3"?"selected='selected'":""}>광주</option>
+    				<option value="2" ${dto.locCode=="2"?"selected='selected'":""}>부산</option>
+    				<option value="3" ${dto.locCode=="3"?"selected='selected'":""}>제주도</option>
+    				<option value="4" ${dto.locCode=="4"?"selected='selected'":""}>인천</option>
+    				<option value="5" ${dto.locCode=="5"?"selected='selected'":""}>대전</option>
+    				<option value="6" ${dto.locCode=="6"?"selected='selected'":""}>대구</option>
+    				<option value="7" ${dto.locCode=="7"?"selected='selected'":""}>광주</option>
+    				<option value="8" ${dto.locCode=="8"?"selected='selected'":""}>울산</option>
 	 			</select>
 	 		</td>
 	 	</tr>

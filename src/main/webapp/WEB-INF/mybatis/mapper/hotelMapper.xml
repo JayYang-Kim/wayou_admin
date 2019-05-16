@@ -26,7 +26,7 @@
 	<select id="hotelCount" parameterType="map" resultType="Integer">
 		SELECT NVL(count(*),0)
 		FROM hotelInfo h
-		JOIN locationCode3 l ON h.loccode=l.loccode
+		JOIN locationCode l ON h.loccode=l.loccode
 		<where>
 			<if test="searchValue!=null and searchValue!=''">
 				<include refid="where-list"/>
@@ -40,7 +40,7 @@
     		SELECT ROWNUM rnum, tb.* FROM (
         		SELECT hotelCode, hname, locName, name
         		FROM hotelInfo h
-        		JOIN locationCode3 l ON h.loccode=l.loccode
+        		JOIN locationCode l ON h.loccode=l.loccode
         		<where>
         			<if test="searchValue!=null and searchValue!=''">
 						<include refid="where-list"/>
