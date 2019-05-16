@@ -74,6 +74,13 @@ public class HotelServiceImpl implements HotelService {
 	public int updateHotel(Hotel dto, String pathname) {
 		int result=0;
 		try {
+			if(dto.getUpload()!=null && !dto.getUpload().isEmpty()) {
+				String saveFilename = fileManager.doFileUpload(dto.getUpload(), pathname);
+				if(saveFilename!=null)
+					dto.setSaveFilename(saveFilename);
+			}
+			
+			
 			result=dao.updateData("hotel.updateHotel", dto);
 		} catch (Exception e) {
 			e.printStackTrace();

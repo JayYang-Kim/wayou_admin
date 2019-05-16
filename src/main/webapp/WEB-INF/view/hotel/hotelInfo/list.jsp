@@ -101,6 +101,7 @@ function sendHotel(mode) {
 
 }
 
+
 function searchHotel() {
 	var f=document.searchHotelForm;
 	f.submit();

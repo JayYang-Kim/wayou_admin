@@ -71,9 +71,6 @@
 	 			<th style="border-top: none;"></th>
 	 			<td>
 	 				${dto.saveFilename}
-	 				<c:if test="${not empty dto.saveFilename}">
-	 					| <span style="cursor: pointer;" data-num="${dto.hotelCode}" id="deleteHotelImg">이미지삭제</span>
-	 				</c:if>
 	 			</td>
 	 		</tr>
 	 	</c:if>
